@@ -43,10 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrangedTestCaseBuilder.cs" />
+    <Compile Include="DynamicNameInjection.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="IAssertTestCaseBuilder.cs" />
+    <Compile Include="ISingleRunnableTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SingleRunnableTestCase.cs" />
+    <Compile Include="Specification.cs" />
+    <Compile Include="StringTestExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SpecFramework.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
