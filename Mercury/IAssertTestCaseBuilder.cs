@@ -16,15 +16,15 @@ namespace Mercury
         IParamertizedDynamicAssertCaseBuilder<TResult> Act<TResult>(Func<T, dynamic, TResult> actFunc);
     }
 
-    public interface IAssertQuickSilverCaseBuilder<out T> : ISpecification
+    public interface IAssertCaseBuilder<out T> : ISpecification
     {
-        IAssertQuickSilverCaseBuilder<T> Assert(Action<T> assertTestMethod);
-        IAssertQuickSilverCaseBuilder<T> Assert(string assertionTestCaseName, Action<T> assertTestMethod);
+        IAssertCaseBuilder<T> Assert(Action<T> assertTestMethod);
+        IAssertCaseBuilder<T> Assert(string assertionTestCaseName, Action<T> assertTestMethod);
         IParamertizedDynamicArrangedTest<T> With(dynamic data);
     }
 
-    public interface IArrangedQuickSilver<out T> : IAssertQuickSilverCaseBuilder<T>
+    public interface IArranged<out T> : IAssertCaseBuilder<T>
     {
-        IAssertQuickSilverCaseBuilder<TResult> Act<TResult>(Func<T, TResult> actFunc);
+        IAssertCaseBuilder<TResult> Act<TResult>(Func<T, TResult> actFunc);
     }
 }

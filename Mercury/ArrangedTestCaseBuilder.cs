@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal sealed class ArrangedQuickSilver<TSut> : IArrangedQuickSilver<TSut>, IParamertizedDynamicArrangedTest<TSut>
+    internal sealed class Arranged<TSut> : IArranged<TSut>, IParamertizedDynamicArrangedTest<TSut>
     {
         public string TestSuiteName { get; private set; }
         public Func<TSut> ArrangeMethod { get; set; }
@@ -11,7 +11,7 @@ namespace Mercury
         private readonly List<ISingleRunnableTestCase> _builtTests = new List<ISingleRunnableTestCase>();
         private readonly List<dynamic> _data = new List<dynamic>();
 
-        public ArrangedQuickSilver(string testSuiteName, Func<TSut> arrangeMethod,
+        public Arranged(string testSuiteName, Func<TSut> arrangeMethod,
             IEnumerable<ISingleRunnableTestCase> builtTests)
         {
             TestSuiteName = testSuiteName;
@@ -20,7 +20,7 @@ namespace Mercury
                 _builtTests.AddRange(builtTests);
         }
 
-        public ArrangedQuickSilver(string testSuiteName, Func<dynamic, TSut> arrangeMethod,
+        public Arranged(string testSuiteName, Func<dynamic, TSut> arrangeMethod,
             IEnumerable<ISingleRunnableTestCase> builtTests, IEnumerable<dynamic> data)
         {
             TestSuiteName = testSuiteName;
@@ -31,23 +31,23 @@ namespace Mercury
                 _data.AddRange(data);
         }
 
-        public IAssertQuickSilverCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
+        public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
         {
-            return new ArrangedQuickSilver<TResult>(TestSuiteName, () => actFunc(ArrangeMethod()), _builtTests);
+            return new Arranged<TResult>(TestSuiteName, () => actFunc(ArrangeMethod()), _builtTests);
         }
 
         public IParamertizedDynamicAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, dynamic, TResult> actFunc)
         {
-            return new ArrangedQuickSilver<TResult>(TestSuiteName, d => actFunc(ArrangeMethod(), d), _builtTests, _data);
+            return new Arranged<TResult>(TestSuiteName, d => actFunc(ArrangeMethod(), d), _builtTests, _data);
         }
 
-        public IAssertQuickSilverCaseBuilder<TSut> Assert(Action<TSut> assertTestMethod)
+        public IAssertCaseBuilder<TSut> Assert(Action<TSut> assertTestMethod)
         {
             InternalAssert(TestSuiteName, assertTestMethod);
             return this;
         }
 
-        public IAssertQuickSilverCaseBuilder<TSut> Assert(string assertionTestCaseName, Action<TSut> assertTestMethod)
+        public IAssertCaseBuilder<TSut> Assert(string assertionTestCaseName, Action<TSut> assertTestMethod)
         {
             InternalAssert(TestSuiteName + " " + assertionTestCaseName, assertTestMethod);
             return this;
