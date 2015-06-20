@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ActsThatTakeVoidTests.cs" />
-    <Compile Include="DynamicNameInjectionTests.cs" />
+    <Compile Include="NameInjectionTests.cs" />
     <Compile Include="Extensions\ArrangeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
