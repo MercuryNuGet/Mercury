@@ -6,12 +6,12 @@ Fluid NUnit specification extensions that will run under NCrunch, and ReSharper 
 ##NuGet
 
 ```
-install-package Mercury -Pre
+install-package mercury -pre
 ```
 
 ##Inherit
 
-Inherit from `Specification` and implement members.
+Inherit from `Specification` and implement members. Return an empty array of `ISpecification`. In this array is where you will list your specifications.
 
 ```
   public class MyTest : Specification
@@ -26,7 +26,7 @@ Inherit from `Specification` and implement members.
   }
 ```
 
-##Write specs
+##Write specifications
 
 ###Single assert, no setup
 
@@ -36,7 +36,7 @@ Simplest spec is just a name and an assert:
 "Simple assert".Assert(() => Assert.AreEqual(2, 1 + 1)),
 ```
 
-This will emit a single test with the text "Simple assert" included in the test name.
+This will emit a single unit test with the text "Simple assert" included in the test name.
 
 ###Arrange
 
