@@ -10,11 +10,6 @@ namespace Mercury
             return builder.Assert(string.Format("is equal to {0}", expected), result => Assert.AreEqual(expected, result));
         }
 
-        public static IArranged<object> Arrange(this string str)
-        {
-            return str.Arrange<object>();
-        }
-
         /// <summary>
         /// Use ActOn to keep the test context. Must use for calling voids.
         /// </summary>
