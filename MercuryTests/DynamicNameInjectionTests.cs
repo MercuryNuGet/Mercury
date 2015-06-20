@@ -3,37 +3,23 @@ using NUnit.Framework;
 
 namespace MercuryTests
 {
-    [TestFixture]
-    public class DynamicNameInjectionTests
+    class NameInjectionTests : Specification
     {
-        [Test]
-        public void a()
+        protected override ISpecification[] TestCases()
         {
-            Assert.AreEqual("", DynamicNameInjection.Inject("", new {}));
-        }
-
-        [Test]
-        public void b()
-        {
-            Assert.AreEqual("some string", DynamicNameInjection.Inject("some string", new {}));
-        }
-
-        [Test]
-        public void one_value()
-        {
-            Assert.AreEqual("2", DynamicNameInjection.Inject("#a", new {a = 2}));
-        }
-
-        [Test]
-        public void two_values()
-        {
-            Assert.AreEqual("2 3", DynamicNameInjection.Inject("#a #b", new {a = 2, b = 3}));
-        }
-
-        [Test]
-        public void clashing_values()
-        {
-            Assert.AreEqual("3 2 3", DynamicNameInjection.Inject("#aa #a #aa", new {a = 2, aa = 3}));
+            return new ISpecification[]
+            {                
+                "In case of #case expect \"#expect\""
+                    .Arrange()
+                    .With(new {@case = "empty",s = "", d = new { }, expect = ""})
+                    .With(new {@case = "no tags", s = "some string", d = new { }, expect = "some string"})
+                    .With(new {@case = "single tag of value 1", s = "#a", d = new { a = 1}, expect = "1"})
+                    .With(new {@case = "single tag of value 2", s = "#a", d = new { a = 2}, expect = "2"})
+                    .With(new {@case = "two tags", s = "#a #b", d = new { a = 1, b = 2}, expect = "1 2"})
+                    .With(new {@case = "clashing tags", s = "#aa #a #aa", d = new { a = 2, aa = 3}, expect = "3 2 3"})
+                    .Act((o, data) => DynamicNameInjection.Inject(data.s, data.d))
+                    .Assert((actual, data) => Assert.AreEqual(data.expect, actual)),
+            };
         }
     }
 }
