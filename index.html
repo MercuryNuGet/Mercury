@@ -90,15 +90,51 @@ namespace MercuryExample
    .Assert("is empty", list =&gt; Assert.AreEqual(0, list.Count)),
 </code></pre>
 
+<p>Classes under test whose constructors do not take parameters can take advantage of this shorter syntax:</p>
+
+<pre><code>.Arrange&lt;StringBuilder&gt;())
+</code></pre>
+
+<p>If you do not require a test context, you can use <code>Arrange()</code> with no params or types:</p>
+
+<pre><code>"No context needed because acting on static method"
+    .Arrange()
+    .Act(n =&gt; System.IO.Path.Combine("a", "b"))
+    .Assert(path =&gt; Assert.AreEqual(@"a\b", path)),
+</code></pre>
+
 <h3>
 <a id="act" class="anchor" href="#act" aria-hidden="true"><span class="octicon octicon-link"></span></a>Act</h3>
 
 <p>You can separate out the <code>Act</code> from the <code>Assert</code>. Here the act invokes <code>Any()</code> and the result is passed to the <code>Assert</code>.</p>
 
 <pre><code>"New List; linq says there is not any"
-   .Arrange(() =&gt; new List&lt;int&gt;())
+   .Arrange&lt;List&lt;int&gt;&gt;()
    .Act(list =&gt; list.Any())
    .Assert(any =&gt; Assert.IsFalse(any)),
+</code></pre>
+
+<h3>
+<a id="acton" class="anchor" href="#acton" aria-hidden="true"><span class="octicon octicon-link"></span></a>ActOn</h3>
+
+<p><code>Act</code> returns the result of it's method. This will not work if the method is <code>void</code>. <code>ActOn</code> is also way to keep the test context. Example:</p>
+
+<pre><code>"Act version"
+   .Arrange(() =&gt; new List&lt;int&gt;(new []{1, 2, 3}))
+   .Act(list =&gt;
+   {
+     list.Clear();
+     return list;
+   })
+   .Assert(list =&gt; Assert.AreEqual(0, list.Count)),
+</code></pre>
+
+<p>Can be just:</p>
+
+<pre><code>"ActOn version"
+   .Arrange(() =&gt; new List&lt;int&gt;(new []{1, 2, 3}))
+   .ActOn(list =&gt; list.Clear())
+   .Assert(list =&gt; Assert.AreEqual(0, list.Count)),
 </code></pre>
 
 <h3>
@@ -107,13 +143,9 @@ namespace MercuryExample
 <p><code>With</code> enables you to parameterise your tests. It takes a <code>dynamic</code>, so you can set up an anoymous type.</p>
 
 <pre><code>"When I add an item to list"
-   .Arrange(() =&gt; new List&lt;int&gt;())
+   .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=1})
-   .Act((list, data) =&gt;
-   {
-     list.Add(data.a);
-     return list;
-   })
+   .ActOn((list, data) =&gt; list.Add(data.a))
    .Assert("it is exactly one long",
       (list, data) =&gt; Assert.AreEqual(1, list.Count)),
 </code></pre>
@@ -124,14 +156,10 @@ namespace MercuryExample
 <p>Use the <code>#</code> symbol to inject named parameters from your <code>With</code> data.</p>
 
 <pre><code>"When I add #a item to list"
-   .Arrange(() =&gt; new List&lt;int&gt;())
+   .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=1})
    .With(new {a=2})
-   .Act((list, data) =&gt;
-   {
-      list.Add(data.a);
-      return list;
-   })
+   .ActOn((list, data) =&gt; list.Add(data.a))
    .Assert("it is exactly one long",
       (list, data) =&gt; Assert.AreEqual(1, list.Count)),
 </code></pre>
@@ -148,14 +176,10 @@ When I add 2 item to list it is exactly one long
 <p>The total number of tests emitted is the number of <code>Assert</code>s multiplied by the number of <code>With</code>s. This test below therefore runs 4 tests.</p>
 
 <pre><code>"When I add #a to list"
-   .Arrange(() =&gt; new List&lt;int&gt;())
+   .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=1})
    .With(new {a=2})
-   .Act((list, data) =&gt;
-   {
-      list.Add(data.a);
-      return list;
-   })
+   .ActOn((list, data) =&gt; list.Add(data.a))
    .Assert("it is exactly one long",
       (list, data) =&gt; Assert.AreEqual(1, list.Count))
    .Assert("and contains #a",
@@ -168,14 +192,10 @@ When I add 2 item to list it is exactly one long
 <p>Where each <code>With</code> will generate a different expected value, include those expected values in the <code>With</code> data.</p>
 
 <pre><code>"When I add #expectedLength items to list"
-   .Arrange(() =&gt; new List&lt;int&gt;())
+   .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=new []{1,2,3},   expectedLength=3, expectedSum=6})
    .With(new {a=new []{4,6,7,9}, expectedLength=4, expectedSum=26})
-   .Act((list, data) =&gt;
-   {
-      list.AddRange(data.a);
-      return list;
-   })
+   .ActOn((list, data) =&gt; list.AddRange(data.a))
    .Assert("it is exactly #expectedLength long",
       (list, data) =&gt; Assert.AreEqual(data.expectedLength, list.Count))
    .Assert("and the sum is #expectedSum",
