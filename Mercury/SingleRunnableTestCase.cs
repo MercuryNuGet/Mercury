@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal sealed class SingleRunnableQuickSilverCase : ISingleRunnableTestCase, ISpecification
+    internal sealed class SingleRunnableTestCase : ISingleRunnableTestCase, ISpecification
     {
         private readonly string _str;
         private readonly Action _test;
 
-        public SingleRunnableQuickSilverCase(string str, Action test)
+        public SingleRunnableTestCase(string str, Action test)
         {
             _str = str;
             _test = test;

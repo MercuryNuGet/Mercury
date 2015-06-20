@@ -103,7 +103,7 @@ namespace Mercury
 
         private void InternalAssert(string name, Action<TSut> assertTestMethod, Func<TSut> arrangeMethod)
         {
-            var concreteTest = new SingleRunnableQuickSilverCase(name, () =>
+            var concreteTest = new SingleRunnableTestCase(name, () =>
             {
                 var arrange = arrangeMethod();
                 assertTestMethod(arrange);

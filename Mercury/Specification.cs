@@ -38,7 +38,7 @@ namespace Mercury
                 var idx = 1;
                 foreach (var element in groupedTest)
                 {
-                    renamedTestCases.Add(new SingleRunnableQuickSilverCase(string.Format("{0} : {1}", element.Name, idx),
+                    renamedTestCases.Add(new SingleRunnableTestCase(string.Format("{0} : {1}", element.Name, idx),
                         element.TestMethod));
                     idx++;
                 }

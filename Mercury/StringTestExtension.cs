@@ -18,7 +18,7 @@ namespace Mercury
 
         public static ISpecification Assert(this string str, Action test)
         {
-            return new SingleRunnableQuickSilverCase(str, test);
+            return new SingleRunnableTestCase(str, test);
         }
 
         /// <summary>
