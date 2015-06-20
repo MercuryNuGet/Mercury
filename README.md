@@ -67,6 +67,30 @@ You can separate out the `Act` from the `Assert`. Here the act invokes `Any()` a
    .Assert(any => Assert.IsFalse(any)),
 ```
 
+###ActOn
+
+`Act` returns the result of it's method. This will not work if the method is `void`. `ActOn` is also way to keep the test context. Example:
+
+```
+"Act version"
+   .Arrange(() => new List<int>(new []{1, 2, 3}))
+   .Act(list =>
+   {
+     list.Clear();
+     return list;
+   })
+   .Assert(list => Assert.AreEqual(0, list.Count)),
+```
+
+Can be just:
+
+```
+"ActOn version"
+   .Arrange(() => new List<int>(new []{1, 2, 3}))
+   .ActOn(list => list.Clear())
+   .Assert(list => Assert.AreEqual(0, list.Count)),
+```
+
 ###With
 
 `With` enables you to parameterise your tests. It takes a `dynamic`, so you can set up an anoymous type.
