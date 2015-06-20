@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Mercury</id>
-    <version>0.0.3-prerelease</version>
+    <version>0.0.4-prerelease</version>
     <authors>Alan Evans</authors>
     <owners>Mercury</owners>    
 	<!--
