@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Mercury
 {
-    public static class DynamicNameInjection
+    internal static class NameInjection
     {
-        public static string Inject(string str, dynamic d)
+        internal static string Inject(string str, object d)
         {
             Type t = d.GetType();
             foreach (var p in t.GetProperties().OrderByDescending(p => p.Name))

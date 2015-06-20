@@ -18,7 +18,7 @@ namespace MercuryTests
                     .With(new {@case = "two tags", s = "#a #b", d = new {a = 1, b = 2}, expect = "1 2"})
                     .With(new {@case = "clashing tags", s = "#aa #a #aa", d = new {a = 2, aa = 3}, expect = "3 2 3"})
                     .With(new {@case = "missing data", s = "#c", d = new {a = 2, b = 3}, expect = "#c"})
-                    .Act((o, data) => DynamicNameInjection.Inject(data.s, data.d))
+                    .Act((o, data) => NameInjection.Inject(data.s, data.d))
                     .Assert((actual, data) => Assert.AreEqual(data.expect, actual)),
             };
         }

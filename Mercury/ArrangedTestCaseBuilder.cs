@@ -79,7 +79,7 @@ namespace Mercury
                 foreach (var data in _data)
                 {
                     var d = data;
-                    string inject = DynamicNameInjection.Inject(testName, d);
+                    string inject = NameInjection.Inject(testName, d);
                     Func<TSut> dynamicArrangeMethod = () => DynamicArrangeMethod(d);
                     Action<TSut> assertTestMethod = sut => dynamicAssertMethod(sut, d);
                     InternalAssert(inject, assertTestMethod, dynamicArrangeMethod);
@@ -90,7 +90,7 @@ namespace Mercury
                 foreach (var data in _data)
                 {
                     var d = data;
-                    string inject = DynamicNameInjection.Inject(testName, d);
+                    string inject = NameInjection.Inject(testName, d);
                     InternalAssert(inject, sut => dynamicAssertMethod(sut, d), ArrangeMethod);
                 }
             }

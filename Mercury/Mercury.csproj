@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrangedTestCaseBuilder.cs" />
-    <Compile Include="DynamicNameInjection.cs" />
+    <Compile Include="NameInjection.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IAssertTestCaseBuilder.cs" />
     <Compile Include="ISingleRunnableTestCase.cs" />
