@@ -39,28 +39,36 @@
 <h2>
 <a id="nuget" class="anchor" href="#nuget" aria-hidden="true"><span class="octicon octicon-link"></span></a>NuGet</h2>
 
-<pre><code>install-package Mercury -Pre
+<pre><code>install-package mercury -pre
 </code></pre>
 
 <h2>
 <a id="inherit" class="anchor" href="#inherit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inherit</h2>
 
-<p>Inherit from <code>Specification</code> and implement members.</p>
+<p>Inherit from <code>Specification</code> and implement members. Return an empty array of <code>ISpecification</code>. In this array is where you will list your specifications.</p>
 
-<pre><code>  public class MyTest : Specification
+<pre><code>using Mercury;
+using NUnit.Framework;
+
+namespace MercuryExample
+{
+  public class MyTest : Specification
   {
-      protected override ISpecification[] TestCases()
-      {
-          return new ISpecification[]
-          {
+    protected override ISpecification[] TestCases()
+    {
+        return new ISpecification[]
+        {
 
-          };
-      }
+        };
+    }
   }
+}
 </code></pre>
 
 <h2>
-<a id="write-specs" class="anchor" href="#write-specs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Write specs</h2>
+<a id="write-specifications" class="anchor" href="#write-specifications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Write specifications</h2>
+
+<p>You can copy and paste these examples directly into the array then run the tests with your favorite test runner.</p>
 
 <h3>
 <a id="single-assert-no-setup" class="anchor" href="#single-assert-no-setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Single assert, no setup</h3>
@@ -70,7 +78,7 @@
 <pre><code>"Simple assert".Assert(() =&gt; Assert.AreEqual(2, 1 + 1)),
 </code></pre>
 
-<p>This will emit a single test with the text "Simple assert" included in the test name.</p>
+<p>This will emit a single unit test with the text "Simple assert" included in the test name.</p>
 
 <h3>
 <a id="arrange" class="anchor" href="#arrange" aria-hidden="true"><span class="octicon octicon-link"></span></a>Arrange</h3>
@@ -106,7 +114,8 @@
      list.Add(data.a);
      return list;
    })
-   .Assert("it is exactly one long", (list, data) =&gt; Assert.AreEqual(1, list.Count)),
+   .Assert("it is exactly one long",
+      (list, data) =&gt; Assert.AreEqual(1, list.Count)),
 </code></pre>
 
 <h3>
@@ -123,7 +132,8 @@
       list.Add(data.a);
       return list;
    })
-   .Assert("it is exactly one long", (list, data) =&gt; Assert.AreEqual(1, list.Count)),
+   .Assert("it is exactly one long",
+      (list, data) =&gt; Assert.AreEqual(1, list.Count)),
 </code></pre>
 
 <p>This emits two tests:</p>
@@ -146,8 +156,10 @@ When I add 2 item to list it is exactly one long
       list.Add(data.a);
       return list;
    })
-   .Assert("it is exactly one long", (list, data) =&gt; Assert.AreEqual(1, list.Count))
-   .Assert("and contains #a", (list, data) =&gt; Assert.AreEqual(data.a, list[0])),
+   .Assert("it is exactly one long",
+      (list, data) =&gt; Assert.AreEqual(1, list.Count))
+   .Assert("and contains #a",
+      (list, data) =&gt; Assert.AreEqual(data.a, list[0])),
 </code></pre>
 
 <h3>
