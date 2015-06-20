@@ -152,7 +152,7 @@ The total number of tests emitted is the number of `Assert`s multiplied by the n
    .ActOn((list, data) => list.Add(data.a))
    .Assert("it is exactly one long",
       (list, data) => Assert.AreEqual(1, list.Count))
-   .Assert("and contains #a",
+   .Assert("it contains #a",
       (list, data) => Assert.AreEqual(data.a, list[0])),
 ```
 
@@ -168,6 +168,6 @@ Where each `With` will generate a different expected value, include those expect
    .ActOn((list, data) => list.AddRange(data.a))
    .Assert("it is exactly #expectedLength long",
       (list, data) => Assert.AreEqual(data.expectedLength, list.Count))
-   .Assert("and the sum is #expectedSum",
+   .Assert("the sum is #expectedSum",
       (list, data) => Assert.AreEqual(data.expectedSum, list.Sum())),
 ```
