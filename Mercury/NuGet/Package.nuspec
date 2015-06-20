@@ -9,7 +9,7 @@
     <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>    
     -->	    
 	<projectUrl>http://mercurynuget.github.io/Mercury/</projectUrl>
-	<iconUrl>http://mercurynuget.github.io/Mercury/images/Mercury_32.png</iconUrl>
+	<iconUrl>http://mercurynuget.github.io/Mercury/images/Mercury_128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>    
     <description>Fluid NUnit specification extensions that will run under NCrunch, and ReSharper test runners.</description>
     <releaseNotes>.net 4.0 support</releaseNotes>
