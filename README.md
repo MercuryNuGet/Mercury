@@ -14,19 +14,27 @@ install-package mercury -pre
 Inherit from `Specification` and implement members. Return an empty array of `ISpecification`. In this array is where you will list your specifications.
 
 ```
+using Mercury;
+using NUnit.Framework;
+
+namespace MercuryExample
+{
   public class MyTest : Specification
   {
-      protected override ISpecification[] TestCases()
-      {
-          return new ISpecification[]
-          {
+    protected override ISpecification[] TestCases()
+    {
+        return new ISpecification[]
+        {
 
-          };
-      }
+        };
+    }
   }
+}
 ```
 
 ##Write specifications
+
+You can copy and paste these examples directly into the array then run the tests with your favorite test runner.
 
 ###Single assert, no setup
 
@@ -72,7 +80,8 @@ You can separate out the `Act` from the `Assert`. Here the act invokes `Any()` a
      list.Add(data.a);
      return list;
    })
-   .Assert("it is exactly one long", (list, data) => Assert.AreEqual(1, list.Count)),
+   .Assert("it is exactly one long",
+      (list, data) => Assert.AreEqual(1, list.Count)),
 ```
 
 ###Multiple Withs and parameter injection to test name
@@ -89,7 +98,8 @@ Use the `#` symbol to inject named parameters from your `With` data.
       list.Add(data.a);
       return list;
    })
-   .Assert("it is exactly one long", (list, data) => Assert.AreEqual(1, list.Count)),
+   .Assert("it is exactly one long",
+      (list, data) => Assert.AreEqual(1, list.Count)),
 ```
 
 This emits two tests:
@@ -113,8 +123,10 @@ The total number of tests emitted is the number of `Assert`s multiplied by the n
       list.Add(data.a);
       return list;
    })
-   .Assert("it is exactly one long", (list, data) => Assert.AreEqual(1, list.Count))
-   .Assert("and contains #a", (list, data) => Assert.AreEqual(data.a, list[0])),
+   .Assert("it is exactly one long",
+      (list, data) => Assert.AreEqual(1, list.Count))
+   .Assert("and contains #a",
+      (list, data) => Assert.AreEqual(data.a, list[0])),
 ```
 
 ###Place expected values in the data
