@@ -182,7 +182,7 @@ When I add 2 item to list it is exactly one long
    .ActOn((list, data) =&gt; list.Add(data.a))
    .Assert("it is exactly one long",
       (list, data) =&gt; Assert.AreEqual(1, list.Count))
-   .Assert("and contains #a",
+   .Assert("it contains #a",
       (list, data) =&gt; Assert.AreEqual(data.a, list[0])),
 </code></pre>
 
@@ -198,7 +198,7 @@ When I add 2 item to list it is exactly one long
    .ActOn((list, data) =&gt; list.AddRange(data.a))
    .Assert("it is exactly #expectedLength long",
       (list, data) =&gt; Assert.AreEqual(data.expectedLength, list.Count))
-   .Assert("and the sum is #expectedSum",
+   .Assert("the sum is #expectedSum",
       (list, data) =&gt; Assert.AreEqual(data.expectedSum, list.Sum())),
 </code></pre>
         </section>
