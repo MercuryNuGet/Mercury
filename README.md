@@ -77,7 +77,7 @@ You can separate out the `Act` from the `Assert`. Here the act invokes `Any()` a
 
 ```
 "New List; linq says there is not any"
-   .Arrange<List<int>>())
+   .Arrange<List<int>>()
    .Act(list => list.Any())
    .Assert(any => Assert.IsFalse(any)),
 ```
@@ -112,7 +112,7 @@ Can be just:
 
 ```
 "When I add an item to list"
-   .Arrange<List<int>>())
+   .Arrange<List<int>>()
    .With(new {a=1})
    .ActOn((list, data) => list.Add(data.a))
    .Assert("it is exactly one long",
@@ -125,7 +125,7 @@ Use the `#` symbol to inject named parameters from your `With` data.
 
 ```
 "When I add #a item to list"
-   .Arrange<List<int>>())
+   .Arrange<List<int>>()
    .With(new {a=1})
    .With(new {a=2})
    .ActOn((list, data) => list.Add(data.a))
@@ -146,7 +146,7 @@ The total number of tests emitted is the number of `Assert`s multiplied by the n
 
 ```
 "When I add #a to list"
-   .Arrange<List<int>>())
+   .Arrange<List<int>>()
    .With(new {a=1})
    .With(new {a=2})
    .ActOn((list, data) => list.Add(data.a))
@@ -162,7 +162,7 @@ Where each `With` will generate a different expected value, include those expect
 
 ```
 "When I add #expectedLength items to list"
-   .Arrange<List<int>>())
+   .Arrange<List<int>>()
    .With(new {a=new []{1,2,3},   expectedLength=3, expectedSum=6})
    .With(new {a=new []{4,6,7,9}, expectedLength=4, expectedSum=26})
    .ActOn((list, data) => list.AddRange(data.a))
