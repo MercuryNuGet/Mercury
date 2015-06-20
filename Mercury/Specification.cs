@@ -53,9 +53,4 @@ namespace Mercury
             testCase.Run();
         }
     }
-
-    public interface ISpecification
-    {
-        IEnumerable<ISingleRunnableTestCase> GetAll();
-    }
 }
