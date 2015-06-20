@@ -1,5 +1,5 @@
 # Mercury
-Fluid NUnit specification extensions that will run under NCrunch, and ReSharper test runners.
+Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.
 
 #Get started
 

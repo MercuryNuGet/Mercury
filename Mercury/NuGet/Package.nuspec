@@ -11,7 +11,7 @@
 	<projectUrl>http://mercurynuget.github.io/Mercury/</projectUrl>
 	<iconUrl>http://mercurynuget.github.io/Mercury/images/Mercury_128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>    
-    <description>Fluid NUnit specification extensions that will run under NCrunch, and ReSharper test runners.</description>
+    <description>Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.</description>
     <releaseNotes>.net 4.0 support</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>NUnit</tags>

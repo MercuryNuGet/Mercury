@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Mercury")]
-[assembly: AssemblyDescription("Fluid NUnit specification extensions that will run under NCrunch, and ReSharper test runners.")]
+[assembly: AssemblyDescription("Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Mercury")]
