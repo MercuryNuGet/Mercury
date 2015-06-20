@@ -59,7 +59,7 @@ Next most complex is an `Arrange`, this is equivalent to an NUnit `[SetUp]` and 
 Classes under test whose constructors do not take parameters can take advantage of this shorter syntax:
 
 ```
-.Arrange<new List<int>>())
+.Arrange<StringBuilder>())
 ```
 
 If you do not require a test context, you can use `Arrange()`:
@@ -77,7 +77,7 @@ You can separate out the `Act` from the `Assert`. Here the act invokes `Any()` a
 
 ```
 "New List; linq says there is not any"
-   .Arrange(() => new List<int>())
+   .Arrange<List<int>>())
    .Act(list => list.Any())
    .Assert(any => Assert.IsFalse(any)),
 ```
@@ -112,7 +112,7 @@ Can be just:
 
 ```
 "When I add an item to list"
-   .Arrange<new List<int>>())
+   .Arrange<List<int>>())
    .With(new {a=1})
    .Act((list, data) =>
    {
@@ -129,7 +129,7 @@ Use the `#` symbol to inject named parameters from your `With` data.
 
 ```
 "When I add #a item to list"
-   .Arrange<new List<int>>())
+   .Arrange<List<int>>())
    .With(new {a=1})
    .With(new {a=2})
    .Act((list, data) =>
@@ -154,7 +154,7 @@ The total number of tests emitted is the number of `Assert`s multiplied by the n
 
 ```
 "When I add #a to list"
-   .Arrange<new List<int>>())
+   .Arrange<List<int>>())
    .With(new {a=1})
    .With(new {a=2})
    .Act((list, data) =>
@@ -174,7 +174,7 @@ Where each `With` will generate a different expected value, include those expect
 
 ```
 "When I add #expectedLength items to list"
-   .Arrange<new List<int>>())
+   .Arrange<List<int>>())
    .With(new {a=new []{1,2,3},   expectedLength=3, expectedSum=6})
    .With(new {a=new []{4,6,7,9}, expectedLength=4, expectedSum=26})
    .Act((list, data) =>
