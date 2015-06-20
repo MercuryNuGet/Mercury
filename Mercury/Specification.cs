@@ -15,7 +15,7 @@ namespace Mercury
 
         protected ISingleRunnableTestCase[] CreateCases()
         {
-            var testCases = new List<ISingleRunnableTestCase>(TestCases().SelectMany(t => t.GetAll()));
+            var testCases = new List<ISingleRunnableTestCase>(TestCases().SelectMany(t => t.EmitAllRunnableTests()));
 
             return RenameTestsWithClashingNames(testCases);
         }

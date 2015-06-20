@@ -34,7 +34,7 @@ namespace Mercury
             return _str;
         }
 
-        public IEnumerable<ISingleRunnableTestCase> GetAll()
+        public IEnumerable<ISingleRunnableTestCase> EmitAllRunnableTests()
         {
             return new ISingleRunnableTestCase[] {this};
         }

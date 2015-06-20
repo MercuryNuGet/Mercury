@@ -111,7 +111,7 @@ namespace Mercury
             _builtTests.Add(concreteTest);
         }
 
-        public IEnumerable<ISingleRunnableTestCase> GetAll()
+        public IEnumerable<ISingleRunnableTestCase> EmitAllRunnableTests()
         {
             return _builtTests;
         }
