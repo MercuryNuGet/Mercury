@@ -122,5 +122,21 @@ namespace MercuryTests
             Assert.AreEqual("TestA : 2", renamedSpecs[2].Name);
             Assert.AreEqual("TestB : 2", renamedSpecs[3].Name);
         }
+
+        [Test]
+        public void Can_prevent_causing_clash()
+        {
+            var specs = new ISingleRunnableTestCase[]
+            {
+                NewSpecWithName("TestA"),
+                NewSpecWithName("TestA"),
+                NewSpecWithName("TestA : 1"),
+            };
+            var renamedSpecs = DoRename(specs);
+            Assert.AreEqual("TestA : 2", renamedSpecs[0].Name);
+            Assert.AreEqual("TestA : 3", renamedSpecs[1].Name);
+            Assert.AreEqual("TestA : 1", renamedSpecs[2].Name);
+            Assert.AreSame(specs[2], renamedSpecs[2]);
+        }
     }
 }

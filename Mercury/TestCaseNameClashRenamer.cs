@@ -19,13 +19,18 @@ namespace Mercury
 
             foreach (var groupedTest in groupedTests.Where(g => g.Count() > 1))
             {
-                var repeatNumber = 1;
+                var repeatNumber = 0;
                 foreach (var element in groupedTest)
                 {
                     var test = element.Value;
-                    var newTestName = string.Format("{0} : {1}", test.Name, repeatNumber);
+                    string newTestName;
+                    do
+                    {
+                        repeatNumber++;
+                        newTestName = string.Format("{0} : {1}", test.Name, repeatNumber);
+                    }
+                    while (groupedTests.Any(g => g.Key == newTestName));
                     renamedTestCases[element.Index] = new SingleRunnableTestCase(newTestName, element.Value.TestMethod);
-                    repeatNumber++;
                 }
             }
 
