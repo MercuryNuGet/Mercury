@@ -48,7 +48,7 @@ namespace Mercury
             return this;
         }
 
-        public IParamertizedDynamicArrangedTest<TSut, TData> With<TData>(TData data)
+        public IDataArrangedTest<TSut, TData> With<TData>(TData data)
         {
             return new DataBuilder<TSut, TData>(this).With(data);
         }

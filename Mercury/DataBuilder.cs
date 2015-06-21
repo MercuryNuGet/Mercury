@@ -5,26 +5,26 @@ using System.Text;
 
 namespace Mercury
 {
-    internal sealed class DataAssertBuilder<TSut, TData, TPostAct> : IParamertizedDynamicAssertCaseBuilder<TPostAct, TData>
+    internal sealed class DataAssertBuilder<TSut, TData, TPostAct> : IDataAssertCaseBuilder<TPostAct, TData>
     {
         private TestCaseBuilder<TSut> _testCaseBuilder;
         private Func<TSut, TData, TPostAct> _actFunc;
         private readonly List<TData> _data;
 
-        public DataAssertBuilder(TestCaseBuilder<TSut> _testCaseBuilder, Func<TSut, TData, TPostAct> actFunc, List<TData> data)
+        public DataAssertBuilder(TestCaseBuilder<TSut> testCaseBuilder, Func<TSut, TData, TPostAct> actFunc, List<TData> data)
         {
-            _testCaseBuilder = _testCaseBuilder;
+            _testCaseBuilder = testCaseBuilder;
             _actFunc = actFunc;
             _data = data;
         }
 
-        public IParamertizedDynamicAssertCaseBuilder<TPostAct, TData> Assert(Action<TPostAct, TData> dynamicAssertMethod)
+        public IDataAssertCaseBuilder<TPostAct, TData> Assert(Action<TPostAct, TData> dynamicAssertMethod)
         {
             InternalAssert(_testCaseBuilder.TestSuiteName, dynamicAssertMethod);
             return this;
         }
 
-        public IParamertizedDynamicAssertCaseBuilder<TPostAct, TData> Assert(string assertionTestCaseName, Action<TPostAct, TData> dynamicAssertMethod)
+        public IDataAssertCaseBuilder<TPostAct, TData> Assert(string assertionTestCaseName, Action<TPostAct, TData> dynamicAssertMethod)
         {
             InternalAssert(_testCaseBuilder.TestSuiteName + " " + assertionTestCaseName, dynamicAssertMethod);
             return this;
@@ -51,7 +51,7 @@ namespace Mercury
         }
     }
 
-    internal class DataBuilder<TSut, TData> : IParamertizedDynamicArrangedTest<TSut, TData>
+    internal class DataBuilder<TSut, TData> : IDataArrangedTest<TSut, TData>
     {
         private readonly List<TData> _data = new List<TData>();
         private readonly TestCaseBuilder<TSut> _testCaseBuilder;
@@ -62,23 +62,23 @@ namespace Mercury
             _testCaseBuilder = testCaseBuilder;
         }
 
-        public IParamertizedDynamicArrangedTest<TSut, TData> With(TData data)
+        public IDataArrangedTest<TSut, TData> With(TData data)
         {
             _data.Add(data);
             return this;
         }
 
-        public IParamertizedDynamicAssertCaseBuilder<TResult, TData> Act<TResult>(Func<TSut, TData, TResult> actFunc)
+        public IDataAssertCaseBuilder<TResult, TData> Act<TResult>(Func<TSut, TData, TResult> actFunc)
         {
             return new DataAssertBuilder<TSut, TData, TResult>(_testCaseBuilder, actFunc, _data);
         }
 
-        public IParamertizedDynamicAssertCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
+        public IDataAssertCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
         {
             return Act((sut, data) => sut).Assert(assertMethod);
         }
 
-        public IParamertizedDynamicAssertCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertMethod)
+        public IDataAssertCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertMethod)
         {
             return Act((sut, data) => sut).Assert(assertionTestCaseName, assertMethod);
         }

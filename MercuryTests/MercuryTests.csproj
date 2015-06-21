@@ -50,6 +50,7 @@
     <Compile Include="Extensions\ArrangeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleRunnableTestCasesTests.cs" />
+    <Compile Include="WithTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mercury\Mercury.csproj">
