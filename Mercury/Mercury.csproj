@@ -53,6 +53,7 @@
     <Compile Include="SingleRunnableTestCase.cs" />
     <Compile Include="Specification.cs" />
     <Compile Include="StringTestExtension.cs" />
+    <Compile Include="TestCaseNameClashRenamer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
