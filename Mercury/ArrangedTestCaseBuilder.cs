@@ -7,9 +7,7 @@ namespace Mercury
     {
         public string TestSuiteName { get; private set; }
         public Func<TSut> ArrangeMethod { get; set; }
-        public Func<dynamic, TSut> DynamicArrangeMethod { get; set; }
         private readonly List<ISingleRunnableTestCase> _builtTests = new List<ISingleRunnableTestCase>();
-        private readonly List<dynamic> _data = new List<dynamic>();
 
         public TestCaseBuilder(string testSuiteName, Func<TSut> arrangeMethod,
             IEnumerable<ISingleRunnableTestCase> builtTests)
@@ -18,17 +16,6 @@ namespace Mercury
             ArrangeMethod = arrangeMethod;
             if (builtTests != null)
                 _builtTests.AddRange(builtTests);
-        }
-
-        public TestCaseBuilder(string testSuiteName, Func<dynamic, TSut> arrangeMethod,
-            IEnumerable<ISingleRunnableTestCase> builtTests, IEnumerable<dynamic> data)
-        {
-            TestSuiteName = testSuiteName;
-            DynamicArrangeMethod = arrangeMethod;
-            if (builtTests != null)
-                _builtTests.AddRange(builtTests);
-            if (data != null)
-                _data.AddRange(data);
         }
 
         public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)

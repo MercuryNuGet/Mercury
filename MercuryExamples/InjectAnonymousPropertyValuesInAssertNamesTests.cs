@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MercuryExamples
 {
-    internal class InjectDynamicDataInAssertNamesTests : Specification
+    internal class InjectAnonymousPropertyValuesInAssertNamesTests : Specification
     {
         protected override ISpecification[] TestCases()
         {

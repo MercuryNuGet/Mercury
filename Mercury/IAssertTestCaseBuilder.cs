@@ -4,10 +4,9 @@ namespace Mercury
 {
     public interface IDataAssertCaseBuilder<out T, TData> : ISpecification
     {
-        IDataAssertCaseBuilder<T, TData> Assert(Action<T, TData> dynamicAssertMethod);
+        IDataAssertCaseBuilder<T, TData> Assert(Action<T, TData> assertMethod);
 
-        IDataAssertCaseBuilder<T, TData> Assert(string assertionTestCaseName,
-            Action<T, TData> dynamicAssertMethod);
+        IDataAssertCaseBuilder<T, TData> Assert(string assertionTestCaseName, Action<T, TData> assertMethod);
     }
 
     public interface IDataArrangedTest<out T, TData> : IDataAssertCaseBuilder<T, TData>

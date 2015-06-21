@@ -33,7 +33,7 @@ namespace Mercury
         /// <param name="arrangedTest">The arranged test context</param>
         /// <param name="action">Action to perform on test context</param>
         /// <returns>The original test context</returns>
-        public static IDataAssertCaseBuilder<T, TData> ActOn<T, TData>(this IDataArrangedTest<T, TData> arrangedTest, Action<T, dynamic> action)
+        public static IDataAssertCaseBuilder<T, TData> ActOn<T, TData>(this IDataArrangedTest<T, TData> arrangedTest, Action<T, TData> action)
         {
             return arrangedTest.Act((sut, d) =>
             {
