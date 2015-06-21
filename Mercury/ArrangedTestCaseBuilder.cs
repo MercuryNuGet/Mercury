@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal sealed class TestCaseBuilder<TSut> : IArranged<TSut>, IParamertizedDynamicArrangedTest<TSut>
+    internal sealed class TestCaseBuilder<TSut> : IArranged<TSut>
     {
         public string TestSuiteName { get; private set; }
         public Func<TSut> ArrangeMethod { get; set; }
@@ -36,11 +36,6 @@ namespace Mercury
             return new TestCaseBuilder<TResult>(TestSuiteName, () => actFunc(ArrangeMethod()), _builtTests);
         }
 
-        public IParamertizedDynamicAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, dynamic, TResult> actFunc)
-        {
-            return new TestCaseBuilder<TResult>(TestSuiteName, d => actFunc(ArrangeMethod(), d), _builtTests, _data);
-        }
-
         public IAssertCaseBuilder<TSut> Assert(Action<TSut> assertTestMethod)
         {
             InternalAssert(TestSuiteName, assertTestMethod);
@@ -53,50 +48,12 @@ namespace Mercury
             return this;
         }
 
-        public IParamertizedDynamicArrangedTest<TSut> With(dynamic data)
+        public IParamertizedDynamicArrangedTest<TSut, TData> With<TData>(TData data)
         {
-            _data.Add(data);
-            return this;
+            return new DataBuilder<TSut, TData>(this).With(data);
         }
 
-        public IParamertizedDynamicArrangedTest<TSut> Assert(Action<TSut, dynamic> dynamicAssertMethod)
-        {
-            InternalDynamicAssert(TestSuiteName, dynamicAssertMethod);
-            return this;
-        }
-
-        public IParamertizedDynamicArrangedTest<TSut> Assert(string assertionTestCaseName,
-            Action<TSut, dynamic> dynamicAssertMethod)
-        {
-            InternalDynamicAssert(TestSuiteName + " " + assertionTestCaseName, dynamicAssertMethod);
-            return this;
-        }
-
-        private void InternalDynamicAssert(string testName, Action<TSut, dynamic> dynamicAssertMethod)
-        {
-            if (DynamicArrangeMethod != null)
-            {
-                foreach (var data in _data)
-                {
-                    var d = data;
-                    string inject = NameInjection.Inject(testName, d);
-                    Func<TSut> dynamicArrangeMethod = () => DynamicArrangeMethod(d);
-                    Action<TSut> assertTestMethod = sut => dynamicAssertMethod(sut, d);
-                    InternalAssert(inject, assertTestMethod, dynamicArrangeMethod);
-                }
-            }
-            else
-            {
-                foreach (var data in _data)
-                {
-                    var d = data;
-                    string inject = NameInjection.Inject(testName, d);
-                    InternalAssert(inject, sut => dynamicAssertMethod(sut, d), ArrangeMethod);
-                }
-            }
-        }
-
-        private void InternalAssert(string name, Action<TSut> assertTestMethod)
+        internal void InternalAssert(string name, Action<TSut> assertTestMethod)
         {
             InternalAssert(name, assertTestMethod, ArrangeMethod);
         }

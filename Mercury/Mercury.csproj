@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrangedTestCaseBuilder.cs" />
+    <Compile Include="DataBuilder.cs" />
     <Compile Include="ISpecification.cs" />
     <Compile Include="NameInjection.cs" />
     <Compile Include="Extensions.cs" />

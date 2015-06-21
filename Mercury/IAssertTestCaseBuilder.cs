@@ -2,25 +2,25 @@ using System;
 
 namespace Mercury
 {
-    public interface IParamertizedDynamicAssertCaseBuilder<out T> : ISpecification
+    public interface IParamertizedDynamicAssertCaseBuilder<out T, TData> : ISpecification
     {
-        IParamertizedDynamicArrangedTest<T> Assert(Action<T, dynamic> dynamicAssertMethod);
+        IParamertizedDynamicAssertCaseBuilder<T, TData> Assert(Action<T, TData> dynamicAssertMethod);
 
-        IParamertizedDynamicArrangedTest<T> Assert(string assertionTestCaseName,
-            Action<T, dynamic> dynamicAssertMethod);
+        IParamertizedDynamicAssertCaseBuilder<T, TData> Assert(string assertionTestCaseName,
+            Action<T, TData> dynamicAssertMethod);
     }
 
-    public interface IParamertizedDynamicArrangedTest<out T> : IParamertizedDynamicAssertCaseBuilder<T>
+    public interface IParamertizedDynamicArrangedTest<out T, TData> : IParamertizedDynamicAssertCaseBuilder<T, TData>
     {
-        IParamertizedDynamicArrangedTest<T> With(dynamic data);
-        IParamertizedDynamicAssertCaseBuilder<TResult> Act<TResult>(Func<T, dynamic, TResult> actFunc);
+        IParamertizedDynamicArrangedTest<T, TData> With(TData data);
+        IParamertizedDynamicAssertCaseBuilder<TResult, TData> Act<TResult>(Func<T, TData, TResult> actFunc);
     }
 
     public interface IAssertCaseBuilder<out T> : ISpecification
     {
         IAssertCaseBuilder<T> Assert(Action<T> assertTestMethod);
         IAssertCaseBuilder<T> Assert(string assertionTestCaseName, Action<T> assertTestMethod);
-        IParamertizedDynamicArrangedTest<T> With(dynamic data);
+        IParamertizedDynamicArrangedTest<T, TData> With<TData>(TData data);
     }
 
     public interface IArranged<out T> : IAssertCaseBuilder<T>
