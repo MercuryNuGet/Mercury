@@ -4,7 +4,7 @@ namespace Mercury
 {
     internal static class TestCaseNameClashRenamer
     {
-        internal static ISingleRunnableTestCase[] Rename(ISingleRunnableTestCase[] testCases)
+        internal static ISingleRunnableTestCase[] RenameClashingTests(ISingleRunnableTestCase[] testCases)
         {
             var renamedTestCases = testCases.ToArray();
 

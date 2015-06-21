@@ -15,36 +15,8 @@ namespace Mercury
 
         protected ISingleRunnableTestCase[] CreateCases()
         {
-            var testCases = new List<ISingleRunnableTestCase>(TestCases().SelectMany(t => t.EmitAllRunnableTests()));
-
-            return RenameTestsWithClashingNames(testCases);
-        }
-
-        private static ISingleRunnableTestCase[] RenameTestsWithClashingNames(
-            IEnumerable<ISingleRunnableTestCase> testCases)
-        {
-            var renamedTestCases = new List<ISingleRunnableTestCase>();
-
-            var groupedTests = testCases.GroupBy(c => c.Name);
-
-            foreach (var groupedTest in groupedTests)
-            {
-                var count = groupedTest.Count();
-                if (count == 1)
-                {
-                    renamedTestCases.Add(groupedTest.Single());
-                    continue;
-                }
-                var idx = 1;
-                foreach (var element in groupedTest)
-                {
-                    renamedTestCases.Add(new SingleRunnableTestCase(string.Format("{0} : {1}", element.Name, idx),
-                        element.TestMethod));
-                    idx++;
-                }
-            }
-
-            return renamedTestCases.ToArray();
+            var testCases = TestCases().SelectMany(t => t.EmitAllRunnableTests()).ToArray();
+            return TestCaseNameClashRenamer.RenameClashingTests(testCases);
         }
 
         [Test, TestCaseSource("CreateCases")]

@@ -20,7 +20,7 @@ namespace MercuryTests
 
         private static ISingleRunnableTestCase[] DoRename(ISingleRunnableTestCase[] specs)
         {
-            var renamedSpecs = TestCaseNameClashRenamer.Rename(specs);
+            var renamedSpecs = TestCaseNameClashRenamer.RenameClashingTests(specs);
             AssertSameLengthAndNotSameInstance(specs, renamedSpecs);
             return renamedSpecs;
         }
