@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal sealed class Arranged<TSut> : IArranged<TSut>, IParamertizedDynamicArrangedTest<TSut>
+    internal sealed class TestCaseBuilder<TSut> : IArranged<TSut>, IParamertizedDynamicArrangedTest<TSut>
     {
         public string TestSuiteName { get; private set; }
         public Func<TSut> ArrangeMethod { get; set; }
@@ -11,7 +11,7 @@ namespace Mercury
         private readonly List<ISingleRunnableTestCase> _builtTests = new List<ISingleRunnableTestCase>();
         private readonly List<dynamic> _data = new List<dynamic>();
 
-        public Arranged(string testSuiteName, Func<TSut> arrangeMethod,
+        public TestCaseBuilder(string testSuiteName, Func<TSut> arrangeMethod,
             IEnumerable<ISingleRunnableTestCase> builtTests)
         {
             TestSuiteName = testSuiteName;
@@ -20,7 +20,7 @@ namespace Mercury
                 _builtTests.AddRange(builtTests);
         }
 
-        public Arranged(string testSuiteName, Func<dynamic, TSut> arrangeMethod,
+        public TestCaseBuilder(string testSuiteName, Func<dynamic, TSut> arrangeMethod,
             IEnumerable<ISingleRunnableTestCase> builtTests, IEnumerable<dynamic> data)
         {
             TestSuiteName = testSuiteName;
@@ -33,12 +33,12 @@ namespace Mercury
 
         public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
         {
-            return new Arranged<TResult>(TestSuiteName, () => actFunc(ArrangeMethod()), _builtTests);
+            return new TestCaseBuilder<TResult>(TestSuiteName, () => actFunc(ArrangeMethod()), _builtTests);
         }
 
         public IParamertizedDynamicAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, dynamic, TResult> actFunc)
         {
-            return new Arranged<TResult>(TestSuiteName, d => actFunc(ArrangeMethod(), d), _builtTests, _data);
+            return new TestCaseBuilder<TResult>(TestSuiteName, d => actFunc(ArrangeMethod(), d), _builtTests, _data);
         }
 
         public IAssertCaseBuilder<TSut> Assert(Action<TSut> assertTestMethod)
