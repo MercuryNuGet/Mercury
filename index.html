@@ -140,7 +140,7 @@ namespace MercuryExample
 <h3>
 <a id="with" class="anchor" href="#with" aria-hidden="true"><span class="octicon octicon-link"></span></a>With</h3>
 
-<p><code>With</code> enables you to parameterise your tests. It takes a <code>dynamic</code>, so you can set up an anoymous type.</p>
+<p><code>With</code> enables you to parameterise your tests. It takes a single generic parameter, so you can set up an anoymous type.</p>
 
 <pre><code>"When I add an item to list"
    .Arrange&lt;List&lt;int&gt;&gt;()
@@ -153,7 +153,7 @@ namespace MercuryExample
 <h3>
 <a id="multiple-withs-and-parameter-injection-to-test-name" class="anchor" href="#multiple-withs-and-parameter-injection-to-test-name" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multiple Withs and parameter injection to test name</h3>
 
-<p>Use the <code>#</code> symbol to inject named parameters from your <code>With</code> data.</p>
+<p>Use the <code>#</code> symbol to inject named parameters from your <code>With</code> data type.</p>
 
 <pre><code>"When I add #a item to list"
    .Arrange&lt;List&lt;int&gt;&gt;()
