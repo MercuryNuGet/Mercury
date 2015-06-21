@@ -108,7 +108,7 @@ Can be just:
 
 ###With
 
-`With` enables you to parameterise your tests. It takes a `dynamic`, so you can set up an anoymous type.
+`With` enables you to parameterise your tests. It takes a single generic parameter, so you can set up an anoymous type.
 
 ```
 "When I add an item to list"
@@ -121,7 +121,7 @@ Can be just:
 
 ###Multiple Withs and parameter injection to test name
 
-Use the `#` symbol to inject named parameters from your `With` data.
+Use the `#` symbol to inject named parameters from your `With` data type.
 
 ```
 "When I add #a item to list"
