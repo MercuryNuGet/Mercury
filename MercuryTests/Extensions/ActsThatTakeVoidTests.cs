@@ -10,11 +10,11 @@ namespace MercuryTests.Extensions
         {
             return new ISpecification[]
             {
-                "Dynamic Act can take void"
+                "Data Act can take void"
                     .Arrange<List<int>>()
                     .ActOn(list => list.Add(3))
                     .Assert(list => Assert.AreEqual(1, list.Count)),
-                "Dynamic Act can take void"
+                "Data Act can take void"
                     .Arrange<List<int>>()
                     .With(new {a=1})
                     .ActOn((list, d) => list.Add(d.a))
