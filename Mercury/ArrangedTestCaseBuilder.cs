@@ -3,7 +3,13 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal sealed class TestCaseBuilder<TSut> : IArranged<TSut>
+    internal interface ITestCaseBuilder<TSut> : ISpecification
+    {
+        string TestSuiteName { get; }
+        void AddSingleTest(string testCaseName, Action<TSut> postArrangeTestMethod);
+    }
+
+    internal sealed class TestCaseBuilder<TSut> : IArranged<TSut>, ITestCaseBuilder<TSut>
     {
         public string TestSuiteName { get; private set; }
         public Func<TSut> ArrangeMethod { get; set; }
@@ -25,13 +31,13 @@ namespace Mercury
 
         public IAssertCaseBuilder<TSut> Assert(Action<TSut> assertTestMethod)
         {
-            InternalAssert(TestSuiteName, assertTestMethod);
+            AddSingleTest(TestSuiteName, assertTestMethod);
             return this;
         }
 
         public IAssertCaseBuilder<TSut> Assert(string assertionTestCaseName, Action<TSut> assertTestMethod)
         {
-            InternalAssert(TestSuiteName + " " + assertionTestCaseName, assertTestMethod);
+            AddSingleTest(TestSuiteName + " " + assertionTestCaseName, assertTestMethod);
             return this;
         }
 
@@ -40,17 +46,12 @@ namespace Mercury
             return new DataBuilder<TSut, TData>(this).With(data);
         }
 
-        internal void InternalAssert(string name, Action<TSut> assertTestMethod)
+        public void AddSingleTest(string testCaseName, Action<TSut> postArrangeTestMethod)
         {
-            InternalAssert(name, assertTestMethod, ArrangeMethod);
-        }
-
-        private void InternalAssert(string name, Action<TSut> assertTestMethod, Func<TSut> arrangeMethod)
-        {
-            var concreteTest = new SingleRunnableTestCase(name, () =>
+            var concreteTest = new SingleRunnableTestCase(testCaseName, () =>
             {
-                var arrange = arrangeMethod();
-                assertTestMethod(arrange);
+                var arrange = ArrangeMethod();
+                postArrangeTestMethod(arrange);
             });
             _builtTests.Add(concreteTest);
         }

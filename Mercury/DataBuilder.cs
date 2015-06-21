@@ -6,9 +6,9 @@ namespace Mercury
     internal sealed class DataBuilder<TSut, TData> : IDataArrangedTest<TSut, TData>
     {
         private readonly List<TData> _data = new List<TData>();
-        private readonly TestCaseBuilder<TSut> _testCaseBuilder;
+        private readonly ITestCaseBuilder<TSut> _testCaseBuilder;
 
-        public DataBuilder(TestCaseBuilder<TSut> testCaseBuilder)
+        public DataBuilder(ITestCaseBuilder<TSut> testCaseBuilder)
         {
             _testCaseBuilder = testCaseBuilder;
         }
