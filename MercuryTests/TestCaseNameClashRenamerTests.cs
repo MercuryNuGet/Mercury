@@ -25,7 +25,8 @@ namespace MercuryTests
             return renamedSpecs;
         }
 
-        private static void AssertSameLengthAndNotSameInstance(ISingleRunnableTestCase[] specs, ISingleRunnableTestCase[] renamedSpecs)
+        private static void AssertSameLengthAndNotSameInstance(ISingleRunnableTestCase[] specs,
+            ISingleRunnableTestCase[] renamedSpecs)
         {
             Assert.AreEqual(specs.Length, renamedSpecs.Length);
             Assert.AreNotSame(specs, renamedSpecs);
@@ -34,14 +35,14 @@ namespace MercuryTests
         [Test]
         public void Can_rename_empty_list()
         {
-            ISingleRunnableTestCase[] specs = new ISingleRunnableTestCase[0];
+            var specs = new ISingleRunnableTestCase[0];
             DoRename(specs);
         }
 
         [Test]
         public void Can_rename_a_single_item_list()
         {
-            var specs = new ISingleRunnableTestCase[]
+            var specs = new[]
             {
                 NewSpecWithName("TestA")
             };
@@ -52,10 +53,10 @@ namespace MercuryTests
         [Test]
         public void Can_rename_two_items_that_do_not_clash()
         {
-            var specs = new ISingleRunnableTestCase[]
+            var specs = new[]
             {
                 NewSpecWithName("TestA"),
-                NewSpecWithName("TestB"),
+                NewSpecWithName("TestB")
             };
             var renamedSpecs = DoRename(specs);
             Assert.AreEqual(specs, renamedSpecs);
@@ -64,10 +65,10 @@ namespace MercuryTests
         [Test]
         public void Can_rename_two_items_that_do_clash()
         {
-            var specs = new ISingleRunnableTestCase[]
+            var specs = new[]
             {
                 NewSpecWithName("TestA"),
-                NewSpecWithName("TestA"),
+                NewSpecWithName("TestA")
             };
             var renamedSpecs = DoRename(specs);
             Assert.AreEqual("TestA : 1", renamedSpecs[0].Name);
@@ -80,10 +81,10 @@ namespace MercuryTests
             Action m1 = () => { };
             Action m2 = () => { };
             Assert.AreNotSame(m1, m2);
-            var specs = new ISingleRunnableTestCase[]
+            var specs = new[]
             {
                 NewSpecWithName("TestA", m1),
-                NewSpecWithName("TestA", m2),
+                NewSpecWithName("TestA", m2)
             };
             var renamedSpecs = DoRename(specs);
             Assert.AreEqual(m1, renamedSpecs[0].TestMethod);
@@ -93,11 +94,11 @@ namespace MercuryTests
         [Test]
         public void Can_rename_two_items_that_do_clash_but_are_apart_and_keep_order()
         {
-            var specs = new ISingleRunnableTestCase[]
+            var specs = new[]
             {
                 NewSpecWithName("TestA"),
                 NewSpecWithName("TestB"),
-                NewSpecWithName("TestA"),
+                NewSpecWithName("TestA")
             };
             var renamedSpecs = DoRename(specs);
             Assert.AreEqual("TestA : 1", renamedSpecs[0].Name);
@@ -108,12 +109,12 @@ namespace MercuryTests
         [Test]
         public void Can_rename_two_separate_clashes_and_keep_order()
         {
-            var specs = new ISingleRunnableTestCase[]
+            var specs = new[]
             {
                 NewSpecWithName("TestA"),
                 NewSpecWithName("TestB"),
                 NewSpecWithName("TestA"),
-                NewSpecWithName("TestB"),
+                NewSpecWithName("TestB")
             };
             var renamedSpecs = DoRename(specs);
             Assert.AreEqual(specs.Length, renamedSpecs.Length);
@@ -126,11 +127,11 @@ namespace MercuryTests
         [Test]
         public void Can_prevent_causing_clash()
         {
-            var specs = new ISingleRunnableTestCase[]
+            var specs = new[]
             {
                 NewSpecWithName("TestA"),
                 NewSpecWithName("TestA"),
-                NewSpecWithName("TestA : 1"),
+                NewSpecWithName("TestA : 1")
             };
             var renamedSpecs = DoRename(specs);
             Assert.AreEqual("TestA : 2", renamedSpecs[0].Name);

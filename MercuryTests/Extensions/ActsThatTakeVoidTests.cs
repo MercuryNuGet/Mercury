@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace MercuryTests.Extensions
 {
-    class ActsThatTakeVoidTests : Specification
+    internal class ActsThatTakeVoidTests : Specification
     {
         protected override ISpecification[] TestCases()
         {
@@ -16,21 +16,21 @@ namespace MercuryTests.Extensions
                     .Assert(list => Assert.AreEqual(1, list.Count)),
                 "Data Act can take void"
                     .Arrange<List<int>>()
-                    .With(new {a=1})
+                    .With(new {a = 1})
                     .ActOn((list, d) => list.Add(d.a))
-                    .Assert((list, d) => Assert.AreEqual(1, list.Count)),         
+                    .Assert((list, d) => Assert.AreEqual(1, list.Count)),
                 "Act version"
-                    .Arrange(() => new List<int>(new []{1, 2, 3}))
+                    .Arrange(() => new List<int>(new[] {1, 2, 3}))
                     .Act(list =>
                     {
-                       list.Clear();
-                       return list;
+                        list.Clear();
+                        return list;
                     })
                     .Assert(list => Assert.AreEqual(0, list.Count)),
                 "ActOn version"
-                    .Arrange(() => new List<int>(new []{1, 2, 3}))
+                    .Arrange(() => new List<int>(new[] {1, 2, 3}))
                     .ActOn(list => list.Clear())
-                    .Assert(list => Assert.AreEqual(0, list.Count)),
+                    .Assert(list => Assert.AreEqual(0, list.Count))
             };
         }
     }

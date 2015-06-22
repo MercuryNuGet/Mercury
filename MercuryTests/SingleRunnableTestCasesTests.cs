@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
 using Mercury;
+using NUnit.Framework;
 
 namespace MercuryTests
 {
@@ -44,7 +42,7 @@ namespace MercuryTests
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof (Exception))]
         public void Propergates_exceptions()
         {
             ISingleRunnableTestCase testCase = new SingleRunnableTestCase("Name", () => { throw new Exception(); });
