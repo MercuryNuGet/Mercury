@@ -54,7 +54,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleRunnableTestCase.cs" />
     <Compile Include="Specification.cs" />
+    <Compile Include="StaticArrange\StaticArrangedTestBuilder.cs" />
+    <Compile Include="StaticArrange\StaticAssertBuilder.cs" />
     <Compile Include="StringTestExtension.cs" />
+    <Compile Include="TestCaseAccumulator.cs" />
     <Compile Include="TestCaseNameClashRenamer.cs" />
   </ItemGroup>
   <ItemGroup>

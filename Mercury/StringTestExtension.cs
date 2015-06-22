@@ -1,4 +1,5 @@
 ﻿using System;
+using Mercury.StaticArrange;
 
 namespace Mercury
 {
@@ -40,6 +41,16 @@ namespace Mercury
         public static IArranged<object> Arrange(this string testName)
         {
             return testName.Arrange<object>(() => null);
+        }
+
+        /// <summary>
+        /// Use if you do not require a test context.
+        /// </summary>
+        /// <param name="testName">The test name</param>
+        /// <returns>Arranged test with no context</returns>
+        public static IStaticArranged StaticArrange(this string testName)
+        {
+            return new StaticArrangedTestBuilder(testName);
         }
     }
 }

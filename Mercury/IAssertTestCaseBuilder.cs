@@ -26,4 +26,20 @@ namespace Mercury
     {
         IAssertCaseBuilder<TResult> Act<TResult>(Func<T, TResult> actFunc);
     }
+
+
+    public interface IStaticArranged : IStaticAssertCaseBuilder
+    {
+        IStaticAssertCaseBuilder<TResult> Act<TResult>(Func<TResult> actFunc);
+    }
+
+    public interface IStaticAssertCaseBuilder
+    {
+    }
+
+    public interface IStaticAssertCaseBuilder<out TResult> : ISpecification
+    {
+        IStaticAssertCaseBuilder<TResult> Assert(Action<TResult> assertAction);
+        IStaticAssertCaseBuilder<TResult> Assert(string assertionTestCaseName, Action<TResult> assertAction);
+    }
 }

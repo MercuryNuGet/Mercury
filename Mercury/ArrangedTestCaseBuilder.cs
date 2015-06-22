@@ -3,7 +3,12 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal interface ITestCaseBuilder<TSut> : ISpecification
+    internal interface ITestCaseAccumulator : ISpecification
+    {
+        void AddSingleTest(string testCaseName, Action testAction);
+    }
+
+    internal interface ITestCaseBuilder<out TSut> : ISpecification
     {
         string TestSuiteName { get; }
         void AddSingleTest(string testCaseName, Action<TSut> postArrangeTestMethod);
@@ -13,20 +18,19 @@ namespace Mercury
     {
         public string TestSuiteName { get; private set; }
         public Func<TSut> ArrangeMethod { get; set; }
-        private readonly List<ISingleRunnableTestCase> _builtTests = new List<ISingleRunnableTestCase>();
+        private readonly TestCaseAccumulator _accumulator = new TestCaseAccumulator();
 
-        public TestCaseBuilder(string testSuiteName, Func<TSut> arrangeMethod,
-            IEnumerable<ISingleRunnableTestCase> builtTests)
+        public TestCaseBuilder(string testSuiteName, Func<TSut> arrangeMethod, TestCaseAccumulator builtTests)
         {
             TestSuiteName = testSuiteName;
             ArrangeMethod = arrangeMethod;
             if (builtTests != null)
-                _builtTests.AddRange(builtTests);
+                _accumulator.Add(builtTests);
         }
 
         public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
         {
-            return new TestCaseBuilder<TResult>(TestSuiteName, () => actFunc(ArrangeMethod()), _builtTests);
+            return new TestCaseBuilder<TResult>(TestSuiteName, () => actFunc(ArrangeMethod()), _accumulator);
         }
 
         public IAssertCaseBuilder<TSut> Assert(Action<TSut> assertTestMethod)
@@ -48,17 +52,16 @@ namespace Mercury
 
         public void AddSingleTest(string testCaseName, Action<TSut> postArrangeTestMethod)
         {
-            var concreteTest = new SingleRunnableTestCase(testCaseName, () =>
+            _accumulator.AddSingleTest(testCaseName, () =>
             {
                 var arrange = ArrangeMethod();
                 postArrangeTestMethod(arrange);
             });
-            _builtTests.Add(concreteTest);
         }
 
         public IEnumerable<ISingleRunnableTestCase> EmitAllRunnableTests()
         {
-            return _builtTests;
+            return _accumulator.EmitAllRunnableTests();
         }
     }
 }

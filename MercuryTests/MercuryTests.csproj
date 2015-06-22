@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StaticArrange\StaticArrangeWithoutDataTests.cs" />
     <Compile Include="TestCaseNameClashRenamerTests.cs" />
     <Compile Include="Extensions\ActsThatTakeVoidTests.cs" />
     <Compile Include="NameInjectionTests.cs" />
