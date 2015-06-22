@@ -2,7 +2,7 @@ using System;
 
 namespace Mercury
 {
-    public interface IDataAssertCaseBuilder<out T, TData> : ISpecification
+    public interface IDataAssertCaseBuilder<out T, out TData> : ISpecification
     {
         IDataAssertCaseBuilder<T, TData> Assert(Action<T, TData> assertMethod);
 
