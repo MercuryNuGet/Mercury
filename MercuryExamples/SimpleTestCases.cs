@@ -7,7 +7,7 @@ namespace MercuryExamples
     {
         protected override ISpecification[] TestCases()
         {
-            return new ISpecification[]
+            return new[]
             {
                 "Can add two integers"
                     .Arrange(() => new MathHelper())

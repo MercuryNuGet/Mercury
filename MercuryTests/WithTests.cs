@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using System.Linq;
 using Mercury;
+using NUnit.Framework;
 
 namespace MercuryTests
 {
@@ -15,7 +12,7 @@ namespace MercuryTests
         {
             ISpecification spec = "With example"
                 .Arrange()
-                .With(new { a = 1 })
+                .With(new {a = 1})
                 .Assert((sut, d) => Assert.AreEqual(1, d.a));
 
             var tests = spec.EmitAllRunnableTests();
@@ -28,8 +25,8 @@ namespace MercuryTests
         {
             ISpecification spec = "With example"
                 .Arrange()
-                .With(new { a = 1 })
-                .With(new { a = 2 })
+                .With(new {a = 1})
+                .With(new {a = 2})
                 .Assert((sut, d) => Assert.AreEqual(1, d.a));
 
             var tests = spec.EmitAllRunnableTests();
@@ -42,8 +39,8 @@ namespace MercuryTests
         {
             ISpecification spec = "With example"
                 .Arrange()
-                .With(new { a = 1 })
-                .With(new { a = 2 })
+                .With(new {a = 1})
+                .With(new {a = 2})
                 .Assert((sut, d) => Assert.AreEqual(1, d.a))
                 .Assert((sut, d) => Assert.AreEqual(1, d.a));
 
@@ -57,9 +54,9 @@ namespace MercuryTests
         {
             ISpecification spec = "With example"
                 .Arrange()
-                .With(new { a = 1 })
-                .With(new { a = 2 })
-                .With(new { a = 3 })
+                .With(new {a = 1})
+                .With(new {a = 2})
+                .With(new {a = 3})
                 .Assert((sut, d) => Assert.AreEqual(1, d.a))
                 .Assert((sut, d) => Assert.AreEqual(1, d.a));
 
@@ -71,12 +68,12 @@ namespace MercuryTests
         [Test]
         public void Each_data_assert_pair_is_executed()
         {
-            int[] array = new int[6];
+            var array = new int[6];
             ISpecification spec = "With example"
                 .Arrange()
-                .With(new { a = 1 })
-                .With(new { a = 2 })
-                .With(new { a = 3 })
+                .With(new {a = 1})
+                .With(new {a = 2})
+                .With(new {a = 3})
                 .Assert((sut, d) => array[d.a - 1]++)
                 .Assert((sut, d) => array[d.a + 2]++);
 
@@ -89,13 +86,13 @@ namespace MercuryTests
         [Test]
         public void Each_data_assert_pair_and_their_act_is_executed()
         {
-            int[] array = new int[12];
+            var array = new int[12];
             ISpecification spec = "With example"
                 .Arrange()
-                .With(new { a = -1 })
-                .With(new { a = -2 })
-                .With(new { a = -3 })
-                .With(new { a = -4 })
+                .With(new {a = -1})
+                .With(new {a = -2})
+                .With(new {a = -3})
+                .With(new {a = -4})
                 .Act((sut, d) => -d.a)
                 .Assert((s, d) => array[s - 1]++)
                 .Assert((s, d) => array[s + 2]++)
