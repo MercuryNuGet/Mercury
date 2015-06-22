@@ -27,14 +27,10 @@ namespace MercuryExamples
                     .Assert("hashCode equal", (o, d) => Assert.AreEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode())),
                 "Inequality of #lhs and #rhs:"
                     .Arrange()
-                    .With(new {lhs = new Complex(0, 0), rhs = new Complex(1, 0)})
-                    .With(new {lhs = new Complex(0, 0), rhs = new Complex(0, 1)})
-                    .With(new {lhs = new Complex(1, 0), rhs = new Complex(0, 0)})
-                    .With(new {lhs = new Complex(0, 1), rhs = new Complex(0, 0)})
-                    .Assert("not equal", (o, d) => Assert.AreNotEqual(d.lhs, d.rhs))
-                    .Assert("hashCode not equal", (o, d) => Assert.AreNotEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode())),
-                "Inequality of #lhs and #rhs:"
-                    .Arrange()
+                    .With(new {lhs = new Complex(0, 0), rhs = (object) new Complex(1, 0)})
+                    .With(new {lhs = new Complex(0, 0), rhs = (object) new Complex(0, 1)})
+                    .With(new {lhs = new Complex(1, 0), rhs = (object) new Complex(0, 0)})
+                    .With(new {lhs = new Complex(0, 1), rhs = (object) new Complex(0, 0)})
                     .With(new {lhs = new Complex(0, 1), rhs = new object()})
                     .Assert("not equal", (o, d) => Assert.AreNotEqual(d.lhs, d.rhs))
                     .Assert("hashCode not equal", (o, d) => Assert.AreNotEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode())),
