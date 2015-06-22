@@ -5,11 +5,12 @@ namespace Mercury
 {
     internal sealed class DataAssertBuilder<TSut, TData, TPostAct> : IDataAssertCaseBuilder<TPostAct, TData>
     {
-        private ITestCaseBuilder<TSut> _testCaseBuilder;
-        private Func<TSut, TData, TPostAct> _actFunc;
+        private readonly ITestCaseBuilder<TSut> _testCaseBuilder;
+        private readonly Func<TSut, TData, TPostAct> _actFunc;
         private readonly List<TData> _data;
 
-        public DataAssertBuilder(ITestCaseBuilder<TSut> testCaseBuilder, Func<TSut, TData, TPostAct> actFunc, List<TData> data)
+        public DataAssertBuilder(ITestCaseBuilder<TSut> testCaseBuilder, Func<TSut, TData, TPostAct> actFunc,
+            List<TData> data)
         {
             _testCaseBuilder = testCaseBuilder;
             _actFunc = actFunc;
@@ -22,7 +23,8 @@ namespace Mercury
             return this;
         }
 
-        public IDataAssertCaseBuilder<TPostAct, TData> Assert(string assertionTestCaseName, Action<TPostAct, TData> assertMethod)
+        public IDataAssertCaseBuilder<TPostAct, TData> Assert(string assertionTestCaseName,
+            Action<TPostAct, TData> assertMethod)
         {
             InternalAssert(_testCaseBuilder.TestSuiteName + " " + assertionTestCaseName, assertMethod);
             return this;
