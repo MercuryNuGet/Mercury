@@ -27,15 +27,16 @@ namespace MercuryTests.StaticArrange
             Assert.AreEqual(1, tests.Count());
             Assert.AreEqual("test", tests[0].Name);
         }
+
         [Test]
         public void can_static_arrange_with_double_data()
         {
             ISpecification spec = "test"
-                 .StaticArrange()
-                 .With(new { a = "a", b = "b", expect = @"a\b" })
-                 .With(new { a = "c", b = "d", expect = @"c\d" })
-                 .Act(data => Path.Combine(data.a, data.b))
-                 .Assert((result, data) => Assert.AreEqual(data.expect, result));
+                .StaticArrange()
+                .With(new {a = "a", b = "b", expect = @"a\b"})
+                .With(new {a = "c", b = "d", expect = @"c\d"})
+                .Act(data => Path.Combine(data.a, data.b))
+                .Assert((result, data) => Assert.AreEqual(data.expect, result));
 
             var tests = spec.EmitAllRunnableTests().ToArray();
             Assert.AreEqual(2, tests.Count());
@@ -67,7 +68,7 @@ namespace MercuryTests.StaticArrange
         {
             ISpecification spec = "test"
                 .StaticArrange()
-                .With(new { a = "a", b = "b", expect = @"a\b" })
+                .With(new {a = "a", b = "b", expect = @"a\b"})
                 .Act(data => Path.Combine(data.a, data.b))
                 .Assert("first", (result, data) => Assert.AreEqual(data.expect, result))
                 .Assert("second", (result, data) => Assert.AreEqual(data.expect, result));
@@ -118,6 +119,36 @@ namespace MercuryTests.StaticArrange
             Assert.AreEqual(3*expectedActInvokes, actStore[2]);
             Assert.AreEqual(5*expectedActInvokes, actStore.Sum());
             Assert.IsTrue(store.All(s => s == expectedAssertInvokes));
+        }
+
+        [Test]
+        public void reuse_of_post_act_should_give_two_separately_runnable_tests()
+        {
+            var actInvokes = 0;
+            var store = new int[2];
+            var builder = "test"
+                .StaticArrange()
+                .With(new {index = 1, value = 2})
+                .With(new {index = 2, value = 3})
+                .Act(data => actInvokes++);
+
+            ISpecification spec1 = builder
+                .Assert((result, data) => store[0]++);
+
+            ISpecification spec2 = builder
+                .Assert((result, data) => store[1]++);
+
+            RunAll(spec1);
+
+            Assert.AreEqual(2, store[0]);
+            Assert.AreEqual(0, store[1]);
+            Assert.AreEqual(2, actInvokes);
+
+            RunAll(spec2);
+
+            Assert.AreEqual(2, store[0]);
+            Assert.AreEqual(2, store[1]);
+            Assert.AreEqual(4, actInvokes);
         }
     }
 }

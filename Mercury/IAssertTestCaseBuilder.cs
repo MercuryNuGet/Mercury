@@ -2,10 +2,10 @@ using System;
 
 namespace Mercury
 {
-    public interface IDataArrangedTest<out T, TData> : IAssertWithDataCaseBuilder<T, TData>
+    public interface IDataArrangedTest<out TSut, TData> : IAssertWithDataCaseBuilder<TSut, TData>
     {
-        IDataArrangedTest<T, TData> With(TData data);
-        IAssertWithDataCaseBuilder<TResult, TData> Act<TResult>(Func<T, TData, TResult> actFunc);
+        IDataArrangedTest<TSut, TData> With(TData data);
+        IAssertWithDataCaseBuilder<TResult, TData> Act<TResult>(Func<TSut, TData, TResult> actFunc);
     }
 
     public interface IAssertCaseBuilder<out T> : ISpecification
