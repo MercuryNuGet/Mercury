@@ -48,7 +48,7 @@
     <Compile Include="ISpecification.cs" />
     <Compile Include="NameInjection.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="IAssertTestCaseBuilder.cs" />
+    <Compile Include="PublicInterfaces.cs" />
     <Compile Include="ISingleRunnableTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleRunnableTestCase.cs" />
