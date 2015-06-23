@@ -67,7 +67,7 @@ If you do not require a test context, you can use `Arrange()` with no params or 
 ```
 "No context needed because acting on static method"
     .Arrange()
-    .Act(n => System.IO.Path.Combine("a", "b"))
+    .Act(() => System.IO.Path.Combine("a", "b"))
     .Assert(path => Assert.AreEqual(@"a\b", path)),
 ```
 
@@ -80,6 +80,15 @@ You can separate out the `Act` from the `Assert`. Here the act invokes `Any()` a
    .Arrange<List<int>>()
    .Act(list => list.Any())
    .Assert(any => Assert.IsFalse(any)),
+```
+
+Or more succinctly in this case:
+
+```
+"New List; linq says there is not any"
+   .Arrange<List<int>>()
+   .Act(list => list.Any())
+   .Assert(Assert.IsFalse),
 ```
 
 ###ActOn
@@ -117,6 +126,17 @@ Can be just:
    .ActOn((list, data) => list.Add(data.a))
    .Assert("it is exactly one long",
       (list, data) => Assert.AreEqual(1, list.Count)),
+```
+
+`With` can be used in a situation without a test context using `Arrange()`
+
+```
+"Test-Context less using with"
+    .Arrange()
+    .With(new {a = "a", b = "b", expect = @"a\b"})
+    .With(new {a = "c", b = "d", expect = @"c\d"})
+    .Act(data => Path.Combine(data.a, data.b))
+    .Assert((actual, data) => Assert.AreEqual(data.expect, actual)),
 ```
 
 ###Multiple Withs and parameter injection to test name

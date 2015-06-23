@@ -1,4 +1,6 @@
 ﻿using System;
+using Mercury.Arrange;
+using Mercury.StaticArrange;
 
 namespace Mercury
 {
@@ -13,7 +15,7 @@ namespace Mercury
         /// <returns>An arranged test context</returns>
         public static IArranged<T> Arrange<T>(this string testName, Func<T> arrangeMethod)
         {
-            return new TestCaseBuilder<T>(testName, arrangeMethod, null);
+            return new ArrangedTestBuilder<T>(testName, arrangeMethod);
         }
 
         public static ISpecification Assert(this string testName, Action test)
@@ -37,9 +39,19 @@ namespace Mercury
         /// </summary>
         /// <param name="testName">The test name</param>
         /// <returns>Arrange test with null context</returns>
-        public static IArranged<object> Arrange(this string testName)
+        public static IArranged<object> ArrangeNull(this string testName)
         {
             return testName.Arrange<object>(() => null);
+        }
+
+        /// <summary>
+        /// Use if you do not require a test context.
+        /// </summary>
+        /// <param name="testName">The test name</param>
+        /// <returns>Arranged test with no context</returns>
+        public static IStaticArranged Arrange(this string testName)
+        {
+            return new StaticArrangedTestBuilder(testName);
         }
     }
 }
