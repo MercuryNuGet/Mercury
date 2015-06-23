@@ -13,7 +13,7 @@ namespace Mercury.StaticArrange
             _suite = suite;
         }
 
-        public IAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TData, TPostAct> actFunc)
+        public IPreAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TData, TPostAct> actFunc)
         {
             return new StaticDataPreAssertBuilder<TPostAct, TData>(actFunc, this);
         }

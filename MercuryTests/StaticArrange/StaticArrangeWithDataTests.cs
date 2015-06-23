@@ -150,5 +150,16 @@ namespace MercuryTests.StaticArrange
             Assert.AreEqual(2, store[1]);
             Assert.AreEqual(4, actInvokes);
         }
+
+        [Test]
+        public void post_act_is_not_ISpecification_without_one_assert()
+        {
+            var builder = "test"
+                .StaticArrange()
+                .With(new {index = 1})
+                .Act(data => data.index);
+
+            Assert.IsNotInstanceOf(typeof (ISpecification), builder);
+        }
     }
 }

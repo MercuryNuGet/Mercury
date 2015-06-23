@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 
 namespace Mercury.StaticArrange
 {
-    internal sealed class StaticDataPreAssertBuilder<TSut, TData> : IAssertWithDataCaseBuilder<TSut, TData>
+    internal sealed class StaticDataPreAssertBuilder<TSut, TData> : IPreAssertWithDataCaseBuilder<TSut, TData>
     {
         private readonly Func<TData, TSut> _actFunc;
         private readonly IDataSuite<TData> _dataSuite;
@@ -12,11 +11,6 @@ namespace Mercury.StaticArrange
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
-        }
-
-        public IEnumerable<ISingleRunnableTestCase> EmitAllRunnableTests()
-        {
-            throw new NotImplementedException();
         }
 
         public IAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertAction)

@@ -29,7 +29,7 @@ namespace Mercury
 
     public interface IStaticArrangedWithData<TData>
     {
-        IAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TData, TPostAct> actFunc);
+        IPreAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TData, TPostAct> actFunc);
         IStaticArrangedWithData<TData> With(TData data);
     }
 
@@ -51,6 +51,12 @@ namespace Mercury
     {
         IStaticAssertCaseBuilder<TResult> Assert(Action<TResult> assertAction);
         IStaticAssertCaseBuilder<TResult> Assert(string assertionTestCaseName, Action<TResult> assertAction);
+    }
+
+    public interface IPreAssertWithDataCaseBuilder<out TSut, out TData>
+    {
+        IAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertAction);
+        IAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertAction);
     }
 
     public interface IAssertWithDataCaseBuilder<out TSut, out TData> : ISpecification
