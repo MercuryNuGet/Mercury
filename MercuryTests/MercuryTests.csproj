@@ -47,6 +47,7 @@
     <Compile Include="Arrange\ArrangeWithoutDataTests.cs" />
     <Compile Include="Arrange\StaticArrangeWithDataTests.cs" />
     <Compile Include="Arrange\StaticArrangeWithoutDataTests.cs" />
+    <Compile Include="Extensions\PassthroughActExtensionTests.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TestCaseNameClashRenamerTests.cs" />
     <Compile Include="Extensions\ActsThatTakeVoidTests.cs" />

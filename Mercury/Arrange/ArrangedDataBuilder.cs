@@ -4,7 +4,7 @@ using Mercury.AssertBuilder;
 
 namespace Mercury.Arrange
 {
-    internal sealed class ArrangedDataBuilder<TSut, TData> : ISutArrangedWithData<TSut, TData>, IDataSuite<TData>
+    internal sealed class ArrangedDataBuilder<TSut, TData> : IArrangedWithData<TSut, TData>, IDataSuite<TData>
     {
         private readonly ISuite _suite;
         private readonly Func<TSut> _arrangeFunc;
@@ -16,7 +16,7 @@ namespace Mercury.Arrange
             _arrangeFunc = arrangeFunc;
         }
 
-        public IPreAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TSut, TData, TPostAct> actFunc)
+        public IAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TSut, TData, TPostAct> actFunc)
         {
             return new StaticDataPreAssertBuilder<TPostAct, TData>(
                 data =>
@@ -26,7 +26,7 @@ namespace Mercury.Arrange
                 }, this);
         }
 
-        public ISutArrangedWithData<TSut, TData> With(TData data)
+        public IArrangedWithData<TSut, TData> With(TData data)
         {
             _data.Add(data);
             return this;

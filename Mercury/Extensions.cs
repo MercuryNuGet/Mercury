@@ -1,14 +1,15 @@
 ﻿using System;
+using NUnit.Framework;
 
 namespace Mercury
 {
     public static class Extensions
     {
-        public static IStaticAssertCaseBuilder<T> AssertEquals<T>(this IStaticPreAssertCaseBuilder<T> builder,
+        public static IPostAssertCaseBuilder<T> AssertEquals<T>(this IAssertCaseBuilder<T> builder,
             T expected)
         {
             return builder.Assert(string.Format("is equal to {0}", expected),
-                result => NUnit.Framework.Assert.AreEqual(expected, result));
+                result => Assert.AreEqual(expected, result));
         }
 
         /// <summary>
@@ -18,7 +19,7 @@ namespace Mercury
         /// <param name="arrangedTest">The arranged test context</param>
         /// <param name="action">Action to perform on test context</param>
         /// <returns>The original test context</returns>
-        public static IStaticPreAssertCaseBuilder<T> ActOn<T>(this IArranged<T> arrangedTest, Action<T> action)
+        public static IAssertCaseBuilder<T> ActOn<T>(this IArranged<T> arrangedTest, Action<T> action)
         {
             return arrangedTest.Act(sut =>
             {
@@ -35,8 +36,8 @@ namespace Mercury
         /// <param name="arrangedTest">The arranged test context</param>
         /// <param name="action">Action to perform on test context</param>
         /// <returns>The original test context</returns>
-        public static IPreAssertWithDataCaseBuilder<T, TData> ActOn<T, TData>(
-            this ISutArrangedWithData<T, TData> arrangedTest,
+        public static IAssertWithDataCaseBuilder<T, TData> ActOn<T, TData>(
+            this IArrangedWithData<T, TData> arrangedTest,
             Action<T, TData> action)
         {
             return arrangedTest.Act((sut, d) =>
@@ -44,12 +45,6 @@ namespace Mercury
                 action(sut, d);
                 return sut;
             });
-        }
-
-        public static IAssertWithDataCaseBuilder<TSut, TData> Assert<TSut, TData>(
-            this ISutArrangedWithData<TSut, TData> arranged, Action<TSut, TData> assertAction)
-        {
-            return arranged.Act((sut, data) => sut).Assert(assertAction);
         }
     }
 }

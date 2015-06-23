@@ -3,25 +3,25 @@ using System.Collections.Generic;
 
 namespace Mercury.AssertBuilder
 {
-    internal sealed class StaticDataAssertBuilder<TSut, TData> : IAssertWithDataCaseBuilder<TSut, TData>
+    internal sealed class DataAssertBuilder<TSut, TData> : IPostAssertWithDataCaseBuilder<TSut, TData>
     {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
         private readonly Func<TData, TSut> _actFunc;
         private readonly IDataSuite<TData> _dataSuite;
 
-        public StaticDataAssertBuilder(Func<TData, TSut> actFunc, IDataSuite<TData> dataSuite)
+        public DataAssertBuilder(Func<TData, TSut> actFunc, IDataSuite<TData> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
         }
 
-        public IAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
+        public IPostAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
         {
             InternalAssert(_dataSuite.SuiteName, assertMethod);
             return this;
         }
 
-        public IAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName,
+        public IPostAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName,
             Action<TSut, TData> assertMethod)
         {
             InternalAssert(_dataSuite.SuiteName + " " + assertionTestCaseName, assertMethod);

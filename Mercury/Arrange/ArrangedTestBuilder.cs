@@ -14,12 +14,12 @@ namespace Mercury.Arrange
             _arrangeFunc = arrangeFunc;
         }
 
-        public IStaticPreAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
+        public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
         {
             return new StaticPreAssertBuilder<TResult>(this, () => actFunc(_arrangeFunc()));
         }
 
-        public ISutArrangedWithData<TSut, TData> With<TData>(TData data)
+        public IArrangedWithData<TSut, TData> With<TData>(TData data)
         {
             return new ArrangedDataBuilder<TSut, TData>(this, _arrangeFunc).With(data);
         }

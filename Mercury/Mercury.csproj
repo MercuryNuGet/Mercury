@@ -52,13 +52,14 @@
     <Compile Include="ISingleRunnableTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleRunnableTestCase.cs" />
+    <Compile Include="PassthoughActExtensions.cs" />
     <Compile Include="Specification.cs" />
     <Compile Include="IDataSuite.cs" />
     <Compile Include="ISuite.cs" />
     <Compile Include="StaticArrange\StaticArrangedDataBuilder.cs" />
     <Compile Include="StaticArrange\StaticArrangedTestBuilder.cs" />
-    <Compile Include="AssertBuilder\StaticAssertBuilder.cs" />
-    <Compile Include="AssertBuilder\StaticDataAssertBuilder.cs" />
+    <Compile Include="AssertBuilder\AssertBuilder.cs" />
+    <Compile Include="AssertBuilder\DataAssertBuilder.cs" />
     <Compile Include="AssertBuilder\StaticDataPreAssertBuilder.cs" />
     <Compile Include="AssertBuilder\StaticPreAssertBuilder.cs" />
     <Compile Include="StringTestExtension.cs" />

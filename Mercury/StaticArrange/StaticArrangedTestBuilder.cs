@@ -12,7 +12,7 @@ namespace Mercury.StaticArrange
             _testName = testName;
         }
 
-        public IStaticPreAssertCaseBuilder<TResult> Act<TResult>(Func<TResult> actFunc)
+        public IAssertCaseBuilder<TResult> Act<TResult>(Func<TResult> actFunc)
         {
             return new StaticPreAssertBuilder<TResult>(this, actFunc);
         }
