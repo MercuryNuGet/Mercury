@@ -45,7 +45,17 @@
   <ItemGroup>
     <Compile Include="Arrange\ArrangedDataBuilder.cs" />
     <Compile Include="Arrange\ArrangedTestBuilder.cs" />
+    <Compile Include="CodeGen.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
     <Compile Include="ISpecification.cs" />
+    <Compile Include="Manager.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Manager.ttinclude</DependentUpon>
+    </Compile>
     <Compile Include="NameInjection.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PublicInterfaces.cs" />
@@ -67,7 +77,18 @@
     <Compile Include="TestCaseNameClashRenamer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CodeGen.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CodeGen.cs</LastGenOutput>
+    </None>
+    <None Include="Manager.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Manager.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
