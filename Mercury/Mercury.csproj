@@ -60,8 +60,8 @@
     <Compile Include="StaticArrange\StaticArrangedTestBuilder.cs" />
     <Compile Include="AssertBuilder\AssertBuilder.cs" />
     <Compile Include="AssertBuilder\DataAssertBuilder.cs" />
-    <Compile Include="AssertBuilder\StaticDataPreAssertBuilder.cs" />
-    <Compile Include="AssertBuilder\StaticPreAssertBuilder.cs" />
+    <Compile Include="AssertBuilder\DataPreAssertBuilder.cs" />
+    <Compile Include="AssertBuilder\PreAssertBuilder.cs" />
     <Compile Include="StringTestExtension.cs" />
     <Compile Include="AssertBuilder\TestCaseAccumulator.cs" />
     <Compile Include="TestCaseNameClashRenamer.cs" />

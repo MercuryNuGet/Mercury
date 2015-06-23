@@ -2,12 +2,12 @@ using System;
 
 namespace Mercury.AssertBuilder
 {
-    internal sealed class StaticDataPreAssertBuilder<TSut, TData> : IAssertWithDataCaseBuilder<TSut, TData>
+    internal sealed class DataPreAssertBuilder<TSut, TData> : IAssertWithDataCaseBuilder<TSut, TData>
     {
         private readonly Func<TData, TSut> _actFunc;
         private readonly IDataSuite<TData> _dataSuite;
 
-        public StaticDataPreAssertBuilder(Func<TData, TSut> actFunc, IDataSuite<TData> dataSuite)
+        public DataPreAssertBuilder(Func<TData, TSut> actFunc, IDataSuite<TData> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;

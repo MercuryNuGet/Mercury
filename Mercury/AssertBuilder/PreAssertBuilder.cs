@@ -2,12 +2,12 @@
 
 namespace Mercury.AssertBuilder
 {
-    internal sealed class StaticPreAssertBuilder<TResult> : IAssertCaseBuilder<TResult>
+    internal sealed class PreAssertBuilder<TResult> : IAssertCaseBuilder<TResult>
     {
         private readonly ISuite _suite;
         private readonly Func<TResult> _actFunc;
 
-        public StaticPreAssertBuilder(ISuite suite, Func<TResult> actFunc)
+        public PreAssertBuilder(ISuite suite, Func<TResult> actFunc)
         {
             _suite = suite;
             _actFunc = actFunc;

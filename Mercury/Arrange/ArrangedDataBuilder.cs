@@ -18,7 +18,7 @@ namespace Mercury.Arrange
 
         public IAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TSut, TData, TPostAct> actFunc)
         {
-            return new StaticDataPreAssertBuilder<TPostAct, TData>(
+            return new DataPreAssertBuilder<TPostAct, TData>(
                 data =>
                 {
                     var arranged = _arrangeFunc();

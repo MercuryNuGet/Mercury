@@ -16,7 +16,7 @@ namespace Mercury.Arrange
 
         public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
         {
-            return new StaticPreAssertBuilder<TResult>(this, () => actFunc(_arrangeFunc()));
+            return new PreAssertBuilder<TResult>(this, () => actFunc(_arrangeFunc()));
         }
 
         public IArrangedWithData<TSut, TData> With<TData>(TData data)
