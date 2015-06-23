@@ -43,9 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrangedTestCaseBuilder.cs" />
-    <Compile Include="DataAssertBuilder.cs" />
-    <Compile Include="DataBuilder.cs" />
+    <Compile Include="Arrange\ArrangedDataBuilder.cs" />
+    <Compile Include="Arrange\ArrangedTestBuilder.cs" />
     <Compile Include="ISpecification.cs" />
     <Compile Include="NameInjection.cs" />
     <Compile Include="Extensions.cs" />
@@ -58,12 +57,12 @@
     <Compile Include="ISuite.cs" />
     <Compile Include="StaticArrange\StaticArrangedDataBuilder.cs" />
     <Compile Include="StaticArrange\StaticArrangedTestBuilder.cs" />
-    <Compile Include="StaticArrange\StaticAssertBuilder.cs" />
-    <Compile Include="StaticArrange\StaticDataAssertBuilder.cs" />
-    <Compile Include="StaticArrange\StaticDataPreAssertBuilder.cs" />
-    <Compile Include="StaticArrange\StaticPreAssertBuilder.cs" />
+    <Compile Include="AssertBuilder\StaticAssertBuilder.cs" />
+    <Compile Include="AssertBuilder\StaticDataAssertBuilder.cs" />
+    <Compile Include="AssertBuilder\StaticDataPreAssertBuilder.cs" />
+    <Compile Include="AssertBuilder\StaticPreAssertBuilder.cs" />
     <Compile Include="StringTestExtension.cs" />
-    <Compile Include="TestCaseAccumulator.cs" />
+    <Compile Include="AssertBuilder\TestCaseAccumulator.cs" />
     <Compile Include="TestCaseNameClashRenamer.cs" />
   </ItemGroup>
   <ItemGroup>

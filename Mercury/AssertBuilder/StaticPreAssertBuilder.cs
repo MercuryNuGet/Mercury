@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mercury.StaticArrange
+namespace Mercury.AssertBuilder
 {
     internal sealed class StaticPreAssertBuilder<TResult> : IStaticPreAssertCaseBuilder<TResult>
     {

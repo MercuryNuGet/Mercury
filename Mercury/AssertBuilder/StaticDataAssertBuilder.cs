@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mercury.StaticArrange
+namespace Mercury.AssertBuilder
 {
     internal sealed class StaticDataAssertBuilder<TSut, TData> : IAssertWithDataCaseBuilder<TSut, TData>
     {

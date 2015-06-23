@@ -10,9 +10,12 @@ namespace MercuryTests.Extensions
         {
             return new ISpecification[]
             {
-                "Blank arrange"
-                    .Arrange()
-                    .Assert("gives null test context", testContext => Assert.IsNull(testContext)),
+                //"Blank arrange no assert message"
+                //    .StaticArrange()
+                //    .Assert(testContext => Assert.IsNull(testContext)),
+                //"Blank arrange"
+                //    .Arrange()
+                //    .Assert("gives null test context", testContext => Assert.IsNull(testContext)),
                 "No context needed because acting on static method"
                     .Arrange()
                     .Act(n => Path.Combine("a", "b"))

@@ -1,4 +1,5 @@
 ﻿using System;
+using Mercury.Arrange;
 using Mercury.StaticArrange;
 
 namespace Mercury
@@ -14,7 +15,7 @@ namespace Mercury
         /// <returns>An arranged test context</returns>
         public static IArranged<T> Arrange<T>(this string testName, Func<T> arrangeMethod)
         {
-            return new TestCaseBuilder<T>(testName, arrangeMethod, null);
+            return new ArrangedTestBuilder<T>(testName, arrangeMethod);
         }
 
         public static ISpecification Assert(this string testName, Action test)

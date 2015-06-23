@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mercury
+namespace Mercury.AssertBuilder
 {
-    internal sealed class TestCaseAccumulator : ITestCaseAccumulator
+    internal sealed class TestCaseAccumulator
     {
         private readonly List<ISingleRunnableTestCase> _builtTests = new List<ISingleRunnableTestCase>();
 

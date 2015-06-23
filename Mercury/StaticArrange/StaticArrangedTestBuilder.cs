@@ -1,4 +1,5 @@
 ﻿using System;
+using Mercury.AssertBuilder;
 
 namespace Mercury.StaticArrange
 {
