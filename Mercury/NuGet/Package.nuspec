@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Mercury</id>
-    <version>0.0.7-prerelease</version>
+    <version>0.0.8-prerelease</version>
     <authors>Alan Evans</authors>
     <owners>Mercury</owners>    
 	<!--
@@ -12,7 +12,10 @@
 	<iconUrl>http://mercurynuget.github.io/Mercury/images/Mercury_128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>    
     <description>Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.</description>
-    <releaseNotes>0.0.5 ActOn extension, 0.0.6 Edge cases around renaming handled, 0.0.7 Replaced dynamic data with generic data</releaseNotes>
+    <releaseNotes>0.0.5 ActOn extension
+	0.0.6 Edge cases around renaming handled
+	0.0.7 Replaced dynamic data with generic data
+	0.0.8 Arrange() now has own interfaces that do not take an test context</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>NUnit</tags>
     <dependencies>
