@@ -50,6 +50,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataX2.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataX3.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataX4.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
     <Compile Include="ISpecification.cs" />
     <Compile Include="Manager.cs">
       <AutoGen>True</AutoGen>

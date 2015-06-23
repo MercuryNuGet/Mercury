@@ -10,19 +10,46 @@ namespace Mercury {
 
 <# manager.EndBlock(); #>
 
-<# manager.StartNewFile("Employee.generated.cs"); #>
+<#
 
-public class Employee3 { }
+for(int i=2;i<5;i++)
+{
+  manager.StartNewFile("DataX"+i+".generated.cs");
+  var data = "";
+  var outData = "";
+  for(int d = 1; d<=i; d++)
+  {
+    data += ", TData"+d;
+	outData +=  ", out TData"+d;
+  }
 
-<# manager.EndBlock(); #>
+  #>
+
+  public interface IAssertWithDataCaseBuilder<out TSut<# Write(outData); #>>
+  {
+      IPostAssertWithDataCaseBuilder<TSut<# Write(data); #>> Assert(Action<TSut<# Write(data); #>> assertAction);
+      IPostAssertWithDataCaseBuilder<TSut<# Write(data); #>> Assert(string assertionTestCaseName, Action<TSut<# Write(data); #>> assertAction);
+  }
+
+   public interface IPostAssertWithDataCaseBuilder<out TSut<# Write(outData); #>> : ISpecification,
+        IAssertWithDataCaseBuilder<TSut<# Write(data); #>>
+  {
+  }
+
+  public class Data<# Write(i.ToString()); #>{
+  
 
 
-<# manager.StartNewFile("Employee2.generated.cs"); #>
+  
+  }
 
-public class Employee3 { }
+<# manager.EndBlock();
 
-<# manager.EndBlock(); #>
+}
+ #>
 
 <# manager.StartFooter(); #>
 }
 <# manager.EndBlock(); #>
+
+<# manager.Process(true); #>
