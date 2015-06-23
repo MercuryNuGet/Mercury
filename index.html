@@ -99,7 +99,7 @@ namespace MercuryExample
 
 <pre><code>"No context needed because acting on static method"
     .Arrange()
-    .Act(n =&gt; System.IO.Path.Combine("a", "b"))
+    .Act(() =&gt; System.IO.Path.Combine("a", "b"))
     .Assert(path =&gt; Assert.AreEqual(@"a\b", path)),
 </code></pre>
 
@@ -112,6 +112,14 @@ namespace MercuryExample
    .Arrange&lt;List&lt;int&gt;&gt;()
    .Act(list =&gt; list.Any())
    .Assert(any =&gt; Assert.IsFalse(any)),
+</code></pre>
+
+<p>Or more succinctly in this case:</p>
+
+<pre><code>"New List; linq says there is not any"
+   .Arrange&lt;List&lt;int&gt;&gt;()
+   .Act(list =&gt; list.Any())
+   .Assert(Assert.IsFalse),
 </code></pre>
 
 <h3>
@@ -148,6 +156,16 @@ namespace MercuryExample
    .ActOn((list, data) =&gt; list.Add(data.a))
    .Assert("it is exactly one long",
       (list, data) =&gt; Assert.AreEqual(1, list.Count)),
+</code></pre>
+
+<p><code>With</code> can be used in a situation without a test context using <code>Arrange()</code></p>
+
+<pre><code>"Test-Context less using with"
+    .Arrange()
+    .With(new {a = "a", b = "b", expect = @"a\b"})
+    .With(new {a = "c", b = "d", expect = @"c\d"})
+    .Act(data =&gt; Path.Combine(data.a, data.b))
+    .Assert((actual, data) =&gt; Assert.AreEqual(data.expect, actual)),
 </code></pre>
 
 <h3>
