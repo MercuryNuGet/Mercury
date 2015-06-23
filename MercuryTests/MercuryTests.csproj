@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="StaticArrange\StaticArrangeWithDataTests.cs" />
     <Compile Include="StaticArrange\StaticArrangeWithoutDataTests.cs" />
+    <Compile Include="TestUtil.cs" />
     <Compile Include="TestCaseNameClashRenamerTests.cs" />
     <Compile Include="Extensions\ActsThatTakeVoidTests.cs" />
     <Compile Include="NameInjectionTests.cs" />

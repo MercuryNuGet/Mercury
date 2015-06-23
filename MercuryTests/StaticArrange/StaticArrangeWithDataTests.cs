@@ -8,12 +8,6 @@ namespace MercuryTests.StaticArrange
     [TestFixture]
     public sealed class StaticArrangeWithDataTests
     {
-        private static void RunAll(ISpecification spec)
-        {
-            foreach (var test in spec.EmitAllRunnableTests())
-                test.Run();
-        }
-
         [Test]
         public void can_static_arrange_with_data()
         {
@@ -90,7 +84,7 @@ namespace MercuryTests.StaticArrange
                 .Act(data => actStore[data.index] += data.value)
                 .Assert((result, data) => store++);
 
-            RunAll(spec);
+            TestUtil.RunAll(spec);
             Assert.AreEqual(2, actStore[1]);
             Assert.AreEqual(2, actStore.Sum());
             Assert.AreEqual(1, store);
@@ -111,7 +105,7 @@ namespace MercuryTests.StaticArrange
                 .Assert("Named", (result, data) => store[2]++)
                 .Assert("Named 2", (result, data) => store[3]++);
 
-            RunAll(spec);
+            TestUtil.RunAll(spec);
 
             const int expectedActInvokes = 4;
             const int expectedAssertInvokes = 2;
@@ -138,13 +132,13 @@ namespace MercuryTests.StaticArrange
             ISpecification spec2 = builder
                 .Assert((result, data) => store[1]++);
 
-            RunAll(spec1);
+            TestUtil.RunAll(spec1);
 
             Assert.AreEqual(2, store[0]);
             Assert.AreEqual(0, store[1]);
             Assert.AreEqual(2, actInvokes);
 
-            RunAll(spec2);
+            TestUtil.RunAll(spec2);
 
             Assert.AreEqual(2, store[0]);
             Assert.AreEqual(2, store[1]);
@@ -156,10 +150,10 @@ namespace MercuryTests.StaticArrange
         {
             var builder = "test"
                 .StaticArrange()
-                .With(new { index = 1 })
+                .With(new {index = 1})
                 .Act(data => data.index);
 
-            Assert.IsNotInstanceOf(typeof(ISpecification), builder);
+            Assert.IsNotInstanceOf(typeof (ISpecification), builder);
         }
     }
 }

@@ -8,12 +8,6 @@ namespace MercuryTests.StaticArrange
     [TestFixture]
     public sealed class StaticArrangeWithoutDataTests
     {
-        private static void RunAll(ISpecification spec)
-        {
-            foreach (var test in spec.EmitAllRunnableTests())
-                test.Run();
-        }
-
         [Test]
         public void can_static_arrange_without_data()
         {
@@ -70,7 +64,7 @@ namespace MercuryTests.StaticArrange
                 .Assert("Named", result => store[2]++)
                 .Assert("Named 2", result => store[3]++);
 
-            RunAll(spec);
+            TestUtil.RunAll(spec);
             Assert.AreEqual(4, store.Sum());
             Assert.IsTrue(store.All(s => s == 1));
             Assert.AreEqual(4, act);
@@ -91,13 +85,13 @@ namespace MercuryTests.StaticArrange
             ISpecification spec2 = builder
                 .Assert(result => store[1]++);
 
-            RunAll(spec1);
+            TestUtil.RunAll(spec1);
 
             Assert.AreEqual(1, store[0]);
             Assert.AreEqual(0, store[1]);
             Assert.AreEqual(1, actInvokes);
 
-            RunAll(spec2);
+            TestUtil.RunAll(spec2);
 
             Assert.AreEqual(1, store[0]);
             Assert.AreEqual(1, store[1]);
@@ -111,7 +105,7 @@ namespace MercuryTests.StaticArrange
                 .StaticArrange()
                 .Act(() => 1);
 
-            Assert.IsNotInstanceOf(typeof(ISpecification), builder);
+            Assert.IsNotInstanceOf(typeof (ISpecification), builder);
         }
     }
 }
