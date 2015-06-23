@@ -23,7 +23,7 @@ namespace Mercury
 
     public interface IStaticArranged : IStaticAssertCaseBuilder
     {
-        IStaticAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TPostAct> actFunc);
+        IStaticPreAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TPostAct> actFunc);
         IStaticArrangedWithData<TData> With<TData>(TData data);
     }
 
@@ -47,10 +47,14 @@ namespace Mercury
     {
     }
 
-    public interface IStaticAssertCaseBuilder<out TResult> : ISpecification
+    public interface IStaticPreAssertCaseBuilder<out TResult>
     {
         IStaticAssertCaseBuilder<TResult> Assert(Action<TResult> assertAction);
         IStaticAssertCaseBuilder<TResult> Assert(string assertionTestCaseName, Action<TResult> assertAction);
+    }
+
+    public interface IStaticAssertCaseBuilder<out TResult> : ISpecification, IStaticPreAssertCaseBuilder<TResult>
+    {
     }
 
     public interface IPreAssertWithDataCaseBuilder<out TSut, out TData>
@@ -59,10 +63,8 @@ namespace Mercury
         IAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertAction);
     }
 
-    public interface IAssertWithDataCaseBuilder<out TSut, out TData> : ISpecification
+    public interface IAssertWithDataCaseBuilder<out TSut, out TData> : ISpecification, IPreAssertWithDataCaseBuilder<TSut, TData>
     {
-        IAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertAction);
-        IAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertAction);
     }
 
     public interface IAssertWithoutDataCaseBuilder<out TSut> : ISpecification

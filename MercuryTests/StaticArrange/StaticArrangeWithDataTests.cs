@@ -152,14 +152,14 @@ namespace MercuryTests.StaticArrange
         }
 
         [Test]
-        public void post_act_is_not_ISpecification_without_one_assert()
+        public void post_with_act_is_not_ISpecification_without_one_assert()
         {
             var builder = "test"
                 .StaticArrange()
-                .With(new {index = 1})
+                .With(new { index = 1 })
                 .Act(data => data.index);
 
-            Assert.IsNotInstanceOf(typeof (ISpecification), builder);
+            Assert.IsNotInstanceOf(typeof(ISpecification), builder);
         }
     }
 }

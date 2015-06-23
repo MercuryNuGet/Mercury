@@ -75,5 +75,43 @@ namespace MercuryTests.StaticArrange
             Assert.IsTrue(store.All(s => s == 1));
             Assert.AreEqual(4, act);
         }
+
+        [Test]
+        public void reuse_of_post_act_should_give_two_separately_runnable_tests()
+        {
+            var actInvokes = 0;
+            var store = new int[2];
+            var builder = "test"
+                .StaticArrange()
+                .Act(() => actInvokes++);
+
+            ISpecification spec1 = builder
+                .Assert(result => store[0]++);
+
+            ISpecification spec2 = builder
+                .Assert(result => store[1]++);
+
+            RunAll(spec1);
+
+            Assert.AreEqual(1, store[0]);
+            Assert.AreEqual(0, store[1]);
+            Assert.AreEqual(1, actInvokes);
+
+            RunAll(spec2);
+
+            Assert.AreEqual(1, store[0]);
+            Assert.AreEqual(1, store[1]);
+            Assert.AreEqual(2, actInvokes);
+        }
+
+        [Test]
+        public void post_act_is_not_ISpecification_without_one_assert()
+        {
+            var builder = "test"
+                .StaticArrange()
+                .Act(() => 1);
+
+            Assert.IsNotInstanceOf(typeof(ISpecification), builder);
+        }
     }
 }
