@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal sealed class DataAssertBuilder<TSut, TData, TPostAct> : IDataAssertCaseBuilder<TPostAct, TData>
+    internal sealed class DataAssertBuilder<TSut, TData, TPostAct> : IAssertWithDataCaseBuilder<TPostAct, TData>
     {
         private readonly ITestCaseBuilder<TSut> _testCaseBuilder;
         private readonly Func<TSut, TData, TPostAct> _actFunc;
@@ -17,13 +17,13 @@ namespace Mercury
             _data = data;
         }
 
-        public IDataAssertCaseBuilder<TPostAct, TData> Assert(Action<TPostAct, TData> assertMethod)
+        public IAssertWithDataCaseBuilder<TPostAct, TData> Assert(Action<TPostAct, TData> assertMethod)
         {
             InternalAssert(_testCaseBuilder.TestSuiteName, assertMethod);
             return this;
         }
 
-        public IDataAssertCaseBuilder<TPostAct, TData> Assert(string assertionTestCaseName,
+        public IAssertWithDataCaseBuilder<TPostAct, TData> Assert(string assertionTestCaseName,
             Action<TPostAct, TData> assertMethod)
         {
             InternalAssert(_testCaseBuilder.TestSuiteName + " " + assertionTestCaseName, assertMethod);

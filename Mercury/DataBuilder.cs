@@ -19,17 +19,17 @@ namespace Mercury
             return this;
         }
 
-        public IDataAssertCaseBuilder<TResult, TData> Act<TResult>(Func<TSut, TData, TResult> actFunc)
+        public IAssertWithDataCaseBuilder<TResult, TData> Act<TResult>(Func<TSut, TData, TResult> actFunc)
         {
             return new DataAssertBuilder<TSut, TData, TResult>(_testCaseBuilder, actFunc, _data);
         }
 
-        public IDataAssertCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
+        public IAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
         {
             return Act((sut, data) => sut).Assert(assertMethod);
         }
 
-        public IDataAssertCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertMethod)
+        public IAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertMethod)
         {
             return Act((sut, data) => sut).Assert(assertionTestCaseName, assertMethod);
         }
