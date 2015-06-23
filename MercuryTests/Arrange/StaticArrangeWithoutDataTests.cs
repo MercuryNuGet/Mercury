@@ -3,7 +3,7 @@ using System.Linq;
 using Mercury;
 using NUnit.Framework;
 
-namespace MercuryTests.StaticArrange
+namespace MercuryTests.Arrange
 {
     [TestFixture]
     public sealed class StaticArrangeWithoutDataTests

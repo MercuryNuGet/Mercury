@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StaticArrange\StaticArrangeWithDataTests.cs" />
-    <Compile Include="StaticArrange\StaticArrangeWithoutDataTests.cs" />
+    <Compile Include="Arrange\ArrangeWithDataTests.cs" />
+    <Compile Include="Arrange\ArrangeWithoutDataTests.cs" />
+    <Compile Include="Arrange\StaticArrangeWithDataTests.cs" />
+    <Compile Include="Arrange\StaticArrangeWithoutDataTests.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TestCaseNameClashRenamerTests.cs" />
     <Compile Include="Extensions\ActsThatTakeVoidTests.cs" />
