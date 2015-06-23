@@ -12,7 +12,7 @@ namespace MercuryTests.Arrange
         public void can_static_arrange_without_data()
         {
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .Act(() => Path.Combine("a", "b"))
                 .Assert(result => Assert.AreEqual("a\b", result));
 
@@ -25,7 +25,7 @@ namespace MercuryTests.Arrange
         public void can_static_arrange_without_data_double_asserts()
         {
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .Act(() => Path.Combine("a", "b"))
                 .Assert(result => Assert.AreEqual("a\b", result))
                 .Assert(result => Assert.AreEqual("a\b", result));
@@ -40,7 +40,7 @@ namespace MercuryTests.Arrange
         public void can_static_arrange_without_data_double_asserts_with_names()
         {
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .Act(() => Path.Combine("a", "b"))
                 .Assert("first", result => Assert.AreEqual("a\b", result))
                 .Assert("second", result => Assert.AreEqual("a\b", result));
@@ -57,7 +57,7 @@ namespace MercuryTests.Arrange
             var act = 0;
             var store = new int[4];
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .Act(() => act++)
                 .Assert(result => store[0]++)
                 .Assert(result => store[1]++)
@@ -76,7 +76,7 @@ namespace MercuryTests.Arrange
             var actInvokes = 0;
             var store = new int[2];
             var builder = "test"
-                .StaticArrange()
+                .Arrange()
                 .Act(() => actInvokes++);
 
             ISpecification spec1 = builder
@@ -102,7 +102,7 @@ namespace MercuryTests.Arrange
         public void post_act_is_not_ISpecification_without_one_assert()
         {
             var builder = "test"
-                .StaticArrange()
+                .Arrange()
                 .Act(() => 1);
 
             Assert.IsNotInstanceOf(typeof (ISpecification), builder);

@@ -12,7 +12,7 @@ namespace MercuryTests.Arrange
         public void can_static_arrange_with_data()
         {
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {a = "a", b = "b", expect = @"a\b"})
                 .Act(data => Path.Combine(data.a, data.b))
                 .Assert((result, data) => Assert.AreEqual(data.expect, result));
@@ -26,7 +26,7 @@ namespace MercuryTests.Arrange
         public void can_static_arrange_with_double_data()
         {
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {a = "a", b = "b", expect = @"a\b"})
                 .With(new {a = "c", b = "d", expect = @"c\d"})
                 .Act(data => Path.Combine(data.a, data.b))
@@ -42,7 +42,7 @@ namespace MercuryTests.Arrange
         public void can_static_arrange_with_double_data_double_asserts()
         {
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {a = "a", b = "b", expect = @"a\b"})
                 .With(new {a = "c", b = "d", expect = @"c\d"})
                 .Act(data => Path.Combine(data.a, data.b))
@@ -61,7 +61,7 @@ namespace MercuryTests.Arrange
         public void can_static_arrange_with_double_data_double_asserts_and_names()
         {
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {a = "a", b = "b", expect = @"a\b"})
                 .Act(data => Path.Combine(data.a, data.b))
                 .Assert("first", (result, data) => Assert.AreEqual(data.expect, result))
@@ -79,7 +79,7 @@ namespace MercuryTests.Arrange
             var actStore = new int[4];
             var store = 0;
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {index = 1, value = 2})
                 .Act(data => actStore[data.index] += data.value)
                 .Assert((result, data) => store++);
@@ -96,7 +96,7 @@ namespace MercuryTests.Arrange
             var actStore = new int[4];
             var store = new int[4];
             ISpecification spec = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {index = 1, value = 2})
                 .With(new {index = 2, value = 3})
                 .Act(data => actStore[data.index] += data.value)
@@ -121,7 +121,7 @@ namespace MercuryTests.Arrange
             var actInvokes = 0;
             var store = new int[2];
             var builder = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {index = 1, value = 2})
                 .With(new {index = 2, value = 3})
                 .Act(data => actInvokes++);
@@ -149,7 +149,7 @@ namespace MercuryTests.Arrange
         public void post_with_act_is_not_ISpecification_without_one_assert()
         {
             var builder = "test"
-                .StaticArrange()
+                .Arrange()
                 .With(new {index = 1})
                 .Act(data => data.index);
 

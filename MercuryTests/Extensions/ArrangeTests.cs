@@ -11,13 +11,13 @@ namespace MercuryTests.Extensions
             return new ISpecification[]
             {
                 "Blank arrange no assert message"
-                    .Arrange()
+                    .ArrangeNull()
                     .Assert(Assert.IsNull),
                 "Blank arrange"
-                    .Arrange()
+                    .ArrangeNull()
                     .Assert("gives null test context", Assert.IsNull),
                 "No context needed because acting on static method"
-                    .Arrange()
+                    .ArrangeNull()
                     .Act(n => Path.Combine("a", "b"))
                     .Assert(path => Assert.AreEqual(@"a\b", path))
             };

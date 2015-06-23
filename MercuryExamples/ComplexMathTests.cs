@@ -11,13 +11,13 @@ namespace MercuryExamples
             return new ISpecification[]
             {
                 "Can to string #r,#i and get \"#expect\""
-                    .Arrange()
+                    .ArrangeNull()
                     .With(new {r = 0, i = 0, expect = "0 + 0i"})
                     .With(new {r = 1, i = 2, expect = "1 + 2i"})
                     .Act((sut, data) => new Complex(data.r, data.i).ToString())
                     .Assert((s, o) => Assert.AreEqual(o.expect, s)),
                 "Equality of #lhs and #rhs:"
-                    .Arrange()
+                    .ArrangeNull()
                     .With(new {lhs = new Complex(0, 0), rhs = new Complex(0, 0)})
                     .With(new {lhs = new Complex(1, 0), rhs = new Complex(1, 0)})
                     .With(new {lhs = new Complex(0, 1), rhs = new Complex(0, 1)})
@@ -26,7 +26,7 @@ namespace MercuryExamples
                     .Assert("reflexive equal", (o, d) => Assert.AreEqual(d.rhs, d.lhs))
                     .Assert("hashCode equal", (o, d) => Assert.AreEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode())),
                 "Inequality of #lhs and #rhs:"
-                    .Arrange()
+                    .ArrangeNull()
                     .With(new {lhs = new Complex(0, 0), rhs = (object) new Complex(1, 0)})
                     .With(new {lhs = new Complex(0, 0), rhs = (object) new Complex(0, 1)})
                     .With(new {lhs = new Complex(1, 0), rhs = (object) new Complex(0, 0)})
@@ -42,7 +42,7 @@ namespace MercuryExamples
                     .With(new {a = new Complex(0, 1), b = new Complex(0, 0), expect = new Complex(0, 1)})
                     .With(new {a = new Complex(0, 0), b = new Complex(0, 1), expect = new Complex(0, 1)})
                     .With(new {a = new Complex(1, 2), b = new Complex(4, 8), expect = new Complex(5, 10)})
-                    .Act((o, d) => d.a + d.b)
+                    .Act(d => d.a + d.b)
                     .Assert((actual, o1) => Assert.AreEqual(o1.expect, actual))
             };
         }
