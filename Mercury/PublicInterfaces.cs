@@ -14,12 +14,6 @@ namespace Mercury
         IStaticArrangedWithData<TData> With(TData data);
     }
 
-    public interface IArrangedWithData<out TSut, TData>
-    {
-        IAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TSut, TData, TPostAct> actFunc);
-        IArrangedWithData<TSut, TData> With(TData data);
-    }
-
     public interface IIDataAssertCaseBuilder<out T, out TData>
     {
         ISpecification Assert(Action<T, TData> assertTestMethod);
@@ -36,18 +30,7 @@ namespace Mercury
         IPostAssertCaseBuilder<TResult> Assert(string assertionTestCaseName, Action<TResult> assertAction);
     }
 
-    public interface IAssertWithDataCaseBuilder<out TSut, out TData>
-    {
-        IPostAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertAction);
-        IPostAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName, Action<TSut, TData> assertAction);
-    }
-
     public interface IPostAssertCaseBuilder<out TSut> : ISpecification, IAssertCaseBuilder<TSut>
-    {
-    }
-
-    public interface IPostAssertWithDataCaseBuilder<out TSut, out TData> : ISpecification,
-        IAssertWithDataCaseBuilder<TSut, TData>
     {
     }
 }

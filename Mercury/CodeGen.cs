@@ -5,18 +5,19 @@ using Mercury.AssertBuilder;
 using System.Collections.Generic;
 
 namespace Mercury {
-    using Arrange;
 
     public interface IArranged<out TSut>
     {
         IAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TSut, TPostAct> actFunc);
-	    IArrangedWithData<TSut, TData1> With<TData1>(TData1 data1);
+	    IArrangedWithData<TSut, TData> With<TData>(TData data);
 	    IArrangedWithData<TSut, TData1, TData2> With<TData1, TData2>(TData1 data1, TData2 data2);
 	    IArrangedWithData<TSut, TData1, TData2, TData3> With<TData1, TData2, TData3>(TData1 data1, TData2 data2, TData3 data3);
 	    IArrangedWithData<TSut, TData1, TData2, TData3, TData4> With<TData1, TData2, TData3, TData4>(TData1 data1, TData2 data2, TData3 data3, TData4 data4);
 	    IArrangedWithData<TSut, TData1, TData2, TData3, TData4, TData5> With<TData1, TData2, TData3, TData4, TData5>(TData1 data1, TData2 data2, TData3 data3, TData4 data4, TData5 data5);
     }
 
+	namespace Arrange
+	{
 	internal sealed class ArrangedTestBuilder<TSut> : IArranged<TSut>, ISuite
     {
         private readonly string _testName;
@@ -33,9 +34,9 @@ namespace Mercury {
             return new PreAssertBuilder<TResult>(this, () => actFunc(_arrangeFunc()));
         }
 
-        public IArrangedWithData<TSut, TData1> With<TData1>(TData1 data1)
+        public IArrangedWithData<TSut, TData> With<TData>(TData data)
         {
-            return new ArrangedDataBuilder<TSut, TData1>(this, _arrangeFunc).With(data1);
+            return new ArrangedDataBuilder<TSut, TData>(this, _arrangeFunc).With(data);
         }
 
         public IArrangedWithData<TSut, TData1, TData2> With<TData1, TData2>(TData1 data1, TData2 data2)
@@ -62,6 +63,7 @@ namespace Mercury {
         {
             get { return _testName; }
         }
+    }
     }
 
 }

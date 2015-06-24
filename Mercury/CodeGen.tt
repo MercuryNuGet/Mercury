@@ -14,6 +14,7 @@ namespace Mercury {
 
     Func<int, string> createDataTypeCsvList = count =>
     {
+        if (count == 1) return "TData";
         var list = new List<string>();
         for (var d = 1; d <= count; d++)
         {
@@ -24,6 +25,7 @@ namespace Mercury {
 
     Func<int, string> createOutDataTypeCsvList = count =>
     {
+        if (count == 1) return "out TData";
         var list = new List<string>();
         for (var d = 1; d <= count; d++)
         {
@@ -34,6 +36,7 @@ namespace Mercury {
 
     Func<int, string> createDataArgSig = count =>
     {
+        if (count == 1) return "TData data";
         var list = new List<string>();
         for (var d = 1; d <= count; d++)
         {
@@ -54,6 +57,7 @@ namespace Mercury {
 
     Func<string, int, string> newArgList = (name, count) =>
     {
+        if (count == 1) return name;
         var list = new List<string>();
         for (var d = 1; d <= count; d++)
         {
@@ -62,7 +66,6 @@ namespace Mercury {
         return string.Join(", ", list);
     };
 #>
-    using Arrange;
 
     public interface IArranged<out TSut>
     {
@@ -81,6 +84,8 @@ namespace Mercury {
 #>
     }
 
+	namespace Arrange
+	{
 	internal sealed class ArrangedTestBuilder<TSut> : IArranged<TSut>, ISuite
     {
         private readonly string _testName;
@@ -101,9 +106,9 @@ namespace Mercury {
 {
     for (var k = 1; k <= maxDataTypes; k++)
     {
-	    var types = createDataTypeCsvList(k);
+        var types = createDataTypeCsvList(k);
         var sig = createDataArgSig(k);
-		var args = newArgList("data", k);
+        var args = newArgList("data", k);
 #>
         public IArrangedWithData<TSut, <#Write(types); #>> With<<#Write(types); #>>(<#Write(sig); #>)
         {
@@ -119,14 +124,16 @@ namespace Mercury {
             get { return _testName; }
         }
     }
+    }
 
 <#
-for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
+for (var dataTypeCount = 1; dataTypeCount <= maxDataTypes; dataTypeCount++)
 {
     manager.StartNewFile("DataX" + dataTypeCount + ".generated.cs");
     var allDataTypes = createDataTypeCsvList(dataTypeCount);
     var allDataTypesWithOut = createOutDataTypeCsvList(dataTypeCount);
     var sig = createDataArgSig(dataTypeCount);
+    var tupleType = dataTypeCount == 1 ? "TData" : "Tuple<" + allDataTypes + ">";
     #>
 
   public interface IArrangedWithData<out TSut, <# Write(allDataTypes); #>>
@@ -150,9 +157,9 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
         private readonly Func<<# Write(allDataTypes); #>, TSut> _actFunc;
-        private readonly IDataSuite<Tuple<<# Write(allDataTypes); #>>> _dataSuite;
+        private readonly IDataSuite<<# Write(tupleType); #>> _dataSuite;
 
-        public DataAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<Tuple<<# Write(allDataTypes); #>>> dataSuite)
+        public DataAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<<# Write(tupleType); #>> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
@@ -180,7 +187,7 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
                 Action assertTestMethod = () =>
                 {
 <#
-    var allDataItemsCsv = tupleToArgCsv("d", dataTypeCount);
+    var allDataItemsCsv = dataTypeCount == 1 ? "d" : tupleToArgCsv("d", dataTypeCount);
 #>
                     TSut acted = _actFunc(<#Write(allDataItemsCsv); #>);
                     assertMethod(acted, <#Write(allDataItemsCsv); #>);
@@ -198,9 +205,9 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
 	internal sealed class DataPreAssertBuilder<TSut, <# Write(allDataTypes); #>> : IAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>>
     {
         private readonly Func<<# Write(allDataTypes); #>, TSut> _actFunc;
-        private readonly IDataSuite<Tuple<<# Write(allDataTypes); #>>> _dataSuite;
+        private readonly IDataSuite<<# Write(tupleType); #>> _dataSuite;
 
-        public DataPreAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<Tuple<<# Write(allDataTypes); #>>> dataSuite)
+        public DataPreAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<<# Write(tupleType); #>> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
@@ -218,12 +225,16 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
                 assertAction);
         }
     }
+<# manager.EndBlock(); #>
+<# manager.StartNewFile("ArrangedDataBuilderX" + dataTypeCount + ".generated.cs"); #>
 
-	internal sealed class ArrangedDataBuilder<TSut, <# Write(allDataTypes); #>> : IArrangedWithData<TSut, <# Write(allDataTypes); #>>, IDataSuite<Tuple<<# Write(allDataTypes); #>>>
+	namespace Arrange
+	{
+	internal sealed class ArrangedDataBuilder<TSut, <# Write(allDataTypes); #>> : IArrangedWithData<TSut, <# Write(allDataTypes); #>>, IDataSuite<<# Write(tupleType); #>>
     {
         private readonly ISuite _suite;
         private readonly Func<TSut> _arrangeFunc;
-        private readonly List<Tuple<<# Write(allDataTypes); #>>> _data = new List<Tuple<<# Write(allDataTypes); #>>>();
+        private readonly List<<# Write(tupleType); #>> _data = new List<<# Write(tupleType); #>>();
 
         public ArrangedDataBuilder(ISuite suite, Func<TSut> arrangeFunc)
         {
@@ -234,7 +245,7 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
         public IAssertWithDataCaseBuilder<TPostAct, <# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut, <# Write(allDataTypes); #>, TPostAct> actFunc)
         {
 <#{
-              var argList = newArgList("data", dataTypeCount);
+    var argList = newArgList("data", dataTypeCount);
 #>
             return new DataPreAssertBuilder<TPostAct, <# Write(allDataTypes); #>>(
                 (<#Write(argList); #>) =>
@@ -247,7 +258,14 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
 
         public IArrangedWithData<TSut, <# Write(allDataTypes); #>> With(<# Write(createDataArgSig(dataTypeCount)); #>)
         {
-            _data.Add(Tuple.Create(<#Write(newArgList("data", dataTypeCount)); #>));
+<# if (dataTypeCount == 1)
+{ #>
+            _data.Add(<# Write(newArgList("data", dataTypeCount)); #>);
+<# }
+else
+{ #>
+            _data.Add(Tuple.Create(<# Write(newArgList("data", dataTypeCount)); #>));
+<# } #>
             return this;
         }
 
@@ -256,10 +274,11 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
             get { return _suite.SuiteName; }
         }
 
-        public IEnumerable<Tuple<<# Write(allDataTypes); #>>> Data
+        public IEnumerable<<# Write(tupleType); #>> Data
         {
             get { return _data; }
         }
+    }
     }
 <# manager.EndBlock();
 }
