@@ -9,9 +9,10 @@ namespace Mercury.AssertBuilder
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
         private readonly Func<TData, TSut> _actFunc;
-        private readonly IDataSuite<TData> _dataSuite;
+		private readonly IDataSuite<TData> _dataSuite;
 
-        public DataAssertBuilder(Func<TData, TSut> actFunc, IDataSuite<TData> dataSuite)
+        public DataAssertBuilder(Func<TData, TSut> actFunc,
+                           IDataSuite<TData> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
@@ -19,7 +20,7 @@ namespace Mercury.AssertBuilder
 
         public IPostAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
         {
-            InternalAssert(_dataSuite.SuiteName, assertMethod);
+		    InternalAssert(_dataSuite.SuiteName, assertMethod);
             return this;
         }
 

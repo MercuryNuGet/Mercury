@@ -62,6 +62,14 @@ using Mercury.AssertBuilder;
         }
         return string.Join(", ", list);
     };
+
+	 Action<int,string> writeSuiteFieldDefinition = (count,tupleType) =>
+	 {
+	     if (count > 0)
+	         Write("private readonly IDataSuite<" + tupleType + "> _dataSuite;");
+	     else
+	         Write("private readonly ISuite _suite;");
+	 };
 #>
 
 namespace Mercury
@@ -126,66 +134,90 @@ namespace Mercury
     }
 }
 <#
-for (var dataTypeCount = 1; dataTypeCount <= maxDataTypes; dataTypeCount++)
+for (var dataTypeCount = 0; dataTypeCount <= maxDataTypes; dataTypeCount++)
 {
-    manager.StartNewFile("DataX" + dataTypeCount + ".generated.cs");
-    var allDataTypes = createDataTypeCsvList(dataTypeCount);
+    var allDataTypesWithoutPrefixPostfix = createDataTypeCsvList(dataTypeCount);
+    var allDataTypes = allDataTypesWithoutPrefixPostfix == "" ? "" : ", " + allDataTypesWithoutPrefixPostfix;
+    var allDataTypesPost = allDataTypesWithoutPrefixPostfix == "" ? "" : allDataTypesWithoutPrefixPostfix + ", ";
     var allDataTypesWithOut = createOutDataTypeCsvList(dataTypeCount);
+    var allDataTypesWithOutPre = allDataTypesWithOut == "" ? "" : ", " + allDataTypesWithOut;
     var sig = createDataArgSig(dataTypeCount);
-    var tupleType = dataTypeCount == 1 ? "TData" : "Tuple<" + allDataTypes + ">";
-    #>
+    var tupleType = dataTypeCount == 1 ? "TData" : "Tuple<" + allDataTypesWithoutPrefixPostfix + ">";
+    if (dataTypeCount >= 0)
+    {
+        manager.StartNewFile("DataX" + dataTypeCount + ".generated.cs");
+        #>
 namespace Mercury
 {
-  public interface IArrangedWithData<out TSut, <# Write(allDataTypes); #>>
+  public interface IArrangedWithData<out TSut<# Write(allDataTypes); #>>
   {
-     IAssertWithDataCaseBuilder<TPostAct, <# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut, <# Write(allDataTypes); #>, TPostAct> actFunc);
-     IArrangedWithData<TSut, <# Write(allDataTypes); #>> With(<#Write(sig); #>);
+     IAssertWithDataCaseBuilder<TPostAct<# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut<# Write(allDataTypes); #>, TPostAct> actFunc);
+     IArrangedWithData<TSut<# Write(allDataTypes); #>> With(<#Write(sig); #>);
   }
 
-  public interface IAssertWithDataCaseBuilder<out TSut, <# Write(allDataTypesWithOut); #>>
+  public interface IAssertWithDataCaseBuilder<out TSut<# Write(allDataTypesWithOutPre); #>>
   {
-      IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(Action<TSut, <# Write(allDataTypes); #>> assertAction);
-      IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(string assertionTestCaseName, Action<TSut, <# Write(allDataTypes); #>> assertAction);
+      IPostAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>> Assert(Action<TSut<# Write(allDataTypes); #>> assertAction);
+      IPostAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>> Assert(string assertionTestCaseName, Action<TSut<# Write(allDataTypes); #>> assertAction);
   }
 
-  public interface IPostAssertWithDataCaseBuilder<out TSut, <# Write(allDataTypesWithOut); #>> : ISpecification,
-        IAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>>
+  public interface IPostAssertWithDataCaseBuilder<out TSut<# Write(allDataTypesWithOutPre); #>> : ISpecification,
+        IAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>>
   {
   }
 }
-<#manager.EndBlock(); #>
+<# }
+manager.EndBlock(); #>
 <#manager.StartNewFile("DataAssertBuilderX" + dataTypeCount + ".generated.cs"); #>
 using System.Collections.Generic;
 
 namespace Mercury.AssertBuilder
 {
-  internal sealed class DataAssertBuilder<TSut, <# Write(allDataTypes); #>> : IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>>
+  internal sealed class DataAssertBuilder<TSut<# Write(allDataTypes); #>> : IPostAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>>
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
-        private readonly Func<<# Write(allDataTypes); #>, TSut> _actFunc;
-        private readonly IDataSuite<<# Write(tupleType); #>> _dataSuite;
+        private readonly Func<<# Write(allDataTypesPost); #>TSut> _actFunc;
+		<# writeSuiteFieldDefinition(dataTypeCount, tupleType); #>
 
-        public DataAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<<# Write(tupleType); #>> dataSuite)
+
+        public DataAssertBuilder(Func<<# Write(allDataTypesPost); #>TSut> actFunc,
+<# if (dataTypeCount == 0)
+{ #>
+                           ISuite suite)
+<# }
+else
+{ #>
+                           IDataSuite<<# Write(tupleType); #>> dataSuite)
+<# } #>
         {
             _actFunc = actFunc;
+<# if (dataTypeCount > 0)
+{ #>
             _dataSuite = dataSuite;
+<# }
+else
+{ #>
+            _suite = suite;
+<# } #>
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(Action<TSut, <# Write(allDataTypes); #>> assertMethod)
+        public IPostAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>> Assert(Action<TSut<# Write(allDataTypes); #>> assertMethod)
         {
-            InternalAssert(_dataSuite.SuiteName, assertMethod);
+		    InternalAssert(_<# Write(dataTypeCount == 0 ? "s" : "dataS"); #>uite.SuiteName, assertMethod);
             return this;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(string assertionTestCaseName,
-            Action<TSut, <# Write(allDataTypes); #>> assertMethod)
+        public IPostAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>> Assert(string assertionTestCaseName,
+            Action<TSut<# Write(allDataTypes); #>> assertMethod)
         {
-            InternalAssert(_dataSuite.SuiteName + " " + assertionTestCaseName, assertMethod);
+            InternalAssert(_<# Write(dataTypeCount == 0 ? "s" : "dataS"); #>uite.SuiteName + " " + assertionTestCaseName, assertMethod);
             return this;
         }
 
-        private void InternalAssert(string testName, Action<TSut, <# Write(allDataTypes); #>> assertMethod)
+        private void InternalAssert(string testName, Action<TSut<# Write(allDataTypes); #>> assertMethod)
         {
+<# if (dataTypeCount > 0)
+{ #>
             foreach (var data in _dataSuite.Data)
             {
                 var d = data;
@@ -200,6 +232,10 @@ namespace Mercury.AssertBuilder
                 };
                 _tests.AddSingleTest(inject, assertTestMethod);
             }
+<# } else
+{ #>
+            _tests.AddSingleTest(testName, () => assertMethod(_actFunc()));            
+<# } #>
         }
 
         public IEnumerable<ISingleRunnableTestCase> EmitAllRunnableTests()
@@ -214,37 +250,56 @@ using System.Collections.Generic;
 
 namespace Mercury.AssertBuilder
 {
-	internal sealed class DataPreAssertBuilder<TSut, <# Write(allDataTypes); #>> : IAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>>
+	internal sealed class DataPreAssertBuilder<TSut<# Write(allDataTypes); #>> : IAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>>
     {
-        private readonly Func<<# Write(allDataTypes); #>, TSut> _actFunc;
-        private readonly IDataSuite<<# Write(tupleType); #>> _dataSuite;
+        private readonly Func<<# Write(allDataTypesPost); #>TSut> _actFunc;
+        <# writeSuiteFieldDefinition(dataTypeCount, tupleType); #>
 
-        public DataPreAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<<# Write(tupleType); #>> dataSuite)
+
+        public DataPreAssertBuilder(Func<<# Write(allDataTypesPost); #>TSut> actFunc,
+<# if (dataTypeCount == 0)
+{ #>
+                           ISuite suite)
+<# }
+else
+{ #>
+                           IDataSuite<<# Write(tupleType); #>> dataSuite)
+<# } #>
         {
             _actFunc = actFunc;
+<# if (dataTypeCount > 0)
+{ #>
             _dataSuite = dataSuite;
+<# }
+else
+{ #>
+            _suite = suite;
+<# } #>
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(Action<TSut, <# Write(allDataTypes); #>> assertAction)
+        public IPostAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>> Assert(Action<TSut<# Write(allDataTypes); #>> assertAction)
         {
-            return new DataAssertBuilder<TSut, <# Write(allDataTypes); #>>(_actFunc, _dataSuite).Assert(assertAction);
+            return new DataAssertBuilder<TSut<# Write(allDataTypes); #>>(_actFunc, _<# Write(dataTypeCount == 0 ? "s" : "dataS"); #>uite).Assert(assertAction);
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(string assertionTestCaseName,
-            Action<TSut, <# Write(allDataTypes); #>> assertAction)
+        public IPostAssertWithDataCaseBuilder<TSut<# Write(allDataTypes); #>> Assert(string assertionTestCaseName,
+            Action<TSut<# Write(allDataTypes); #>> assertAction)
         {
-            return new DataAssertBuilder<TSut, <# Write(allDataTypes); #>>(_actFunc, _dataSuite).Assert(assertionTestCaseName,
+            return new DataAssertBuilder<TSut<# Write(allDataTypes); #>>(_actFunc, _<# Write(dataTypeCount == 0 ? "s" : "dataS"); #>uite).Assert(assertionTestCaseName,
                 assertAction);
         }
     }
 }
 <# manager.EndBlock(); #>
-<# manager.StartNewFile("ArrangedDataBuilderX" + dataTypeCount + ".generated.cs"); #>
+<#
+if (dataTypeCount > 0)
+{
+    manager.StartNewFile("ArrangedDataBuilderX" + dataTypeCount + ".generated.cs"); #>
 using System.Collections.Generic;
 
 namespace Mercury.Arrange
 {
-	internal sealed class ArrangedDataBuilder<TSut, <# Write(allDataTypes); #>> : IArrangedWithData<TSut, <# Write(allDataTypes); #>>, IDataSuite<<# Write(tupleType); #>>
+	internal sealed class ArrangedDataBuilder<TSut<# Write(allDataTypes); #>> : IArrangedWithData<TSut<# Write(allDataTypes); #>>, IDataSuite<<# Write(tupleType); #>>
     {
         private readonly ISuite _suite;
         private readonly Func<TSut> _arrangeFunc;
@@ -256,12 +311,12 @@ namespace Mercury.Arrange
             _arrangeFunc = arrangeFunc;
         }
 
-        public IAssertWithDataCaseBuilder<TPostAct, <# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut, <# Write(allDataTypes); #>, TPostAct> actFunc)
+        public IAssertWithDataCaseBuilder<TPostAct<# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut<# Write(allDataTypes); #>, TPostAct> actFunc)
         {
 <#{
     var argList = newArgList("data", dataTypeCount);
 #>
-            return new DataPreAssertBuilder<TPostAct, <# Write(allDataTypes); #>>(
+            return new DataPreAssertBuilder<TPostAct<# Write(allDataTypes); #>>(
                 (<#Write(argList); #>) =>
                 {
                     var arranged = _arrangeFunc();
@@ -270,7 +325,7 @@ namespace Mercury.Arrange
 <# } #>
         }
 
-        public IArrangedWithData<TSut, <# Write(allDataTypes); #>> With(<# Write(createDataArgSig(dataTypeCount)); #>)
+        public IArrangedWithData<TSut<# Write(allDataTypes); #>> With(<# Write(createDataArgSig(dataTypeCount)); #>)
         {
 <# if (dataTypeCount == 1)
 { #>
@@ -294,7 +349,9 @@ else
         }
     }
     }
-<# manager.EndBlock();
+<#
+}
+    manager.EndBlock();
 }
 #>
 <# manager.StartFooter(); #>

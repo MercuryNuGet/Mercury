@@ -10,7 +10,8 @@ namespace Mercury.AssertBuilder
         private readonly Func<TData1, TData2, TData3, TData4, TSut> _actFunc;
         private readonly IDataSuite<Tuple<TData1, TData2, TData3, TData4>> _dataSuite;
 
-        public DataPreAssertBuilder(Func<TData1, TData2, TData3, TData4, TSut> actFunc, IDataSuite<Tuple<TData1, TData2, TData3, TData4>> dataSuite)
+        public DataPreAssertBuilder(Func<TData1, TData2, TData3, TData4, TSut> actFunc,
+                           IDataSuite<Tuple<TData1, TData2, TData3, TData4>> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;

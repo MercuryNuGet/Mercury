@@ -63,6 +63,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataAssertBuilderX0.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataAssertBuilderX1.generated.cs">
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
@@ -78,6 +81,9 @@
     <Compile Include="DataAssertBuilderX5.generated.cs">
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataPreAssertBuilderX0.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataPreAssertBuilderX1.generated.cs">
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
@@ -91,6 +97,9 @@
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
     <Compile Include="DataPreAssertBuilderX5.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataX0.generated.cs">
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
     <Compile Include="DataX1.generated.cs">
