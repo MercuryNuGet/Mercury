@@ -3,10 +3,8 @@ using System;
 using Mercury.AssertBuilder;
 using System.Collections.Generic;
 
-namespace Mercury {
-
-	namespace Arrange
-	{
+namespace Mercury.Arrange
+{
 	internal sealed class ArrangedDataBuilder<TSut, TData1, TData2, TData3, TData4, TData5> : IArrangedWithData<TSut, TData1, TData2, TData3, TData4, TData5>, IDataSuite<Tuple<TData1, TData2, TData3, TData4, TData5>>
     {
         private readonly ISuite _suite;
@@ -46,4 +44,3 @@ namespace Mercury {
         }
     }
     }
-}

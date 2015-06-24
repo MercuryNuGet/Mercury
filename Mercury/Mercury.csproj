@@ -63,6 +63,36 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataAssertBuilderX1.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAssertBuilderX2.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAssertBuilderX3.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAssertBuilderX4.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAssertBuilderX5.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataPreAssertBuilderX1.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataPreAssertBuilderX2.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataPreAssertBuilderX3.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataPreAssertBuilderX4.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataPreAssertBuilderX5.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataX1.generated.cs">
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
@@ -97,8 +127,6 @@
     <Compile Include="StaticArrange\StaticArrangedDataBuilder.cs" />
     <Compile Include="StaticArrange\StaticArrangedTestBuilder.cs" />
     <Compile Include="AssertBuilder\AssertBuilder.cs" />
-    <Compile Include="AssertBuilder\DataAssertBuilder.cs" />
-    <Compile Include="AssertBuilder\DataPreAssertBuilder.cs" />
     <Compile Include="AssertBuilder\PreAssertBuilder.cs" />
     <Compile Include="StringTestExtension.cs" />
     <Compile Include="AssertBuilder\TestCaseAccumulator.cs" />
