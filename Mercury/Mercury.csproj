@@ -99,6 +99,21 @@
     <Compile Include="DataX5.generated.cs">
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExtensionsX1.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtensionsX2.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtensionsX3.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtensionsX4.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtensionsX5.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
     <Compile Include="ISpecification.cs" />
     <Compile Include="Manager.cs">
       <AutoGen>True</AutoGen>

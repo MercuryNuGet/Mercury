@@ -347,6 +347,82 @@ else
         }
     }
     }
+<# manager.EndBlock(); #>
+<# manager.StartNewFile("ExtensionsX" + dataTypeCount + ".generated.cs");
+
+    Func<int, string> createExtensionTypes = count =>
+    {
+        var list = new List<string>();
+		list.Add("TActual");
+        for (var d = 1; d < count; d++)
+        {
+            list.Add("TUnusedData" + d);
+        }
+		list.Add("TExpected");
+        return string.Join(", ", list);
+    };
+
+	Func<int, string> createExtensionArgs = count =>
+    {
+        var list = new List<string>();
+		list.Add("actual");
+        for (var d = 1; d < count; d++)
+        {
+            list.Add("unusedData" + d);
+        }
+		list.Add("expected");
+        return string.Join(", ", list);
+    };
+
+	var extensionTypes = createExtensionTypes(dataTypeCount);
+	var extensionArgs = createExtensionArgs(dataTypeCount);
+#>
+using System.Collections.Generic;
+
+namespace Mercury
+{
+    public static class ExtensionsX<# Write(dataTypeCount.ToString()); #> {
+
+<# if (dataTypeCount > 1) {#>
+        /// <summary>
+        ///    Assert that passes result of act and last data item to function. Useful when placing expected as last data item.
+        /// </summary>
+        /// <typeparam name="TActual"></typeparam>
+<# for(var counter = 1; counter < dataTypeCount; counter++) {#>
+        /// <typeparam name="TUnusedData<# Write(counter.ToString()); #>"></typeparam>
+<# } #>
+        /// <typeparam name="TExpected"></typeparam>
+        /// <param name="builder"></param>
+        /// <param name="assertMethod"></param>
+        /// <returns></returns>
+        public static IPostAssertCaseBuilder<<# Write(extensionTypes); #>> Assert<<# Write(extensionTypes); #>>(
+		      this IAssertCaseBuilder<<# Write(extensionTypes); #>> builder,
+		           Action<TActual, TExpected> assertMethod){
+            return builder.Assert((<# Write(extensionArgs); #>) => assertMethod(actual, expected));
+        }
+
+		/// <summary>
+        ///    Assert that passes result of act and last data item to function. Useful when placing expected as last data item.
+        /// </summary>
+        /// <typeparam name="TActual"></typeparam>
+<# for(var counter = 1; counter < dataTypeCount; counter++) {#>
+        /// <typeparam name="TUnusedData<# Write(counter.ToString()); #>"></typeparam>
+<# } #>
+        /// <typeparam name="TExpected"></typeparam>
+        /// <param name="builder"></param>
+		/// <param name="assertName"></param>
+        /// <param name="assertMethod"></param>
+        /// <returns></returns>
+		public static IPostAssertCaseBuilder<<# Write(extensionTypes); #>> Assert<<# Write(extensionTypes); #>>(
+		        this IAssertCaseBuilder<<# Write(extensionTypes); #>> builder,
+		             string assertName,
+				     Action<TActual, TExpected> assertMethod){
+            return builder.Assert(assertName, (<# Write(extensionArgs); #>) => assertMethod(actual, expected));
+        }
+<# } #>
+
+    }
+}
 <#
 }
     manager.EndBlock();
