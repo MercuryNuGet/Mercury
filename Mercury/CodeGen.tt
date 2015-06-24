@@ -12,60 +12,57 @@ namespace Mercury {
 <# manager.EndBlock(); #>
 
 <#
-for (int dataTypeCount = 2; dataTypeCount < 5; dataTypeCount++)
+for (var dataTypeCount = 2; dataTypeCount < 5; dataTypeCount++)
 {
     manager.StartNewFile("DataX" + dataTypeCount + ".generated.cs");
-    var data = "";
-    var preData = "";
-    var outData = "";
     var list = new List<string>();
-    for (int d = 1; d <= dataTypeCount; d++)
+	var outList = new List<string>();
+    for (var d = 1; d <= dataTypeCount; d++)
     {
         list.Add("TData" + d);
-        data += ", TData" + d;
-        preData += "TData" + d + ", ";
-        outData += ", out TData" + d;
+		outList.Add("out TData" + d);
     }
     var allDataTypes = string.Join(", ", list);
+	var allDataTypesWithOut = string.Join(", ", outList);
  #>
 
-  public interface IAssertWithDataCaseBuilder<out TSut<# Write(outData); #>>
+  public interface IAssertWithDataCaseBuilder<out TSut, <# Write(allDataTypesWithOut); #>>
   {
-      IPostAssertWithDataCaseBuilder<TSut<# Write(data); #>> Assert(Action<TSut<# Write(data); #>> assertAction);
-      IPostAssertWithDataCaseBuilder<TSut<# Write(data); #>> Assert(string assertionTestCaseName, Action<TSut<# Write(data); #>> assertAction);
+      IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(Action<TSut, <# Write(allDataTypes); #>> assertAction);
+      IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(string assertionTestCaseName, Action<TSut, <# Write(allDataTypes); #>> assertAction);
   }
 
-  public interface IPostAssertWithDataCaseBuilder<out TSut<# Write(outData); #>> : ISpecification,
-        IAssertWithDataCaseBuilder<TSut<# Write(data); #>>
+  public interface IPostAssertWithDataCaseBuilder<out TSut, <# Write(allDataTypesWithOut); #>> : ISpecification,
+        IAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>>
   {
   }
 
-  internal sealed class DataAssertBuilder<TSut<# Write(data); #>> : IPostAssertWithDataCaseBuilder<TSut<# Write(data); #>>
+  internal sealed class DataAssertBuilder<TSut, <# Write(allDataTypes); #>> : IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>>
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
-        private readonly Func<<# Write(preData); #>TSut> _actFunc;
+        private readonly Func<<# Write(allDataTypes); #>, TSut> _actFunc;
         private readonly IDataSuite<Tuple<<# Write(allDataTypes); #>>> _dataSuite;
 
-        public DataAssertBuilder(Func<<# Write(preData); #>TSut> actFunc, IDataSuite<Tuple<<# Write(allDataTypes); #>>> dataSuite)
+        public DataAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<Tuple<<# Write(allDataTypes); #>>> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut<# Write(data); #>> Assert(Action<TSut<# Write(data); #>> assertMethod)
+        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(Action<TSut, <# Write(allDataTypes); #>> assertMethod)
         {
             InternalAssert(_dataSuite.SuiteName, assertMethod);
             return this;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut<# Write(data); #>> Assert(string assertionTestCaseName,
-            Action<TSut<# Write(data); #>> assertMethod)
+        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(string assertionTestCaseName,
+            Action<TSut, <# Write(allDataTypes); #>> assertMethod)
         {
             InternalAssert(_dataSuite.SuiteName + " " + assertionTestCaseName, assertMethod);
             return this;
         }
 
-        private void InternalAssert(string testName, Action<TSut<# Write(data); #>> assertMethod)
+        private void InternalAssert(string testName, Action<TSut, <# Write(allDataTypes); #>> assertMethod)
         {
             foreach (var data in _dataSuite.Data)
             {
