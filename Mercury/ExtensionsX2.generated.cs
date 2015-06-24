@@ -39,5 +39,20 @@ namespace Mercury
             return builder.Assert(assertName, (actual, unusedData1, expected) => assertMethod(actual, expected));
         }
 
+		/// <summary>
+        ///     Checks that the result of the Act or Sut matches the last data item.
+        /// </summary>
+        /// <typeparam name="TActual"></typeparam>
+        /// <typeparam name="TUnusedData1"></typeparam>
+        /// <typeparam name="TExpected"></typeparam>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+		public static IPostAssertCaseBuilder<TActual, TUnusedData1, TExpected> AssertEqualsExpected<TActual, TUnusedData1, TExpected>(
+                this IAssertCaseBuilder<TActual, TUnusedData1, TExpected> builder)
+        {
+            return builder.Assert("is equal to #Item2", (actual, expected) => NUnit.Framework.Assert.AreEqual(expected, actual));
+        }
+
+
     }
 }

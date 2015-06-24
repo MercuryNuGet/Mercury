@@ -419,6 +419,23 @@ namespace Mercury
 				     Action<TActual, TExpected> assertMethod){
             return builder.Assert(assertName, (<# Write(extensionArgs); #>) => assertMethod(actual, expected));
         }
+
+		/// <summary>
+        ///     Checks that the result of the Act or Sut matches the last data item.
+        /// </summary>
+        /// <typeparam name="TActual"></typeparam>
+<# for(var counter = 1; counter < dataTypeCount; counter++) {#>
+        /// <typeparam name="TUnusedData<# Write(counter.ToString()); #>"></typeparam>
+<# } #>
+        /// <typeparam name="TExpected"></typeparam>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+		public static IPostAssertCaseBuilder<<# Write(extensionTypes); #>> AssertEqualsExpected<<# Write(extensionTypes); #>>(
+                this IAssertCaseBuilder<<# Write(extensionTypes); #>> builder)
+        {
+            return builder.Assert("is equal to #Item<# Write(dataTypeCount.ToString()); #>", (actual, expected) => NUnit.Framework.Assert.AreEqual(expected, actual));
+        }
+
 <# } #>
 
     }

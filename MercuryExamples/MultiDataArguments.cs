@@ -84,6 +84,13 @@ namespace MercuryExamples
                     .With(1, 2, 3, 45, ">12345")
                     .Act((s, a, b, c, d, e) => s + a + b + c + d)
                     .Assert("assert", (combined, e) => Assert.AreEqual(e, combined)),
+
+                 "Concatenation of items"
+                    .Arrange(() => ">")
+                    .With(1, 2, 3, 4, ">1234")
+                    .With(1, 2, 3, 45, ">12345")
+                    .Act((s, a, b, c, d, e) => s + a + b + c + d)
+                    .AssertEqualsExpected(),
             };
         }
     }
