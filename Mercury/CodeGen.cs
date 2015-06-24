@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Mercury {
     using Arrange;
 
-    public interface IArrangedTORENAME<out TSut>
+    public interface IArranged<out TSut>
     {
         IAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TSut, TPostAct> actFunc);
 	    IArrangedWithData<TSut, TData1> With<TData1>(TData1 data1);
@@ -17,12 +17,12 @@ namespace Mercury {
 	    IArrangedWithData<TSut, TData1, TData2, TData3, TData4, TData5> With<TData1, TData2, TData3, TData4, TData5>(TData1 data1, TData2 data2, TData3 data3, TData4 data4, TData5 data5);
     }
 
-	internal sealed class ArrangedTestBuilderT<TSut> : IArrangedTORENAME<TSut>, ISuite
+	internal sealed class ArrangedTestBuilder<TSut> : IArranged<TSut>, ISuite
     {
         private readonly string _testName;
         private readonly Func<TSut> _arrangeFunc;
 
-        public ArrangedTestBuilderT(string testName, Func<TSut> arrangeFunc)
+        public ArrangedTestBuilder(string testName, Func<TSut> arrangeFunc)
         {
             _testName = testName;
             _arrangeFunc = arrangeFunc;

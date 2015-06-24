@@ -2,12 +2,6 @@ using System;
 
 namespace Mercury
 {
-    public interface IArranged<out TSut>
-    {
-        IAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TSut, TPostAct> actFunc);
-        IArrangedWithData<TSut, TData> With<TData>(TData data);
-    }
-
     public interface IStaticArranged
     {
         IAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TPostAct> actFunc);

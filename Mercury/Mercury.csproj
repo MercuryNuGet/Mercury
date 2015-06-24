@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arrange\ArrangedDataBuilder.cs" />
-    <Compile Include="Arrange\ArrangedTestBuilder.cs" />
     <Compile Include="CodeGen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
