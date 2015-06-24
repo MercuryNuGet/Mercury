@@ -67,4 +67,67 @@ namespace Mercury {
             return _tests.EmitAllRunnableTests();
         }
     }
+
+	internal sealed class DataPreAssertBuilder<TSut, TData1, TData2> : IAssertWithDataCaseBuilder<TSut, TData1, TData2>
+    {
+        private readonly Func<TData1, TData2, TSut> _actFunc;
+        private readonly IDataSuite<Tuple<TData1, TData2>> _dataSuite;
+
+        public DataPreAssertBuilder(Func<TData1, TData2, TSut> actFunc, IDataSuite<Tuple<TData1, TData2>> dataSuite)
+        {
+            _actFunc = actFunc;
+            _dataSuite = dataSuite;
+        }
+
+        public IPostAssertWithDataCaseBuilder<TSut, TData1, TData2> Assert(Action<TSut, TData1, TData2> assertAction)
+        {
+            return new DataAssertBuilder<TSut, TData1, TData2>(_actFunc, _dataSuite).Assert(assertAction);
+        }
+
+        public IPostAssertWithDataCaseBuilder<TSut, TData1, TData2> Assert(string assertionTestCaseName,
+            Action<TSut, TData1, TData2> assertAction)
+        {
+            return new DataAssertBuilder<TSut, TData1, TData2>(_actFunc, _dataSuite).Assert(assertionTestCaseName,
+                assertAction);
+        }
+    }
+
+	internal sealed class ArrangedDataBuilder<TSut, TData1, TData2> : IArrangedWithData<TSut, TData1, TData2>, IDataSuite<Tuple<TData1, TData2>>
+    {
+        private readonly ISuite _suite;
+        private readonly Func<TSut> _arrangeFunc;
+        private readonly List<Tuple<TData1, TData2>> _data = new List<Tuple<TData1, TData2>>();
+
+        public ArrangedDataBuilder(ISuite suite, Func<TSut> arrangeFunc)
+        {
+            _suite = suite;
+            _arrangeFunc = arrangeFunc;
+        }
+
+        public IAssertWithDataCaseBuilder<TPostAct, TData1, TData2> Act<TPostAct>(Func<TSut, TData1, TData2, TPostAct> actFunc)
+        {
+            return new DataPreAssertBuilder<TPostAct, TData1, TData2>(
+                (data1, data2) =>
+                {
+                    var arranged = _arrangeFunc();
+                    return actFunc(arranged, data1, data2);
+                }, this);
+        }
+
+        public IArrangedWithData<TSut, TData1, TData2> With(TData1 data1, TData2 data2)
+        {
+            _data.Add(Tuple.Create(data1, data2));
+            return this;
+        }
+
+        public string SuiteName
+        {
+            get { return _suite.SuiteName; }
+        }
+
+        public IEnumerable<Tuple<TData1, TData2>> Data
+        {
+            get { return _data; }
+        }
+    }
 }

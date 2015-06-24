@@ -5,6 +5,7 @@ using Mercury.AssertBuilder;
 using System.Collections.Generic;
 
 namespace Mercury {
+    using Arrange;
 
     public interface IArrangedTORENAME<out TSut>
     {
@@ -14,6 +15,53 @@ namespace Mercury {
 	    IArrangedWithData<TSut, TData1, TData2, TData3> With<TData1, TData2, TData3>(TData1 data1, TData2 data2, TData3 data3);
 	    IArrangedWithData<TSut, TData1, TData2, TData3, TData4> With<TData1, TData2, TData3, TData4>(TData1 data1, TData2 data2, TData3 data3, TData4 data4);
 	    IArrangedWithData<TSut, TData1, TData2, TData3, TData4, TData5> With<TData1, TData2, TData3, TData4, TData5>(TData1 data1, TData2 data2, TData3 data3, TData4 data4, TData5 data5);
+    }
+
+	internal sealed class ArrangedTestBuilderT<TSut> : IArrangedTORENAME<TSut>, ISuite
+    {
+        private readonly string _testName;
+        private readonly Func<TSut> _arrangeFunc;
+
+        public ArrangedTestBuilderT(string testName, Func<TSut> arrangeFunc)
+        {
+            _testName = testName;
+            _arrangeFunc = arrangeFunc;
+        }
+
+        public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
+        {
+            return new PreAssertBuilder<TResult>(this, () => actFunc(_arrangeFunc()));
+        }
+
+        public IArrangedWithData<TSut, TData1> With<TData1>(TData1 data1)
+        {
+            return new ArrangedDataBuilder<TSut, TData1>(this, _arrangeFunc).With(data1);
+        }
+
+        public IArrangedWithData<TSut, TData1, TData2> With<TData1, TData2>(TData1 data1, TData2 data2)
+        {
+            return new ArrangedDataBuilder<TSut, TData1, TData2>(this, _arrangeFunc).With(data1, data2);
+        }
+
+        public IArrangedWithData<TSut, TData1, TData2, TData3> With<TData1, TData2, TData3>(TData1 data1, TData2 data2, TData3 data3)
+        {
+            return new ArrangedDataBuilder<TSut, TData1, TData2, TData3>(this, _arrangeFunc).With(data1, data2, data3);
+        }
+
+        public IArrangedWithData<TSut, TData1, TData2, TData3, TData4> With<TData1, TData2, TData3, TData4>(TData1 data1, TData2 data2, TData3 data3, TData4 data4)
+        {
+            return new ArrangedDataBuilder<TSut, TData1, TData2, TData3, TData4>(this, _arrangeFunc).With(data1, data2, data3, data4);
+        }
+
+        public IArrangedWithData<TSut, TData1, TData2, TData3, TData4, TData5> With<TData1, TData2, TData3, TData4, TData5>(TData1 data1, TData2 data2, TData3 data3, TData4 data4, TData5 data5)
+        {
+            return new ArrangedDataBuilder<TSut, TData1, TData2, TData3, TData4, TData5>(this, _arrangeFunc).With(data1, data2, data3, data4, data5);
+        }
+
+        public string SuiteName
+        {
+            get { return _testName; }
+        }
     }
 
 }

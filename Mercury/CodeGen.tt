@@ -32,7 +32,7 @@ namespace Mercury {
         return string.Join(", ", list);
     };
 
-	Func<int, string> createDataArgSig = count =>
+    Func<int, string> createDataArgSig = count =>
     {
         var list = new List<string>();
         for (var d = 1; d <= count; d++)
@@ -41,21 +41,83 @@ namespace Mercury {
         }
         return string.Join(", ", list);
     };
+
+    Func<string, int, string> tupleToArgCsv = (name, count) =>
+    {
+        var list = new List<string>();
+        for (var d = 1; d <= count; d++)
+        {
+            list.Add(name + ".Item" + d);
+        }
+        return string.Join(", ", list);
+    };
+
+    Func<string, int, string> newArgList = (name, count) =>
+    {
+        var list = new List<string>();
+        for (var d = 1; d <= count; d++)
+        {
+            list.Add(name + d);
+        }
+        return string.Join(", ", list);
+    };
 #>
+    using Arrange;
 
     public interface IArrangedTORENAME<out TSut>
     {
         IAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TSut, TPostAct> actFunc);
 <#
+{
     for (var k = 1; k <= maxDataTypes; k++)
     {
         var types = createDataTypeCsvList(k);
-		var sig = createDataArgSig(k);
+        var sig = createDataArgSig(k);
 #>
-	    IArrangedWithData<TSut, <#Write(types);#>> With<<#Write(types);#>>(<#Write(sig);#>);
+	    IArrangedWithData<TSut, <#Write(types); #>> With<<#Write(types); #>>(<#Write(sig); #>);
 <#
     }
+}
 #>
+    }
+
+	internal sealed class ArrangedTestBuilderT<TSut> : IArrangedTORENAME<TSut>, ISuite
+    {
+        private readonly string _testName;
+        private readonly Func<TSut> _arrangeFunc;
+
+        public ArrangedTestBuilderT(string testName, Func<TSut> arrangeFunc)
+        {
+            _testName = testName;
+            _arrangeFunc = arrangeFunc;
+        }
+
+        public IAssertCaseBuilder<TResult> Act<TResult>(Func<TSut, TResult> actFunc)
+        {
+            return new PreAssertBuilder<TResult>(this, () => actFunc(_arrangeFunc()));
+        }
+
+<#
+{
+    for (var k = 1; k <= maxDataTypes; k++)
+    {
+	    var types = createDataTypeCsvList(k);
+        var sig = createDataArgSig(k);
+		var args = newArgList("data", k);
+#>
+        public IArrangedWithData<TSut, <#Write(types); #>> With<<#Write(types); #>>(<#Write(sig); #>)
+        {
+            return new ArrangedDataBuilder<TSut, <#Write(types); #>>(this, _arrangeFunc).With(<#Write(args); #>);
+        }
+
+<#
+    }
+}
+#>
+        public string SuiteName
+        {
+            get { return _testName; }
+        }
     }
 
 <#
@@ -64,13 +126,13 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
     manager.StartNewFile("DataX" + dataTypeCount + ".generated.cs");
     var allDataTypes = createDataTypeCsvList(dataTypeCount);
     var allDataTypesWithOut = createOutDataTypeCsvList(dataTypeCount);
-	var sig = createDataArgSig(dataTypeCount);
+    var sig = createDataArgSig(dataTypeCount);
     #>
 
   public interface IArrangedWithData<out TSut, <# Write(allDataTypes); #>>
   {
      IAssertWithDataCaseBuilder<TPostAct, <# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut, <# Write(allDataTypes); #>, TPostAct> actFunc);
-     IArrangedWithData<TSut, <# Write(allDataTypes); #>> With(<#Write(sig);#>);
+     IArrangedWithData<TSut, <# Write(allDataTypes); #>> With(<#Write(sig); #>);
   }
 
   public interface IAssertWithDataCaseBuilder<out TSut, <# Write(allDataTypesWithOut); #>>
@@ -118,12 +180,7 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
                 Action assertTestMethod = () =>
                 {
 <#
-    var args = new List<string>();
-    for (var k = 1; k <= dataTypeCount; k++)
-    {
-        args.Add("d.Item" + k);
-    }
-    var allDataItemsCsv = String.Join(", ", args);
+    var allDataItemsCsv = tupleToArgCsv("d", dataTypeCount);
 #>
                     TSut acted = _actFunc(<#Write(allDataItemsCsv); #>);
                     assertMethod(acted, <#Write(allDataItemsCsv); #>);
@@ -135,6 +192,73 @@ for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
         public IEnumerable<ISingleRunnableTestCase> EmitAllRunnableTests()
         {
             return _tests.EmitAllRunnableTests();
+        }
+    }
+
+	internal sealed class DataPreAssertBuilder<TSut, <# Write(allDataTypes); #>> : IAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>>
+    {
+        private readonly Func<<# Write(allDataTypes); #>, TSut> _actFunc;
+        private readonly IDataSuite<Tuple<<# Write(allDataTypes); #>>> _dataSuite;
+
+        public DataPreAssertBuilder(Func<<# Write(allDataTypes); #>, TSut> actFunc, IDataSuite<Tuple<<# Write(allDataTypes); #>>> dataSuite)
+        {
+            _actFunc = actFunc;
+            _dataSuite = dataSuite;
+        }
+
+        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(Action<TSut, <# Write(allDataTypes); #>> assertAction)
+        {
+            return new DataAssertBuilder<TSut, <# Write(allDataTypes); #>>(_actFunc, _dataSuite).Assert(assertAction);
+        }
+
+        public IPostAssertWithDataCaseBuilder<TSut, <# Write(allDataTypes); #>> Assert(string assertionTestCaseName,
+            Action<TSut, <# Write(allDataTypes); #>> assertAction)
+        {
+            return new DataAssertBuilder<TSut, <# Write(allDataTypes); #>>(_actFunc, _dataSuite).Assert(assertionTestCaseName,
+                assertAction);
+        }
+    }
+
+	internal sealed class ArrangedDataBuilder<TSut, <# Write(allDataTypes); #>> : IArrangedWithData<TSut, <# Write(allDataTypes); #>>, IDataSuite<Tuple<<# Write(allDataTypes); #>>>
+    {
+        private readonly ISuite _suite;
+        private readonly Func<TSut> _arrangeFunc;
+        private readonly List<Tuple<<# Write(allDataTypes); #>>> _data = new List<Tuple<<# Write(allDataTypes); #>>>();
+
+        public ArrangedDataBuilder(ISuite suite, Func<TSut> arrangeFunc)
+        {
+            _suite = suite;
+            _arrangeFunc = arrangeFunc;
+        }
+
+        public IAssertWithDataCaseBuilder<TPostAct, <# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut, <# Write(allDataTypes); #>, TPostAct> actFunc)
+        {
+<#{
+              var argList = newArgList("data", dataTypeCount);
+#>
+            return new DataPreAssertBuilder<TPostAct, <# Write(allDataTypes); #>>(
+                (<#Write(argList); #>) =>
+                {
+                    var arranged = _arrangeFunc();
+                    return actFunc(arranged, <#Write(argList); #>);
+                }, this);
+<# } #>
+        }
+
+        public IArrangedWithData<TSut, <# Write(allDataTypes); #>> With(<# Write(createDataArgSig(dataTypeCount)); #>)
+        {
+            _data.Add(Tuple.Create(<#Write(newArgList("data", dataTypeCount)); #>));
+            return this;
+        }
+
+        public string SuiteName
+        {
+            get { return _suite.SuiteName; }
+        }
+
+        public IEnumerable<Tuple<<# Write(allDataTypes); #>>> Data
+        {
+            get { return _data; }
         }
     }
 <# manager.EndBlock();
