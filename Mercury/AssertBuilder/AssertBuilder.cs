@@ -7,7 +7,7 @@ namespace Mercury.AssertBuilder
     {
         private readonly ISuite _suite;
         private readonly Func<TResult> _actFunc;
-        private readonly TestCaseAccumulator _accumulator = new TestCaseAccumulator();
+        private readonly TestCaseAccumulator<TResult> _accumulator = new TestCaseAccumulator<TResult>();
 
         public AssertBuilder(ISuite suite, Func<TResult> actFunc)
         {
@@ -17,13 +17,23 @@ namespace Mercury.AssertBuilder
 
         public IPostAssertCaseBuilder<TResult> Assert(Action<TResult> assertAction)
         {
-            _accumulator.AddSingleTest(_suite.SuiteName, () => assertAction(_actFunc()));
+            _accumulator.AddSingleTest(_suite.SuiteName, () =>
+            {
+                var result = _actFunc();
+                assertAction(result);
+                return result;
+            });
             return this;
         }
 
         public IPostAssertCaseBuilder<TResult> Assert(string assertionTestCaseName, Action<TResult> assertAction)
         {
-            _accumulator.AddSingleTest(_suite.SuiteName + " " + assertionTestCaseName, () => assertAction(_actFunc()));
+            _accumulator.AddSingleTest(_suite.SuiteName + " " + assertionTestCaseName, () =>
+            {
+                var result = _actFunc();
+                assertAction(result);
+                return result;
+            });
             return this;
         }
 

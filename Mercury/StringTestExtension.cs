@@ -20,7 +20,11 @@ namespace Mercury
 
         public static ISpecification Assert(this string testName, Action test)
         {
-            return new SingleRunnableTestCase(testName, test);
+            return new SingleRunnableTestCase<object>(testName, () =>
+            {
+                test();
+                return null;
+            });
         }
 
         /// <summary>

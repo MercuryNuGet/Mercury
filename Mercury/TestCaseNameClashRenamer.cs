@@ -29,7 +29,12 @@ namespace Mercury
                         repeatNumber++;
                         newTestName = string.Format("{0} : {1}", test.Name, repeatNumber);
                     } while (groupedTests.Any(g => g.Key == newTestName));
-                    renamedTestCases[element.Index] = new SingleRunnableTestCase(newTestName, element.Value.TestMethod);
+                    var element1 = element;
+                    renamedTestCases[element.Index] = new SingleRunnableTestCase<object>(newTestName, () =>
+                    {
+                        element1.Value.TestMethod();
+                        return null;
+                    });
                 }
             }
 

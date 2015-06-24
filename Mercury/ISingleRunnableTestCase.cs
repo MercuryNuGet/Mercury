@@ -8,4 +8,9 @@ namespace Mercury
         Action TestMethod { get; }
         void Run();
     }
+
+    public interface ISingleRunnableTestCase<out TResult> : ISingleRunnableTestCase
+    {
+        Func<TResult> TestMethodWithResult { get; }
+    }
 }

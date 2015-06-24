@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace Mercury
 {
-    internal sealed class SingleRunnableTestCase : ISingleRunnableTestCase, ISpecification
+    internal sealed class SingleRunnableTestCase<TResult> : ISingleRunnableTestCase<TResult>,
+        ISpecification
     {
         private readonly string _str;
-        private readonly Action _test;
+        private readonly Func<TResult> _test;
 
-        public SingleRunnableTestCase(string str, Action test)
+        public SingleRunnableTestCase(string str, Func<TResult> test)
         {
             _str = str;
             _test = test;
@@ -19,9 +20,11 @@ namespace Mercury
             get { return _str; }
         }
 
+        public Func<TResult> TestMethodWithResult { get { return _test; } }
+
         public Action TestMethod
         {
-            get { return _test; }
+            get { return () => _test(); }
         }
 
         public void Run()

@@ -5,7 +5,7 @@ namespace Mercury.AssertBuilder
 {
     internal sealed class DataAssertBuilder<TSut, TData> : IPostAssertWithDataCaseBuilder<TSut, TData>
     {
-        private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
+        private readonly TestCaseAccumulator<TSut> _tests = new TestCaseAccumulator<TSut>();
         private readonly Func<TData, TSut> _actFunc;
         private readonly IDataSuite<TData> _dataSuite;
 
@@ -34,10 +34,11 @@ namespace Mercury.AssertBuilder
             {
                 var d = data;
                 string inject = NameInjection.Inject(testName, d);
-                Action assertTestMethod = () =>
+                Func<TSut> assertTestMethod = () =>
                 {
                     TSut acted = _actFunc(d);
                     assertMethod(acted, d);
+                    return acted;
                 };
                 _tests.AddSingleTest(inject, assertTestMethod);
             }
