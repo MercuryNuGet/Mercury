@@ -5,26 +5,26 @@ using System.Collections.Generic;
 
 namespace Mercury.AssertBuilder
 {
-  internal sealed class DataAssertBuilder<TSut> : IPostAssertWithDataCaseBuilder<TSut>
+  internal sealed class AssertBuilder<TSut> : IPostAssertCaseBuilder<TSut>
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
         private readonly Func<TSut> _actFunc;
 		private readonly ISuite _suite;
 
-        public DataAssertBuilder(Func<TSut> actFunc,
+        public AssertBuilder(Func<TSut> actFunc,
                            ISuite suite)
         {
             _actFunc = actFunc;
             _suite = suite;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut> Assert(Action<TSut> assertMethod)
+        public IPostAssertCaseBuilder<TSut> Assert(Action<TSut> assertMethod)
         {
 		    InternalAssert(_suite.SuiteName, assertMethod);
             return this;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut> Assert(string assertionTestCaseName,
+        public IPostAssertCaseBuilder<TSut> Assert(string assertionTestCaseName,
             Action<TSut> assertMethod)
         {
             InternalAssert(_suite.SuiteName + " " + assertionTestCaseName, assertMethod);

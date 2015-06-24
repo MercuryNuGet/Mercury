@@ -5,33 +5,33 @@ using System.Collections.Generic;
 
 namespace Mercury.AssertBuilder
 {
-  internal sealed class DataAssertBuilder<TSut, TData> : IPostAssertWithDataCaseBuilder<TSut, TData>
+  internal sealed class AssertBuilder<TSut, TData1, TData2, TData3> : IPostAssertCaseBuilder<TSut, TData1, TData2, TData3>
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
-        private readonly Func<TData, TSut> _actFunc;
-		private readonly IDataSuite<TData> _dataSuite;
+        private readonly Func<TData1, TData2, TData3, TSut> _actFunc;
+		private readonly IDataSuite<Tuple<TData1, TData2, TData3>> _dataSuite;
 
-        public DataAssertBuilder(Func<TData, TSut> actFunc,
-                           IDataSuite<TData> dataSuite)
+        public AssertBuilder(Func<TData1, TData2, TData3, TSut> actFunc,
+                           IDataSuite<Tuple<TData1, TData2, TData3>> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
+        public IPostAssertCaseBuilder<TSut, TData1, TData2, TData3> Assert(Action<TSut, TData1, TData2, TData3> assertMethod)
         {
 		    InternalAssert(_dataSuite.SuiteName, assertMethod);
             return this;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, TData> Assert(string assertionTestCaseName,
-            Action<TSut, TData> assertMethod)
+        public IPostAssertCaseBuilder<TSut, TData1, TData2, TData3> Assert(string assertionTestCaseName,
+            Action<TSut, TData1, TData2, TData3> assertMethod)
         {
             InternalAssert(_dataSuite.SuiteName + " " + assertionTestCaseName, assertMethod);
             return this;
         }
 
-        private void InternalAssert(string testName, Action<TSut, TData> assertMethod)
+        private void InternalAssert(string testName, Action<TSut, TData1, TData2, TData3> assertMethod)
         {
             foreach (var data in _dataSuite.Data)
             {
@@ -39,8 +39,8 @@ namespace Mercury.AssertBuilder
                 string inject = NameInjection.Inject(testName, d);
                 Action assertTestMethod = () =>
                 {
-                    TSut acted = _actFunc(d);
-                    assertMethod(acted, d);
+                    TSut acted = _actFunc(d.Item1, d.Item2, d.Item3);
+                    assertMethod(acted, d.Item1, d.Item2, d.Item3);
                 };
                 _tests.AddSingleTest(inject, assertTestMethod);
             }

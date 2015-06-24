@@ -5,18 +5,18 @@ namespace Mercury
 {
   public interface IArrangedWithData<out TSut>
   {
-     IAssertWithDataCaseBuilder<TPostAct> Act<TPostAct>(Func<TSut, TPostAct> actFunc);
+     IAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TSut, TPostAct> actFunc);
      IArrangedWithData<TSut> With();
   }
 
-  public interface IAssertWithDataCaseBuilder<out TSut>
+  public interface IAssertCaseBuilder<out TSut>
   {
-      IPostAssertWithDataCaseBuilder<TSut> Assert(Action<TSut> assertAction);
-      IPostAssertWithDataCaseBuilder<TSut> Assert(string assertionTestCaseName, Action<TSut> assertAction);
+      IPostAssertCaseBuilder<TSut> Assert(Action<TSut> assertAction);
+      IPostAssertCaseBuilder<TSut> Assert(string assertionTestCaseName, Action<TSut> assertAction);
   }
 
-  public interface IPostAssertWithDataCaseBuilder<out TSut> : ISpecification,
-        IAssertWithDataCaseBuilder<TSut>
+  public interface IPostAssertCaseBuilder<out TSut> : ISpecification,
+        IAssertCaseBuilder<TSut>
   {
   }
 }

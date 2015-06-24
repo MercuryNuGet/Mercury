@@ -5,33 +5,33 @@ using System.Collections.Generic;
 
 namespace Mercury.AssertBuilder
 {
-  internal sealed class DataAssertBuilder<TSut, TData1, TData2> : IPostAssertWithDataCaseBuilder<TSut, TData1, TData2>
+  internal sealed class AssertBuilder<TSut, TData> : IPostAssertCaseBuilder<TSut, TData>
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
-        private readonly Func<TData1, TData2, TSut> _actFunc;
-		private readonly IDataSuite<Tuple<TData1, TData2>> _dataSuite;
+        private readonly Func<TData, TSut> _actFunc;
+		private readonly IDataSuite<TData> _dataSuite;
 
-        public DataAssertBuilder(Func<TData1, TData2, TSut> actFunc,
-                           IDataSuite<Tuple<TData1, TData2>> dataSuite)
+        public AssertBuilder(Func<TData, TSut> actFunc,
+                           IDataSuite<TData> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, TData1, TData2> Assert(Action<TSut, TData1, TData2> assertMethod)
+        public IPostAssertCaseBuilder<TSut, TData> Assert(Action<TSut, TData> assertMethod)
         {
 		    InternalAssert(_dataSuite.SuiteName, assertMethod);
             return this;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, TData1, TData2> Assert(string assertionTestCaseName,
-            Action<TSut, TData1, TData2> assertMethod)
+        public IPostAssertCaseBuilder<TSut, TData> Assert(string assertionTestCaseName,
+            Action<TSut, TData> assertMethod)
         {
             InternalAssert(_dataSuite.SuiteName + " " + assertionTestCaseName, assertMethod);
             return this;
         }
 
-        private void InternalAssert(string testName, Action<TSut, TData1, TData2> assertMethod)
+        private void InternalAssert(string testName, Action<TSut, TData> assertMethod)
         {
             foreach (var data in _dataSuite.Data)
             {
@@ -39,8 +39,8 @@ namespace Mercury.AssertBuilder
                 string inject = NameInjection.Inject(testName, d);
                 Action assertTestMethod = () =>
                 {
-                    TSut acted = _actFunc(d.Item1, d.Item2);
-                    assertMethod(acted, d.Item1, d.Item2);
+                    TSut acted = _actFunc(d);
+                    assertMethod(acted, d);
                 };
                 _tests.AddSingleTest(inject, assertTestMethod);
             }

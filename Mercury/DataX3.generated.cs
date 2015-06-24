@@ -5,18 +5,18 @@ namespace Mercury
 {
   public interface IArrangedWithData<out TSut, TData1, TData2, TData3>
   {
-     IAssertWithDataCaseBuilder<TPostAct, TData1, TData2, TData3> Act<TPostAct>(Func<TSut, TData1, TData2, TData3, TPostAct> actFunc);
+     IAssertCaseBuilder<TPostAct, TData1, TData2, TData3> Act<TPostAct>(Func<TSut, TData1, TData2, TData3, TPostAct> actFunc);
      IArrangedWithData<TSut, TData1, TData2, TData3> With(TData1 data1, TData2 data2, TData3 data3);
   }
 
-  public interface IAssertWithDataCaseBuilder<out TSut, out TData1, out TData2, out TData3>
+  public interface IAssertCaseBuilder<out TSut, out TData1, out TData2, out TData3>
   {
-      IPostAssertWithDataCaseBuilder<TSut, TData1, TData2, TData3> Assert(Action<TSut, TData1, TData2, TData3> assertAction);
-      IPostAssertWithDataCaseBuilder<TSut, TData1, TData2, TData3> Assert(string assertionTestCaseName, Action<TSut, TData1, TData2, TData3> assertAction);
+      IPostAssertCaseBuilder<TSut, TData1, TData2, TData3> Assert(Action<TSut, TData1, TData2, TData3> assertAction);
+      IPostAssertCaseBuilder<TSut, TData1, TData2, TData3> Assert(string assertionTestCaseName, Action<TSut, TData1, TData2, TData3> assertAction);
   }
 
-  public interface IPostAssertWithDataCaseBuilder<out TSut, out TData1, out TData2, out TData3> : ISpecification,
-        IAssertWithDataCaseBuilder<TSut, TData1, TData2, TData3>
+  public interface IPostAssertCaseBuilder<out TSut, out TData1, out TData2, out TData3> : ISpecification,
+        IAssertCaseBuilder<TSut, TData1, TData2, TData3>
   {
   }
 }

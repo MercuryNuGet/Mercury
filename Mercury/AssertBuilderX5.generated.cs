@@ -5,26 +5,26 @@ using System.Collections.Generic;
 
 namespace Mercury.AssertBuilder
 {
-  internal sealed class DataAssertBuilder<TSut, TData1, TData2, TData3, TData4, TData5> : IPostAssertWithDataCaseBuilder<TSut, TData1, TData2, TData3, TData4, TData5>
+  internal sealed class AssertBuilder<TSut, TData1, TData2, TData3, TData4, TData5> : IPostAssertCaseBuilder<TSut, TData1, TData2, TData3, TData4, TData5>
   {
         private readonly TestCaseAccumulator _tests = new TestCaseAccumulator();
         private readonly Func<TData1, TData2, TData3, TData4, TData5, TSut> _actFunc;
 		private readonly IDataSuite<Tuple<TData1, TData2, TData3, TData4, TData5>> _dataSuite;
 
-        public DataAssertBuilder(Func<TData1, TData2, TData3, TData4, TData5, TSut> actFunc,
+        public AssertBuilder(Func<TData1, TData2, TData3, TData4, TData5, TSut> actFunc,
                            IDataSuite<Tuple<TData1, TData2, TData3, TData4, TData5>> dataSuite)
         {
             _actFunc = actFunc;
             _dataSuite = dataSuite;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, TData1, TData2, TData3, TData4, TData5> Assert(Action<TSut, TData1, TData2, TData3, TData4, TData5> assertMethod)
+        public IPostAssertCaseBuilder<TSut, TData1, TData2, TData3, TData4, TData5> Assert(Action<TSut, TData1, TData2, TData3, TData4, TData5> assertMethod)
         {
 		    InternalAssert(_dataSuite.SuiteName, assertMethod);
             return this;
         }
 
-        public IPostAssertWithDataCaseBuilder<TSut, TData1, TData2, TData3, TData4, TData5> Assert(string assertionTestCaseName,
+        public IPostAssertCaseBuilder<TSut, TData1, TData2, TData3, TData4, TData5> Assert(string assertionTestCaseName,
             Action<TSut, TData1, TData2, TData3, TData4, TData5> assertMethod)
         {
             InternalAssert(_dataSuite.SuiteName + " " + assertionTestCaseName, assertMethod);

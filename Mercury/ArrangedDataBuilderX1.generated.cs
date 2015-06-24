@@ -17,14 +17,15 @@ namespace Mercury.Arrange
             _arrangeFunc = arrangeFunc;
         }
 
-        public IAssertWithDataCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TSut, TData, TPostAct> actFunc)
+        public IAssertCaseBuilder<TPostAct, TData> Act<TPostAct>(Func<TSut, TData, TPostAct> actFunc)
         {
-            return new DataPreAssertBuilder<TPostAct, TData>(
+            return new PreAssertBuilder<TPostAct, TData>(
+			    this,
                 (data) =>
                 {
                     var arranged = _arrangeFunc();
                     return actFunc(arranged, data);
-                }, this);
+                });
         }
 
         public IArrangedWithData<TSut, TData> With(TData data)
