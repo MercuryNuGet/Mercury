@@ -5,6 +5,12 @@ using System.Collections.Generic;
 
 namespace Mercury {
 
+  public interface IArrangedWithData<out TSut, TData1, TData2, TData3, TData4>
+  {
+     IAssertWithDataCaseBuilder<TPostAct, TData1, TData2, TData3, TData4> Act<TPostAct>(Func<TSut, TData1, TData2, TData3, TData4, TPostAct> actFunc);
+     IArrangedWithData<TSut, TData1, TData2, TData3, TData4> With(TData1 data1, TData2 data2, TData3 data3, TData4 data4);
+  }
+
   public interface IAssertWithDataCaseBuilder<out TSut, out TData1, out TData2, out TData3, out TData4>
   {
       IPostAssertWithDataCaseBuilder<TSut, TData1, TData2, TData3, TData4> Assert(Action<TSut, TData1, TData2, TData3, TData4> assertAction);

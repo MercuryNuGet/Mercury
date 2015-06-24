@@ -59,6 +59,9 @@
     <Compile Include="DataX4.generated.cs">
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataX5.generated.cs">
+      <DependentUpon>CodeGen.tt</DependentUpon>
+    </Compile>
     <Compile Include="ISpecification.cs" />
     <Compile Include="Manager.cs">
       <AutoGen>True</AutoGen>

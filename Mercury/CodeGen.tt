@@ -10,21 +10,68 @@ using System.Collections.Generic;
 
 namespace Mercury {
 <# manager.EndBlock(); #>
+<# const int maxDataTypes = 5;
+
+    Func<int, string> createDataTypeCsvList = count =>
+    {
+        var list = new List<string>();
+        for (var d = 1; d <= count; d++)
+        {
+            list.Add("TData" + d);
+        }
+        return string.Join(", ", list);
+    };
+
+    Func<int, string> createOutDataTypeCsvList = count =>
+    {
+        var list = new List<string>();
+        for (var d = 1; d <= count; d++)
+        {
+            list.Add("out TData" + d);
+        }
+        return string.Join(", ", list);
+    };
+
+	Func<int, string> createDataArgSig = count =>
+    {
+        var list = new List<string>();
+        for (var d = 1; d <= count; d++)
+        {
+            list.Add("TData" + d + " data" + d);
+        }
+        return string.Join(", ", list);
+    };
+#>
+
+    public interface IArrangedTORENAME<out TSut>
+    {
+        IAssertCaseBuilder<TPostAct> Act<TPostAct>(Func<TSut, TPostAct> actFunc);
+<#
+    for (var k = 1; k <= maxDataTypes; k++)
+    {
+        var types = createDataTypeCsvList(k);
+		var sig = createDataArgSig(k);
+#>
+	    IArrangedWithData<TSut, <#Write(types);#>> With<<#Write(types);#>>(<#Write(sig);#>);
+<#
+    }
+#>
+    }
 
 <#
-for (var dataTypeCount = 2; dataTypeCount < 5; dataTypeCount++)
+for (var dataTypeCount = 2; dataTypeCount <= maxDataTypes; dataTypeCount++)
 {
     manager.StartNewFile("DataX" + dataTypeCount + ".generated.cs");
-    var list = new List<string>();
-	var outList = new List<string>();
-    for (var d = 1; d <= dataTypeCount; d++)
-    {
-        list.Add("TData" + d);
-		outList.Add("out TData" + d);
-    }
-    var allDataTypes = string.Join(", ", list);
-	var allDataTypesWithOut = string.Join(", ", outList);
- #>
+    var allDataTypes = createDataTypeCsvList(dataTypeCount);
+    var allDataTypesWithOut = createOutDataTypeCsvList(dataTypeCount);
+	var sig = createDataArgSig(dataTypeCount);
+    #>
+
+  public interface IArrangedWithData<out TSut, <# Write(allDataTypes); #>>
+  {
+     IAssertWithDataCaseBuilder<TPostAct, <# Write(allDataTypes); #>> Act<TPostAct>(Func<TSut, <# Write(allDataTypes); #>, TPostAct> actFunc);
+     IArrangedWithData<TSut, <# Write(allDataTypes); #>> With(<#Write(sig);#>);
+  }
 
   public interface IAssertWithDataCaseBuilder<out TSut, <# Write(allDataTypesWithOut); #>>
   {
