@@ -59,7 +59,18 @@ namespace Mercury
             {
                 var test1 = (ISingleRunnableTestCase<TSut>) test;
                 a.Add(test1);
-                var spec = (test.Name + " " + branchName).Arrange(() => test1.TestMethodWithResult());
+                var spec = (test.Name + " " + branchName).Arrange(() =>
+                {
+                    try
+                    {
+                        return test1.TestMethodWithResult();
+                    }
+                    catch (Exception)
+                    {
+                        Assert.Inconclusive("A previous assert failed");
+                        return default(TSut);
+                    }
+                });
                 var specs = map(spec);
                 a.Add(specs);
             }
@@ -81,7 +92,7 @@ namespace Mercury
                 _builtTests.Add(test1);
             }
 
-            public void Add(ISpecification[] specs)
+            public void Add(IEnumerable<ISpecification> specs)
             {
                 foreach (var specification in specs)
                 {
