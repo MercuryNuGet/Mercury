@@ -9,24 +9,26 @@ namespace MercuryExamples
         {
             return new[]
             {
-                "A:".Arrange<Sut>()
-                    .ActOn(s => s.Value++)
-                    .Assert(s => Assert.AreEqual(1, s.Value))
-                    .Branch("B:", a =>
+                ":".Arrange<Sut>()
+                    .ActOn(s => s.Navigate("/"))
+                    .Assert(s => Assert.AreEqual("/", s.Path))
+                    .Branch("Home:", a =>
                         new[]
                         {
-                            a.ActOn(s => s.Value += 3)
-                                .Assert("1:", s => Assert.AreEqual(4, s.Value)),
-                            a.ActOn(s => s.Value += 4)
-                                .Assert("2:", s => Assert.AreEqual(5, s.Value))
-                                .Branch("C:", b =>
+                            a.ActOn(s => s.Navigate("Help/"))
+                                .Assert("Help:", s => Assert.AreEqual("/Help/", s.Path)),
+                            a.ActOn(s => s.Navigate("Models/"))
+                                .Assert("Models:", s => Assert.AreEqual("/Models/", s.Path))
+                                .Branch("Car:", b =>
                                     new ISpecification[]
                                     {
-                                        b.ActOn(s => s.Value += 5)
-                                            .Assert("1:", s => Assert.AreEqual(10, s.Value)),
-                                        b.ActOn(s => s.Value += 3)
-                                            .Assert("2:", s => Assert.AreEqual(8, s.Value))
-                                    })
+                                        b.ActOn(s => s.Navigate("Car1/"))
+                                            .Assert("1:", s => Assert.AreEqual("/Models/Car1/", s.Path)),
+                                        b.ActOn(s => s.Navigate("Car2/"))
+                                            .Assert("2:", s => Assert.AreEqual("/Models/Car2/", s.Path))
+                                    }),
+                            a.ActOn(s => s.Navigate("Contact/"))
+                                .Assert("Contact:", s => Assert.AreEqual("/Contact/", s.Path)),
                         }
                     )
             };
@@ -35,6 +37,13 @@ namespace MercuryExamples
 
     internal class Sut
     {
-        public int Value { get; set; }
+        private string _path;
+
+        public void Navigate(string s)
+        {
+            _path += s;
+        }
+
+        public string Path { get { return _path; } }
     }
 }
