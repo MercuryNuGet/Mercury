@@ -9,21 +9,43 @@ namespace MercuryExamples
         {
             return new ISpecification[]
             {
-                "1 items multi data with".Arrange(() => ">")
+                "1 items multi data with"
+                    .Arrange(() => ">")
                     .With(1, 2, ">12")
                     .With(1, 23, ">123")
                     .Act((s, a, b, e) => s + a + b)
                     .Assert((combined, a, b, e) => Assert.AreEqual(e, combined)),
-                "2 items multi data with".Arrange(() => ">")
+                "2 items multi data with"
+                    .Arrange(() => ">")
                     .With(1, 2, 3, ">123")
                     .With(1, 2, 34, ">1234")
                     .Act((s, a, b, c, e) => s + a + b + c)
                     .Assert((combined, a, b, c, e) => Assert.AreEqual(e, combined)),
-                "3 items multi data with".Arrange(() => ">")
+                "3 items multi data with"
+                    .Arrange(() => ">")
                     .With(1, 2, 3, 4, ">1234")
                     .With(1, 2, 3, 45, ">12345")
                     .Act((s, a, b, c, d, e) => s + a + b + c + d)
-                    .Assert((combined, a, b, c, d, e) => Assert.AreEqual(e, combined))
+                    .Assert((combined, a, b, c, d, e) => Assert.AreEqual(e, combined)),
+
+                "1 items multi data with - single data equivalent"
+                    .Arrange(() => ">")
+                    .With(new {a = 1, b = 2, e = ">12"})
+                    .With(new {a = 1, b = 23, e = ">123"})
+                    .Act((s, data) => s + data.a + data.b)
+                    .Assert((combined, data) => Assert.AreEqual(data.e, combined)),
+                "2 items multi data with - single data equivalent"
+                    .Arrange(() => ">")
+                    .With(new {a = 1, b = 2, c = 3, e = ">123"})
+                    .With(new {a = 1, b = 2, c = 34, e = ">1234"})
+                    .Act((s, data) => s + data.a + data.b + data.c)
+                    .Assert((combined, data) => Assert.AreEqual(data.e, combined)),
+                "3 items multi data with - single data equivalent"
+                    .Arrange(() => ">")
+                    .With(new {a = 1, b = 2, c = 3, d = 4, e = ">1234"})
+                    .With(new {a = 1, b = 2, c = 3, d = 45, e = ">12345"})
+                    .Act((s, data) => s + data.a + data.b + data.c + data.d)
+                    .Assert((combined, data) => Assert.AreEqual(data.e, combined))
             };
         }
     }
