@@ -6,7 +6,7 @@
 #><#@ import namespace="System.Collections.Generic"
 #><#@ import namespace="System.IO"
 #><#@ import namespace="System.Text"
-#><#@ import namespace="Microsoft.VisualStudio.TextTemplating"
+#><#@ import namespace="EnvDTE" #><#@ import namespace="Microsoft.VisualStudio.TextTemplating"
 #><#+
 // https://raw.github.com/damieng/DamienGKit
 // http://damieng.com/blog/2009/11/06/multiple-outputs-from-t4-made-easy-revisited
@@ -65,7 +65,7 @@ class Manager {
             files.Reverse();
             if (!footer.IncludeInDefault)
                 template.Remove(footer.Start, footer.Length);
-            foreach(Block block in files) {
+            foreach(var block in files) {
                 String fileName = Path.Combine(outputPath, block.Name);
                 String content = headerText + template.ToString(block.Start, block.Length) + footerText;
                 generatedFileNames.Add(fileName);
@@ -111,8 +111,8 @@ class Manager {
     }
 
     private class VSManager: Manager {
-        private readonly EnvDTE.ProjectItem templateProjectItem;
-        private readonly EnvDTE.DTE dte;
+        private readonly ProjectItem templateProjectItem;
+        private readonly DTE dte;
         private readonly Action<String> checkOutAction;
         private readonly Action<List<String>> projectSyncAction;
 
@@ -146,7 +146,7 @@ class Manager {
             var hostServiceProvider = (IServiceProvider)host;
             if (hostServiceProvider == null)
                 throw new ArgumentNullException("Could not obtain IServiceProvider");
-            dte = (EnvDTE.DTE) hostServiceProvider.GetService(typeof(EnvDTE.DTE));
+            dte = (DTE) hostServiceProvider.GetService(typeof(DTE));
             if (dte == null)
                 throw new ArgumentNullException("Could not obtain DTE from host");
             templateProjectItem = dte.Solution.FindProjectItem(host.TemplateFile);
@@ -154,11 +154,11 @@ class Manager {
             projectSyncAction = keepFileNames => ProjectSync(templateProjectItem, keepFileNames);
         }
 
-        private static void ProjectSync(EnvDTE.ProjectItem templateProjectItem, List<String> keepFileNames) {
+        private static void ProjectSync(ProjectItem templateProjectItem, List<String> keepFileNames) {
             var keepFileNameSet = new HashSet<String>(keepFileNames);
-            var projectFiles = new Dictionary<String, EnvDTE.ProjectItem>();
+            var projectFiles = new Dictionary<String, ProjectItem>();
             var originalFilePrefix = Path.GetFileNameWithoutExtension(templateProjectItem.FileNames[0]) + ".";
-            foreach (EnvDTE.ProjectItem projectItem in templateProjectItem.ProjectItems)
+            foreach (ProjectItem projectItem in templateProjectItem.ProjectItems)
                 projectFiles.Add(projectItem.FileNames[0], projectItem);
 
             // Remove unused items from the project
@@ -167,7 +167,7 @@ class Manager {
                     pair.Value.Delete();
 
             // Add missing files to the project
-            foreach(String fileName in keepFileNameSet)
+            foreach(var fileName in keepFileNameSet)
                 if (!projectFiles.ContainsKey(fileName))
                     templateProjectItem.ProjectItems.AddFromFile(fileName);
         }
