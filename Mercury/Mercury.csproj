@@ -115,11 +115,6 @@
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
     <Compile Include="ISpecification.cs" />
-    <Compile Include="Manager.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Manager.ttinclude</DependentUpon>
-    </Compile>
     <Compile Include="NameInjection.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PreAssertBuilderX0.generated.cs">
@@ -160,10 +155,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CodeGen.cs</LastGenOutput>
     </None>
-    <None Include="Manager.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Manager.cs</LastGenOutput>
-    </None>
+    <None Include="Manager.ttinclude" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
