@@ -1,4 +1,7 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Linq" #>
 <#@ output extension=".cs" #>
 <#@ include file="..\Mercury\BuildConfig.ttinclude" #>
 //Generated from Template
@@ -10,22 +13,41 @@ namespace MercuryTests {
 
 <#
 {
-  for(var dataTypeCount=1; dataTypeCount <= maxDataTypes; dataTypeCount++) { #>
+    var data = new[] {"", "\"SomeString\"", "123", "456", "8.2m", "76f", "80", "99"};
+    var data2 = new[] {"", "SomeString", "123", "456", "8.2", "76", "80", "99"};
+
+    for (var dataTypeCount = 1; dataTypeCount <= maxDataTypes; dataTypeCount++)
+    {
+        var testNameString = "Using ";
+        var expect = "Using ";
+        for (var c = 1; c <= maxDataTypes; c++)
+        {
+            testNameString += "#" + c + " ";
+            expect += c <= dataTypeCount ? data2[c] : ("#" + c);
+            expect += " ";
+        }
+        testNameString += "to inject data";
+        expect += "to inject data";
+        var dataN = Enumerable.Range(1, dataTypeCount).Select(i => "data" + i).ToList();
+        {
+            #>
 
     [TestFixture]
-    public sealed class WithMultidata<# Write(dataTypeCount.ToString()); #> {
+    public sealed class WithMultidata<# Write(dataTypeCount.ToString(CultureInfo.InvariantCulture)); #> {
 
 	    [Test]
 		public void Can_inject_name(){
-		     var spec = "Using #1 to inject data".Arrange(() => ">")
-                .With("SomeData")
-                .Act((sut, data) => sut + data)
+		     var spec = "<# Write(testNameString); #>".Arrange(() => ">")
+                .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount))); #>)
+				.Act((sut, <# Write(string.Join(", ", dataN));  #>) => sut + <# Write(string.Join(" + ", dataN));  #>)
                 .Assert((actual, data) => Assert.Pass());
-            spec.EmitAllRunnableTests().Single();
+             Assert.AreEqual("<# Write(expect); #>", spec.EmitAllRunnableTests().Single().Name);
 		}
 	}
 
 	
-<# } } #>
+<# }
+    }
+} #>
 
 }

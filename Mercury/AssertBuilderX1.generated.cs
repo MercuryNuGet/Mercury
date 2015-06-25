@@ -36,13 +36,14 @@ namespace Mercury.AssertBuilder
             foreach (var data in _dataSuite.Data)
             {
                 var d = data;
-                string inject = NameInjection.Inject(testName, d);
+				testName = NameInjection.Inject("1", testName, d);
+                testName = NameInjection.Inject(testName, d);
                 Action assertTestMethod = () =>
                 {
                     TSut acted = _actFunc(d);
                     assertMethod(acted, d);
                 };
-                _tests.AddSingleTest(inject, assertTestMethod);
+                _tests.AddSingleTest(testName, assertTestMethod);
             }
         }
 

@@ -221,7 +221,11 @@ else
             foreach (var data in _dataSuite.Data)
             {
                 var d = data;
-                string inject = NameInjection.Inject(testName, d);
+<# for (var itemNo = 1; itemNo <= dataTypeCount; itemNo++)
+{ #>
+				testName = NameInjection.Inject("<# Write(itemNo.ToString()); #>", testName, d<# if(dataTypeCount>1) {#>.Item<# Write(itemNo.ToString()); #><# } #>);
+<# } #>
+                testName = NameInjection.Inject(testName, d);
                 Action assertTestMethod = () =>
                 {
 <#
@@ -230,7 +234,7 @@ else
                     TSut acted = _actFunc(<#Write(allDataItemsCsv); #>);
                     assertMethod(acted, <#Write(allDataItemsCsv); #>);
                 };
-                _tests.AddSingleTest(inject, assertTestMethod);
+                _tests.AddSingleTest(testName, assertTestMethod);
             }
 <# } else
 { #>

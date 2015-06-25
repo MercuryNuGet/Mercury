@@ -36,6 +36,12 @@ namespace MercuryTests
                     .Arrange()
                     .With(new {@case = "string data", s = "Length of string is #Length", d = "abc", expect = "Length of string is 3"})
                     .Act(data => NameInjection.Inject(data.s, data.d))
+                    .Assert((actual, data) => Assert.AreEqual(data.expect, actual)),
+                "In case of #case expect \"#expect\""
+                    .Arrange()
+                    .With(new {@case = "Use of 1.", s = "[#1].Length = [#1.Length]", d = "abc", id="1", expect = "[abc].Length = [3]"})
+                    .With(new {@case = "Use of 2.", s = "[#2].Length = [#2.Length]", d = "defg", id="2", expect = "[defg].Length = [4]"})
+                    .Act(data => NameInjection.Inject(data.id, data.s, data.d))
                     .Assert((actual, data) => Assert.AreEqual(data.expect, actual))
             };
         }
