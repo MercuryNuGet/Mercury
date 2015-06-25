@@ -13,6 +13,7 @@ namespace Mercury
             Type t = d.GetType();
             foreach (var p in t.GetProperties().OrderByDescending(p => p.Name))
             {
+                if (p.GetIndexParameters().Any()) continue;
                 str = str.Replace(Prefix + p.Name, p.GetValue(d, null).ToString());
             }
             return str;
