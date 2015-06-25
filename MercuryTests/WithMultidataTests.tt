@@ -20,18 +20,23 @@ namespace MercuryTests {
     {
         var testNameString = "Using ";
         var expect = "Using ";
+        var expectConcat = ">";
         for (var c = 1; c <= maxDataTypes; c++)
         {
             testNameString += "#" + c + " ";
             expect += c <= dataTypeCount ? data2[c] : ("#" + c);
             expect += " ";
+            expectConcat += c < dataTypeCount ? data2[c] : "";
         }
         testNameString += "to inject data";
         expect += "to inject data";
         var dataN = Enumerable.Range(1, dataTypeCount).Select(i => "data" + i).ToList();
+        var dataNm1 = Enumerable.Range(1, dataTypeCount - 1).Select(i => "data" + i).ToList();
         {
             #>
-
+    /// <summary>
+    /// Tests for With multidata with <# Write(dataTypeCount.ToString(CultureInfo.InvariantCulture)); #> elements
+    /// </summary>
     [TestFixture]
     public sealed class WithMultidata<# Write(dataTypeCount.ToString(CultureInfo.InvariantCulture)); #> {
 
@@ -39,12 +44,54 @@ namespace MercuryTests {
 		public void Can_inject_name(){
 		     var spec = "<# Write(testNameString); #>".Arrange(() => ">")
                 .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount))); #>)
-				.Act((sut, <# Write(string.Join(", ", dataN));  #>) => sut + <# Write(string.Join(" + ", dataN));  #>)
+				.Act((sut, <# Write(string.Join(", ", dataN)); #>) => sut + <# Write(string.Join(" + ", dataN)); #>)
                 .Assert((actual, data) => Assert.Pass());
              Assert.AreEqual("<# Write(expect); #>", spec.EmitAllRunnableTests().Single().Name);
 		}
-	}
 
+		[Test]
+        public void Can_fail()
+        {
+             var spec = "Failing".Arrange(() => ">")
+                .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount))); #>)
+				.Act((sut, <# Write(string.Join(", ", dataN)); #>) => sut + <# Write(string.Join(" + ", dataN)); #>)
+                .Assert((actual, data) => Assert.Fail());
+            Assert.Throws<AssertionException>(() => TestUtil.RunAll(spec));
+        }
+
+<# if (dataTypeCount > 1)
+{ #>
+		[Test]
+        public void Assert_expected_extension()
+        {
+            var spec = "Assert Expected".Arrange(() => ">")
+               .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount - 1))); #>, "<# Write(expectConcat); #>")
+               .Act((sut, <# Write(string.Join(", ", dataNm1)); #>, expect) => sut + <# Write(string.Join(" + ", dataNm1)); #>)
+               .AssertEqualsExpected();
+            TestUtil.RunAll(spec);
+        }
+
+		[Test]
+        public void Assert_expected_extension_name()
+        {
+            var name = "Assert concatenation of data".Arrange(() => ">")
+               .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount - 1))); #>, "<# Write(expectConcat); #>")
+               .Act((sut, <# Write(string.Join(", ", dataNm1)); #>, expect) => sut + <# Write(string.Join(" + ", dataNm1)); #>)
+               .AssertEqualsExpected().EmitAllRunnableTests().Single().Name;
+            Assert.AreEqual("Assert concatenation of data is equal to <# Write(expectConcat); #>", name);
+        }
+
+		[Test]
+        public void Assert_expected_extension_can_fail()
+        {
+            var spec = "Assert Expected Failing".Arrange(() => ">")
+               .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount - 1))); #>, "expected")
+               .Act((sut, <# Write(string.Join(", ", dataNm1)); #>, expect) => sut + <# Write(string.Join(" + ", dataNm1)); #>)
+               .AssertEqualsExpected();
+            Assert.Throws<AssertionException>(() => TestUtil.RunAll(spec));
+        }
+<# } #>
+	}
 	
 <# }
     }
