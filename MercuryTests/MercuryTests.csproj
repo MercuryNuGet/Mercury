@@ -55,16 +55,28 @@
     <Compile Include="Extensions\ArrangeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleRunnableTestCasesTests.cs" />
+    <Compile Include="WithMultidataTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WithMultidataTests.tt</DependentUpon>
+    </Compile>
     <Compile Include="WithTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="WithMultidataTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WithMultidataTests.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mercury\Mercury.csproj">
       <Project>{cf2d06cd-a75e-4503-a04e-ae303fbf449c}</Project>
       <Name>Mercury</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

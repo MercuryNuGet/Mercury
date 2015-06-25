@@ -1,5 +1,6 @@
-﻿<#@ template language="C#" hostspecific="True"#>
-<#@ include file="Manager.ttinclude"#>
+﻿<#@ template language="C#" hostspecific="True" #>
+<#@ include file="Manager.ttinclude" #>
+<#@ include file="BuildConfig.ttinclude" #>
 <# var manager = Manager.Create(Host, GenerationEnvironment); #>
 
 <# manager.StartHeader(); #>
@@ -7,8 +8,7 @@
 using System;
 using Mercury.AssertBuilder;
 <# manager.EndBlock(); #>
-<# const int maxDataTypes = 5;
-
+<# 
     Func<int, string> createDataTypeCsvList = count =>
     {
         if (count == 1) return "TData";

@@ -1,0 +1,31 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ include file="..\Mercury\BuildConfig.ttinclude" #>
+//Generated from Template
+using Mercury;
+using System.Linq;
+using NUnit.Framework;
+
+namespace MercuryTests {
+
+<#
+{
+  for(var dataTypeCount=1; dataTypeCount <= maxDataTypes; dataTypeCount++) { #>
+
+    [TestFixture]
+    public sealed class WithMultidata<# Write(dataTypeCount.ToString()); #> {
+
+	    [Test]
+		public void Can_inject_name(){
+		     var spec = "Using #1 to inject data".Arrange(() => ">")
+                .With("SomeData")
+                .Act((sut, data) => sut + data)
+                .Assert((actual, data) => Assert.Pass());
+            spec.EmitAllRunnableTests().Single();
+		}
+	}
+
+	
+<# } } #>
+
+}
