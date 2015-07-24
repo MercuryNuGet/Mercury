@@ -68,6 +68,17 @@ namespace MercuryTests {
         }
 
 		[Test]
+        public void Assert_expected_extension_multi_with()
+        {
+            var spec = "Assert Expected".Arrange(() => ">")
+               .With("SomeString", ">SomeString")
+			   .With("SomeString", ">SomeString")
+               .Act((sut, data1, expect) => sut + data1)
+               .AssertEqualsExpected();
+            TestUtil.RunAll(spec);
+        }
+
+		[Test]
         public void Assert_expected_extension_name()
         {
             var name = "Assert concatenation of data".Arrange(() => ">")
@@ -118,6 +129,17 @@ namespace MercuryTests {
         {
             var spec = "Assert Expected".Arrange(() => ">")
                .With("SomeString", 123, ">SomeString123")
+               .Act((sut, data1, data2, expect) => sut + data1 + data2)
+               .AssertEqualsExpected();
+            TestUtil.RunAll(spec);
+        }
+
+		[Test]
+        public void Assert_expected_extension_multi_with()
+        {
+            var spec = "Assert Expected".Arrange(() => ">")
+               .With("SomeString", 123, ">SomeString123")
+			   .With("SomeString", 123, ">SomeString123")
                .Act((sut, data1, data2, expect) => sut + data1 + data2)
                .AssertEqualsExpected();
             TestUtil.RunAll(spec);
@@ -180,6 +202,17 @@ namespace MercuryTests {
         }
 
 		[Test]
+        public void Assert_expected_extension_multi_with()
+        {
+            var spec = "Assert Expected".Arrange(() => ">")
+               .With("SomeString", 123, 456, ">SomeString123456")
+			   .With("SomeString", 123, 456, ">SomeString123456")
+               .Act((sut, data1, data2, data3, expect) => sut + data1 + data2 + data3)
+               .AssertEqualsExpected();
+            TestUtil.RunAll(spec);
+        }
+
+		[Test]
         public void Assert_expected_extension_name()
         {
             var name = "Assert concatenation of data".Arrange(() => ">")
@@ -230,6 +263,17 @@ namespace MercuryTests {
         {
             var spec = "Assert Expected".Arrange(() => ">")
                .With("SomeString", 123, 456, 8.2m, ">SomeString1234568.2")
+               .Act((sut, data1, data2, data3, data4, expect) => sut + data1 + data2 + data3 + data4)
+               .AssertEqualsExpected();
+            TestUtil.RunAll(spec);
+        }
+
+		[Test]
+        public void Assert_expected_extension_multi_with()
+        {
+            var spec = "Assert Expected".Arrange(() => ">")
+               .With("SomeString", 123, 456, 8.2m, ">SomeString1234568.2")
+			   .With("SomeString", 123, 456, 8.2m, ">SomeString1234568.2")
                .Act((sut, data1, data2, data3, data4, expect) => sut + data1 + data2 + data3 + data4)
                .AssertEqualsExpected();
             TestUtil.RunAll(spec);

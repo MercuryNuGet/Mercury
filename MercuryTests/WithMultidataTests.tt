@@ -72,6 +72,17 @@ namespace MercuryTests {
         }
 
 		[Test]
+        public void Assert_expected_extension_multi_with()
+        {
+            var spec = "Assert Expected".Arrange(() => ">")
+               .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount - 1))); #>, "<# Write(expectConcat); #>")
+			   .With(<# Write(string.Join(", ", data.Skip(1).Take(dataTypeCount - 1))); #>, "<# Write(expectConcat); #>")
+               .Act((sut, <# Write(string.Join(", ", dataNm1)); #>, expect) => sut + <# Write(string.Join(" + ", dataNm1)); #>)
+               .AssertEqualsExpected();
+            TestUtil.RunAll(spec);
+        }
+
+		[Test]
         public void Assert_expected_extension_name()
         {
             var name = "Assert concatenation of data".Arrange(() => ">")
