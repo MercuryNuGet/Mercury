@@ -39,7 +39,7 @@ namespace Mercury
         /// <param name="arranged"></param>
         /// <param name="assertAction"></param>
         /// <returns></returns>
-        public static IPostAssertWithDataCaseBuilder<TSut, TData> Assert<TSut, TData>(
+        public static IPostAssertCaseBuilder<TSut, TData> Assert<TSut, TData>(
             this IArrangedWithData<TSut, TData> arranged, Action<TSut, TData> assertAction)
         {
             return arranged.Act((sut, data) => sut).Assert(assertAction);
@@ -54,7 +54,7 @@ namespace Mercury
         /// <param name="assertName"></param>
         /// <param name="assertAction"></param>
         /// <returns></returns>
-        public static IPostAssertWithDataCaseBuilder<TSut, TData> Assert<TSut, TData>(
+        public static IPostAssertCaseBuilder<TSut, TData> Assert<TSut, TData>(
             this IArrangedWithData<TSut, TData> arranged, string assertName, Action<TSut, TData> assertAction)
         {
             return arranged.Act((sut, data) => sut).Assert(assertName, assertAction);
