@@ -52,6 +52,7 @@
     <Compile Include="InjectAnonymousPropertyValuesInAssertNamesTests.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecByMethodExample.cs" />
     <Compile Include="WithTests.cs" />
   </ItemGroup>
   <ItemGroup>
