@@ -29,7 +29,8 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h1>
-<a id="mercury" class="anchor" href="#mercury" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mercury</h1>
+<a id="mercury--" class="anchor" href="#mercury--" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mercury <a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/v/Mercury.svg?style=flat" alt="NuGet Version"></a> <a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/dt/Mercury.svg?style=flat" alt="NuGet Downloads"></a>
+</h1>
 
 <p>Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.</p>
 
@@ -45,7 +46,26 @@
 <h2>
 <a id="inherit" class="anchor" href="#inherit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inherit</h2>
 
-<p>Inherit from <code>Specification</code> and implement members. Return an empty array of <code>ISpecification</code>. In this array is where you will list your specifications.</p>
+<p>Inherit from <code>SpecificationByMethod</code> or <code>Specification</code> and implement members.</p>
+
+<p>With <code>Specification</code> you must call <code>Spec</code> for each new spec.</p>
+
+<pre><code>using Mercury;
+using NUnit.Framework;
+
+namespace MercuryExample
+{
+    public class MyTest : SpecificationByMethod
+    {
+        protected override void Cases()
+        {
+            Spec(/*see below on writing specs*/);
+        }
+    }
+}
+</code></pre>
+
+<p>With <code>Specification</code> you return an empty array of <code>ISpecification</code>. In this array is where you will list your specifications.</p>
 
 <pre><code>using Mercury;
 using NUnit.Framework;
@@ -58,7 +78,7 @@ namespace MercuryExample
     {
         return new ISpecification[]
         {
-
+            /*see below on writing specs*/
         };
     }
   }
@@ -148,7 +168,7 @@ namespace MercuryExample
 <h3>
 <a id="with" class="anchor" href="#with" aria-hidden="true"><span class="octicon octicon-link"></span></a>With</h3>
 
-<p><code>With</code> enables you to parameterise your tests. It takes a single generic parameter, so you can set up an anoymous type.</p>
+<p><code>With</code> enables you to parameterise your tests. It takes between 1 and 5 generic parameters. As you can set up anoymous, you can usually get away with just one and then you also get useful names.</p>
 
 <pre><code>"When I add an item to list"
    .Arrange&lt;List&lt;int&gt;&gt;()
@@ -166,6 +186,18 @@ namespace MercuryExample
     .With(new {a = "c", b = "d", expect = @"c\d"})
     .Act(data =&gt; Path.Combine(data.a, data.b))
     .Assert((actual, data) =&gt; Assert.AreEqual(data.expect, actual)),
+</code></pre>
+
+<p><code>With</code> when used with mutiple data items gives more assert styles:</p>
+
+<pre><code>"Multiple data arguments in with, and three assert styles"
+    .ArrangeNull()
+    .With("a", "b", @"a\b")
+    .With("c", "d", @"c\d")
+    .Act((_, a, b, expected) =&gt; Path.Combine(a, b))
+    .Assert((result, a, b, expected) =&gt; Assert.AreEqual(expected, result))
+    .Assert((result, expected) =&gt; Assert.AreEqual(expected, result))
+    .AssertEqualsExpected(),
 </code></pre>
 
 <h3>
@@ -218,6 +250,29 @@ When I add 2 item to list it is exactly one long
       (list, data) =&gt; Assert.AreEqual(data.expectedLength, list.Count))
    .Assert("the sum is #expectedSum",
       (list, data) =&gt; Assert.AreEqual(data.expectedSum, list.Sum())),
+</code></pre>
+
+<h3>
+<a id="specificationbymethod-advantages" class="anchor" href="#specificationbymethod-advantages" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>SpecificationByMethod</code> advantages</h3>
+
+<pre><code>class SpecByMethodExample : SpecificationByMethod
+{
+    protected override void Cases()
+    {
+        Spec("Example of spec defined in method".Assert(() =&gt; Assert.AreEqual(2, 1 + 1)));
+
+        Spec("Lets you space out tests".Assert(() =&gt; Assert.AreEqual(2, 1 + 1)));
+
+        for (int i = 0; i &lt; 10; i++)
+        {
+            Spec("And even lets you create specs dynamically #i"
+                .Arrange()
+                .With(new {i})
+                .Act(data =&gt; data.i*10)
+                .Assert((result, data) =&gt; Assert.IsTrue(result%10 == 0)));
+        }
+    }
+}
 </code></pre>
         </section>
 
