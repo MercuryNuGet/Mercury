@@ -52,6 +52,14 @@ namespace MercuryExamples
                     .With(new {a = "c", b = "d", expect = @"c\d"})
                     .Act(data => Path.Combine(data.a, data.b))
                     .Assert((actual, data) => Assert.AreEqual(data.expect, actual)),
+                "Multiple data arguments in with, and three assert styles"
+                    .ArrangeNull()
+                    .With("a", "b", @"a\b")
+                    .With("c", "d", @"c\d")
+                    .Act((_, a, b, expected) => Path.Combine(a, b))
+                    .Assert((result, a, b, expected) => Assert.AreEqual(expected, result))
+                    .Assert((result, expected) => Assert.AreEqual(expected, result))
+                    .AssertEqualsExpected(),
                 "When I add #a item to list"
                     .Arrange<List<int>>()
                     .With(new {a = 1})

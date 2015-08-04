@@ -137,7 +137,7 @@ Can be just:
 
 ###With
 
-`With` enables you to parameterise your tests. It takes a single generic parameter, so you can set up an anoymous type.
+`With` enables you to parameterise your tests. It takes between 1 and 5 generic parameters. As you can set up anoymous, you can usually get away with just one and then you also get useful names.
 
 ```
 "When I add an item to list"
@@ -157,6 +157,19 @@ Can be just:
     .With(new {a = "c", b = "d", expect = @"c\d"})
     .Act(data => Path.Combine(data.a, data.b))
     .Assert((actual, data) => Assert.AreEqual(data.expect, actual)),
+```
+
+`With` when used with mutiple data items gives more assert styles:
+
+```
+"Multiple data arguments in with, and three assert styles"
+    .ArrangeNull()
+    .With("a", "b", @"a\b")
+    .With("c", "d", @"c\d")
+    .Act((_, a, b, expected) => Path.Combine(a, b))
+    .Assert((result, a, b, expected) => Assert.AreEqual(expected, result))
+    .Assert((result, expected) => Assert.AreEqual(expected, result))
+    .AssertEqualsExpected(),
 ```
 
 ###Multiple Withs and parameter injection to test name
