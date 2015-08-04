@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Mercury</id>
-    <version>0.0.8-prerelease</version>
+    <version>0.0.9-prerelease</version>
     <authors>Alan Evans</authors>
     <owners>Mercury</owners>    
 	<!--
@@ -16,6 +16,7 @@
 	0.0.6 Edge cases around renaming handled
 	0.0.7 Replaced dynamic data with generic data
 	0.0.8 Arrange() now has own interfaces that do not take an test context</releaseNotes>
+	0.0.9 Add SpecificationByMethod and up to 5 data arguments</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>NUnit</tags>
     <dependencies>
