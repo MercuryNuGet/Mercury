@@ -11,7 +11,27 @@ install-package mercury -pre
 
 ##Inherit
 
-Inherit from `Specification` and implement members. Return an empty array of `ISpecification`. In this array is where you will list your specifications.
+Inherit from `SpecificationByMethod` or `Specification` and implement members.
+
+With `Specification` you must call `Spec` for each new spec.
+
+```
+using Mercury;
+using NUnit.Framework;
+
+namespace MercuryExample
+{
+    public class MyTest : SpecificationByMethod
+    {
+        protected override void Cases()
+        {
+            Spec(/*see below on writing specs*/);
+        }
+    }
+}
+```
+
+With `Specification` you return an empty array of `ISpecification`. In this array is where you will list your specifications.
 
 ```
 using Mercury;
@@ -25,7 +45,7 @@ namespace MercuryExample
     {
         return new ISpecification[]
         {
-
+            /*see below on writing specs*/
         };
     }
   }
@@ -190,4 +210,27 @@ Where each `With` will generate a different expected value, include those expect
       (list, data) => Assert.AreEqual(data.expectedLength, list.Count))
    .Assert("the sum is #expectedSum",
       (list, data) => Assert.AreEqual(data.expectedSum, list.Sum())),
+```
+
+###`SpecificationByMethod` advantages
+
+```
+class SpecByMethodExample : SpecificationByMethod
+{
+    protected override void Cases()
+    {
+        Spec("Example of spec defined in method".Assert(() => Assert.AreEqual(2, 1 + 1)));
+
+        Spec("Lets you space out tests".Assert(() => Assert.AreEqual(2, 1 + 1)));
+
+        for (int i = 0; i < 10; i++)
+        {
+            Spec("And even lets you create specs dynamically #i"
+                .Arrange()
+                .With(new {i})
+                .Act(data => data.i*10)
+                .Assert((result, data) => Assert.IsTrue(result%10 == 0)));
+        }
+    }
+}
 ```
