@@ -143,6 +143,7 @@
     <Compile Include="Specification.cs" />
     <Compile Include="IDataSuite.cs" />
     <Compile Include="ISuite.cs" />
+    <Compile Include="SpecificationByMethod.cs" />
     <Compile Include="StaticArrange\StaticArrangedDataBuilder.cs" />
     <Compile Include="StaticArrange\StaticArrangedTestBuilder.cs" />
     <Compile Include="StringTestExtension.cs" />
