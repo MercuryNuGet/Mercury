@@ -18,8 +18,8 @@ namespace MercuryTests.Extensions
                     .Assert("gives null test context", Assert.IsNull),
                 "No context needed because acting on static method"
                     .ArrangeNull()
-                    .Act(n => Path.Combine("a", "b"))
-                    .Assert(path => Assert.AreEqual(@"a\b", path))
+                    .Act(n => string.Join(",", "a", "b"))
+                    .Assert(path => Assert.AreEqual("a,b", path))
             };
         }
     }
