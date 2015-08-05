@@ -18,8 +18,8 @@ namespace MercuryTests.Arrange
         {
             ISpecification spec = "test"
                 .Arrange<Counter>()
-                .With(new { a = "a", b = "b", expect = @"a\b" })
-                .Act((counter, data) => Path.Combine(data.a, data.b))
+                .With(new { a = "a", b = "b", expect = "a,b" })
+                .Act((counter, data) => string.Join(",", data.a, data.b))
                 .Assert((result, data) => Assert.AreEqual(data.expect, result));
 
             var tests = spec.EmitAllRunnableTests().ToArray();
@@ -32,9 +32,9 @@ namespace MercuryTests.Arrange
         {
             ISpecification spec = "test"
                 .Arrange<Counter>()
-                .With(new { a = "a", b = "b", expect = @"a\b" })
-                .With(new { a = "c", b = "d", expect = @"c\d" })
-                .Act((counter, data) => Path.Combine(data.a, data.b))
+                .With(new { a = "a", b = "b", expect = "a,b" })
+                .With(new { a = "c", b = "d", expect = "c,d" })
+                .Act((counter, data) => string.Join(",", data.a, data.b))
                 .Assert((result, data) => Assert.AreEqual(data.expect, result));
 
             var tests = spec.EmitAllRunnableTests().ToArray();
@@ -48,9 +48,9 @@ namespace MercuryTests.Arrange
         {
             ISpecification spec = "test"
                 .Arrange<Counter>()
-                .With(new { a = "a", b = "b", expect = @"a\b" })
-                .With(new { a = "c", b = "d", expect = @"c\d" })
-                .Act((counter, data) => Path.Combine(data.a, data.b))
+                .With(new { a = "a", b = "b", expect = "a,b" })
+                .With(new { a = "c", b = "d", expect = "c,d" })
+                .Act((counter, data) => string.Join(",", data.a, data.b))
                 .Assert((result, data) => Assert.AreEqual(data.expect, result))
                 .Assert((result, data) => Assert.AreEqual(data.expect, result));
 
@@ -67,8 +67,8 @@ namespace MercuryTests.Arrange
         {
             ISpecification spec = "test"
                 .Arrange<Counter>()
-                .With(new { a = "a", b = "b", expect = @"a\b" })
-                .Act((counter, data) => Path.Combine(data.a, data.b))
+                .With(new { a = "a", b = "b", expect = "a,b" })
+                .Act((counter, data) => string.Join(",", data.a, data.b))
                 .Assert("first", (result, data) => Assert.AreEqual(data.expect, result))
                 .Assert("second", (result, data) => Assert.AreEqual(data.expect, result));
 

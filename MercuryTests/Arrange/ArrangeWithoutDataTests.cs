@@ -31,9 +31,9 @@ namespace MercuryTests.Arrange
         {
             ISpecification spec = "test"
                 .Arrange<Counter>()
-                .Act(counter => Path.Combine("a", "b"))
-                .Assert(result => Assert.AreEqual("a\b", result))
-                .Assert(result => Assert.AreEqual("a\b", result));
+                .Act(counter => string.Join(",", "a", "b"))
+                .Assert(result => Assert.AreEqual("a,b", result))
+                .Assert(result => Assert.AreEqual("a,b", result));
 
             var tests = spec.EmitAllRunnableTests().ToArray();
             Assert.AreEqual(2, tests.Count());
@@ -46,9 +46,9 @@ namespace MercuryTests.Arrange
         {
             ISpecification spec = "test"
                 .Arrange<Counter>()
-                .Act(counter => Path.Combine("a", "b"))
-                .Assert("first", result => Assert.AreEqual("a\b", result))
-                .Assert("second", result => Assert.AreEqual("a\b", result));
+                .Act(counter => string.Join(",", "a", "b"))
+                .Assert("first", result => Assert.AreEqual("a,b", result))
+                .Assert("second", result => Assert.AreEqual("a,b", result));
 
             var tests = spec.EmitAllRunnableTests().ToArray();
             Assert.AreEqual(2, tests.Count());

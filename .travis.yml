@@ -1,0 +1,10 @@
+language: csharp
+solution: Mercury.sln
+install:
+  - nuget restore Mercury.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release Mercury.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MercuryTests/bin/Release/MercuryTests.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MercuryExamples/bin/Release/MercuryExamples.dll
+  
