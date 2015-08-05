@@ -18,7 +18,7 @@ install-package mercury -pre
 
 Inherit from `SpecificationByMethod` or `Specification` and implement members.
 
-With `Specification` you must call `Spec` for each new spec.
+With `SpecificationByMethod` you must call `Spec` for each new spec.
 
 ```
 using Mercury;
