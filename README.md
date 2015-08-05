@@ -1,4 +1,9 @@
-# Mercury [![NuGet Version](http://img.shields.io/nuget/v/Mercury.svg?style=flat)](https://www.nuget.org/packages/Mercury/) [![NuGet Downloads](http://img.shields.io/nuget/dt/Mercury.svg?style=flat)](https://www.nuget.org/packages/Mercury/)
+# Mercury
+
+[![NuGet Version](http://img.shields.io/nuget/v/Mercury.svg?style=flat)](https://www.nuget.org/packages/Mercury/)
+[![NuGet Downloads](http://img.shields.io/nuget/dt/Mercury.svg?style=flat)](https://www.nuget.org/packages/Mercury/)
+[![Build Status](https://travis-ci.org/MercuryNuGet/Mercury.svg)](https://travis-ci.org/MercuryNuGet/Mercury)
+
 Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.
 
 #Get started
