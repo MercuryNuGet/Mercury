@@ -29,8 +29,11 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h1>
-<a id="mercury--" class="anchor" href="#mercury--" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mercury <a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/v/Mercury.svg?style=flat" alt="NuGet Version"></a> <a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/dt/Mercury.svg?style=flat" alt="NuGet Downloads"></a>
-</h1>
+<a id="mercury" class="anchor" href="#mercury" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mercury</h1>
+
+<p><a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/v/Mercury.svg?style=flat" alt="NuGet Version"></a>
+<a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/dt/Mercury.svg?style=flat" alt="NuGet Downloads"></a>
+<a href="https://travis-ci.org/MercuryNuGet/Mercury"><img src="https://travis-ci.org/MercuryNuGet/Mercury.svg" alt="Build Status"></a></p>
 
 <p>Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.</p>
 
@@ -119,8 +122,8 @@ namespace MercuryExample
 
 <pre><code>"No context needed because acting on static method"
     .Arrange()
-    .Act(() =&gt; System.IO.Path.Combine("a", "b"))
-    .Assert(path =&gt; Assert.AreEqual(@"a\b", path)),
+    .Act(() =&gt; string.Join(",", "a", "b"))
+    .Assert(joined =&gt; Assert.AreEqual("a,b", joined)),
 </code></pre>
 
 <h3>
@@ -182,9 +185,9 @@ namespace MercuryExample
 
 <pre><code>"Test-Context less using with"
     .Arrange()
-    .With(new {a = "a", b = "b", expect = @"a\b"})
-    .With(new {a = "c", b = "d", expect = @"c\d"})
-    .Act(data =&gt; Path.Combine(data.a, data.b))
+    .With(new {a = "a", b = "b", expect = "a,b"})
+    .With(new {a = "c", b = "d", expect = "c,d"})
+    .Act(data =&gt; string.Join(",", data.a, data.b))
     .Assert((actual, data) =&gt; Assert.AreEqual(data.expect, actual)),
 </code></pre>
 
@@ -192,9 +195,9 @@ namespace MercuryExample
 
 <pre><code>"Multiple data arguments in with, and three assert styles"
     .ArrangeNull()
-    .With("a", "b", @"a\b")
-    .With("c", "d", @"c\d")
-    .Act((_, a, b, expected) =&gt; Path.Combine(a, b))
+    .With("a", "b", "a,b")
+    .With("c", "d", "c,d")
+    .Act((_, a, b, expected) =&gt; string.Join(",", a, b))
     .Assert((result, a, b, expected) =&gt; Assert.AreEqual(expected, result))
     .Assert((result, expected) =&gt; Assert.AreEqual(expected, result))
     .AssertEqualsExpected(),
