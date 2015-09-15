@@ -1,21 +1,23 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Mercury
 {
     [TestFixture]
-    public abstract class Specification : S
+    public abstract class Specification : m
     {
     }
 
-    public abstract class S
+    public abstract class m
     {
         protected abstract ISpecification[] TestCases();
 
-        protected ISingleRunnableTestCase[] CreateCases()
+        protected IEnumerable CreateCases()
         {
-            var testCases = TestCases().SelectMany(t => t.EmitAllRunnableTests()).ToArray();
-            return TestCaseNameClashRenamer.RenameClashingTests(testCases);
+            ISingleRunnableTestCase[] testCases = TestCases().SelectMany(t => t.EmitAllRunnableTests()).ToArray();
+            testCases = TestCaseNameClashRenamer.RenameClashingTests(testCases);
+            return testCases.Select(t => new TestCaseData(t).SetName(" " + t.Name));
         }
 
         [Test, TestCaseSource("CreateCases")]
