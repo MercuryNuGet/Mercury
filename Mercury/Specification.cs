@@ -17,11 +17,11 @@ namespace Mercury
         {
             ISingleRunnableTestCase[] testCases = TestCases().SelectMany(t => t.EmitAllRunnableTests()).ToArray();
             testCases = TestCaseNameClashRenamer.RenameClashingTests(testCases);
-            return testCases.Select(t => new TestCaseData(t).SetName(" " + t.Name));
+            return testCases.Select(t => new TestCaseData(t).SetName(t.Name));
         }
 
         [Test, TestCaseSource("CreateCases")]
-        public void T(ISingleRunnableTestCase testCase)
+        public void TestMercuryTestCases(ISingleRunnableTestCase testCase)
         {
             testCase.Run();
         }
