@@ -31,9 +31,9 @@ namespace Mercury.AssertBuilder
             return this;
         }
 
-        private void InternalAssert(string testName, Action<TSut> assertMethod)
+        private void InternalAssert(string testNameTemplate, Action<TSut> assertMethod)
         {
-            _tests.AddSingleTest(testName, () => assertMethod(_actFunc()));            
+            _tests.AddSingleTest(testNameTemplate, () => assertMethod(_actFunc()));            
         }
 
         public IEnumerable<ISingleRunnableTestCase> EmitAllRunnableTests()
