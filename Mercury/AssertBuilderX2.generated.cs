@@ -31,11 +31,12 @@ namespace Mercury.AssertBuilder
             return this;
         }
 
-        private void InternalAssert(string testName, Action<TSut, TData1, TData2> assertMethod)
+        private void InternalAssert(string testNameTemplate, Action<TSut, TData1, TData2> assertMethod)
         {
             foreach (var data in _dataSuite.Data)
             {
                 var d = data;
+				var testName = testNameTemplate;
 				testName = NameInjection.Inject("1", testName, d.Item1);
 				testName = NameInjection.Inject("2", testName, d.Item2);
                 testName = NameInjection.Inject(testName, d);

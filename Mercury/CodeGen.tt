@@ -214,13 +214,14 @@ else
             return this;
         }
 
-        private void InternalAssert(string testName, Action<TSut<# Write(allDataTypes); #>> assertMethod)
+        private void InternalAssert(string testNameTemplate, Action<TSut<# Write(allDataTypes); #>> assertMethod)
         {
 <# if (dataTypeCount > 0)
 { #>
             foreach (var data in _dataSuite.Data)
             {
                 var d = data;
+				var testName = testNameTemplate;
 <# for (var itemNo = 1; itemNo <= dataTypeCount; itemNo++)
 { #>
 				testName = NameInjection.Inject("<# Write(itemNo.ToString()); #>", testName, d<# if(dataTypeCount>1) {#>.Item<# Write(itemNo.ToString()); #><# } #>);
@@ -238,7 +239,7 @@ else
             }
 <# } else
 { #>
-            _tests.AddSingleTest(testName, () => assertMethod(_actFunc()));            
+            _tests.AddSingleTest(testNameTemplate, () => assertMethod(_actFunc()));            
 <# } #>
         }
 
