@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Mercury</id>
-    <version>0.0.11-prerelease</version>
+    <version>0.0.12-prerelease</version>
     <authors>Alan Evans</authors>
     <owners>Mercury</owners>
     <!--
@@ -21,6 +21,7 @@
 0.0.9 Add SpecificationByMethod and up to 5 data arguments
 0.0.10 Less/No clutter around the spec names depending on test runner
 0.0.11 Fix, names were having the incorrect data injected to them
+0.0.12 New Arrange that takes a generic type and a setup action.
     </releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>NUnit</tags>
