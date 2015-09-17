@@ -45,13 +45,30 @@ namespace Mercury
         }
 
         /// <summary>
-        /// Use if you do not require a test context.
+        ///     Use if you do not require a test context.
         /// </summary>
         /// <param name="testName">The test name</param>
         /// <returns>Arranged test with no context</returns>
         public static IStaticArranged Arrange(this string testName)
         {
             return new StaticArrangedTestBuilder(testName);
+        }
+
+        /// <summary>
+        ///     Use to arrange a test context that has a parameterless constuctor but you want to run some further setup.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="testName"></param>
+        /// <param name="arrangeAction"></param>
+        /// <returns></returns>
+        public static IArranged<T> Arrange<T>(this string testName, Action<T> arrangeAction) where T : new()
+        {
+            return testName.Arrange(() =>
+            {
+                var context = new T();
+                arrangeAction(context);
+                return context;
+            });
         }
     }
 }
