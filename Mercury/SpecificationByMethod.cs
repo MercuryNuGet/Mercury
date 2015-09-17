@@ -4,7 +4,12 @@ using NUnit.Framework;
 
 namespace Mercury
 {
-    public abstract class SpecificationByMethod : Specification
+    [Obsolete("Please descend from MercurySuite now")]
+    public abstract class SpecificationByMethod : MercurySuite
+    {
+    }
+
+    public abstract class MercurySuite : Specification
     {
         private readonly List<ISpecification> _specs = new List<ISpecification>();
 

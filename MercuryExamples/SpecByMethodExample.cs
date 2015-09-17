@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MercuryExamples
 {
-    internal class SpecByMethodExample : SpecificationByMethod
+    internal class SpecByMethodExample : MercurySuite
     {
         protected override void Cases()
         {
