@@ -44,6 +44,22 @@ namespace MercuryTests.Arrange
         }
 
         [Test]
+        public void can_arrange_with_double_data_injected_names()
+        {
+            ISpecification spec = "test #a"
+                .Arrange<Counter>()
+                .With(new { a = "a", b = "b", expect = "a,b" })
+                .With(new { a = "c", b = "d", expect = "c,d" })
+                .Act((counter, data) => string.Join(",", data.a, data.b))
+                .Assert((result, data) => Assert.AreEqual(data.expect, result));
+
+            var tests = spec.EmitAllRunnableTests().ToArray();
+            Assert.AreEqual(2, tests.Count());
+            Assert.AreEqual("test a", tests[0].Name);
+            Assert.AreEqual("test c", tests[1].Name);
+        }
+
+        [Test]
         public void can_arrange_with_double_data_double_asserts()
         {
             ISpecification spec = "test"
