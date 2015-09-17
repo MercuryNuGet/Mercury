@@ -1,45 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
 
 namespace Mercury
 {
-    [Obsolete("Please descend from MercurySuite now")]
+    [Obsolete("Please descend from MercurySuite now and override Specifications rather than Cases")]
     public abstract class SpecificationByMethod : MercurySuite
     {
-    }
-
-    public abstract class MercurySuite : Specification
-    {
-        private readonly List<ISpecification> _specs = new List<ISpecification>();
-
-        /// <summary>
-        /// Add new spec
-        /// </summary>
-        /// <param name="specification"></param>
-        protected void Spec(ISpecification specification)
+        protected override void Specifications()
         {
-            _specs.Add(specification);
+            Cases();
         }
 
-        /// <summary>
-        /// Call Spec for each new specification inside this method.
-        /// </summary>
         protected abstract void Cases();
-
-        protected override ISpecification[] TestCases()
-        {
-            _specs.Clear();
-            try
-            {
-                Cases();
-            }
-            catch (Exception ex)
-            {
-                Spec((GetType().Name + " failed to add tests")
-                    .Assert(() => Assert.Fail(ex.ToString())));
-            }
-            return _specs.ToArray();
-        }
     }
 }
