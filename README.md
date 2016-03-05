@@ -43,7 +43,7 @@ You can copy and paste these examples directly into the array then run the tests
 Simplest spec is just a name and an assert:
 
 ```
-Specs += "Simple assert".Assert(() => Assert.AreEqual(2, 1 + 1)),
+Specs += "Simple assert".Assert(() => Assert.AreEqual(2, 1 + 1));
 ```
 
 This will emit a single unit test with the text "Simple assert" included in the test name.
@@ -55,7 +55,7 @@ Next most complex is an `Arrange`, this is equivalent to an NUnit `[SetUp]` and 
 ```
 Specs += "New List"
    .Arrange(() => new List<int>())
-   .Assert("is empty", list => Assert.AreEqual(0, list.Count)),
+   .Assert("is empty", list => Assert.AreEqual(0, list.Count));
 ```
 
 Classes under test whose constructors do not take parameters can take advantage of this shorter syntax:
@@ -70,7 +70,7 @@ If you do not require a test context, you can use `Arrange()` with no params or 
 Specs += "No context needed because acting on static method"
     .Arrange()
     .Act(() => string.Join(",", "a", "b"))
-    .Assert(joined => Assert.AreEqual("a,b", joined)),
+    .Assert(joined => Assert.AreEqual("a,b", joined));
 ```
 
 ###Act
@@ -81,7 +81,7 @@ You can separate out the `Act` from the `Assert`. Here the act invokes `Any()` a
 Specs += "New List; linq says there is not any"
    .Arrange<List<int>>()
    .Act(list => list.Any())
-   .Assert(any => Assert.IsFalse(any)),
+   .Assert(any => Assert.IsFalse(any));
 ```
 
 Or more succinctly in this case:
@@ -90,7 +90,7 @@ Or more succinctly in this case:
 Specs += "New List; linq says there is not any"
    .Arrange<List<int>>()
    .Act(list => list.Any())
-   .Assert(Assert.IsFalse),
+   .Assert(Assert.IsFalse);
 ```
 
 ###ActOn
@@ -105,7 +105,7 @@ Specs += "Act version"
      list.Clear();
      return list;
    })
-   .Assert(list => Assert.AreEqual(0, list.Count)),
+   .Assert(list => Assert.AreEqual(0, list.Count));
 ```
 
 Can be just:
@@ -114,7 +114,7 @@ Can be just:
 Specs += "ActOn version"
    .Arrange(() => new List<int>(new []{1, 2, 3}))
    .ActOn(list => list.Clear())
-   .Assert(list => Assert.AreEqual(0, list.Count)),
+   .Assert(list => Assert.AreEqual(0, list.Count));
 ```
 
 ###With
@@ -127,7 +127,7 @@ Specs += "When I add an item to list"
    .With(new {a=1})
    .ActOn((list, data) => list.Add(data.a))
    .Assert("it is exactly one long",
-      (list, data) => Assert.AreEqual(1, list.Count)),
+      (list, data) => Assert.AreEqual(1, list.Count));
 ```
 
 `With` can be used in a situation without a test context using `Arrange()`
@@ -138,7 +138,7 @@ Specs += "Test-Context less using with"
     .With(new {a = "a", b = "b", expect = "a,b"})
     .With(new {a = "c", b = "d", expect = "c,d"})
     .Act(data => string.Join(",", data.a, data.b))
-    .Assert((actual, data) => Assert.AreEqual(data.expect, actual)),
+    .Assert((actual, data) => Assert.AreEqual(data.expect, actual));
 ```
 
 `With` when used with mutiple data items gives more assert styles:
@@ -151,7 +151,7 @@ Specs += "Multiple data arguments in with, and three assert styles"
     .Act((_, a, b, expected) => string.Join(",", a, b))
     .Assert((result, a, b, expected) => Assert.AreEqual(expected, result))
     .Assert((result, expected) => Assert.AreEqual(expected, result))
-    .AssertEqualsExpected(),
+    .AssertEqualsExpected();
 ```
 
 ###Multiple Withs and parameter injection to test name
@@ -165,7 +165,7 @@ Specs += "When I add #a item to list"
    .With(new {a=2})
    .ActOn((list, data) => list.Add(data.a))
    .Assert("it is exactly one long",
-      (list, data) => Assert.AreEqual(1, list.Count)),
+      (list, data) => Assert.AreEqual(1, list.Count));
 ```
 
 This emits two tests:
@@ -188,7 +188,7 @@ Specs += "When I add #a to list"
    .Assert("it is exactly one long",
       (list, data) => Assert.AreEqual(1, list.Count))
    .Assert("it contains #a",
-      (list, data) => Assert.AreEqual(data.a, list[0])),
+      (list, data) => Assert.AreEqual(data.a, list[0]));
 ```
 
 ###Place expected values in the data
@@ -204,7 +204,7 @@ Specs += "When I add #expectedLength items to list"
    .Assert("it is exactly #expectedLength long",
       (list, data) => Assert.AreEqual(data.expectedLength, list.Count))
    .Assert("the sum is #expectedSum",
-      (list, data) => Assert.AreEqual(data.expectedSum, list.Sum())),
+      (list, data) => Assert.AreEqual(data.expectedSum, list.Sum()));
 ```
 
 ###`MercurySuite` advantages
