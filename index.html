@@ -29,7 +29,7 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h1>
-<a id="mercury" class="anchor" href="#mercury" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mercury</h1>
+<a id="mercury" class="anchor" href="#mercury" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mercury</h1>
 
 <p><a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/v/Mercury.svg?style=flat" alt="NuGet Version"></a>
 <a href="https://www.nuget.org/packages/Mercury/"><img src="http://img.shields.io/nuget/dt/Mercury.svg?style=flat" alt="NuGet Downloads"></a>
@@ -38,79 +38,57 @@
 <p>Fluent NUnit specification extensions that will run under NCrunch, and ReSharper test runners.</p>
 
 <h1>
-<a id="get-started" class="anchor" href="#get-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get started</h1>
+<a id="get-started" class="anchor" href="#get-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get started</h1>
 
 <h2>
-<a id="nuget" class="anchor" href="#nuget" aria-hidden="true"><span class="octicon octicon-link"></span></a>NuGet</h2>
+<a id="nuget" class="anchor" href="#nuget" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NuGet</h2>
 
 <pre><code>install-package mercury -pre
 </code></pre>
 
 <h2>
-<a id="inherit" class="anchor" href="#inherit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inherit</h2>
+<a id="inherit" class="anchor" href="#inherit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inherit</h2>
 
-<p>Inherit from <code>SpecificationByMethod</code> or <code>Specification</code> and implement members.</p>
-
-<p>With <code>SpecificationByMethod</code> you must call <code>Spec</code> for each new spec.</p>
+<p>Inherit from <code>MercurySuite</code> and call <code>Specs +=</code> for each new spec.</p>
 
 <pre><code>using Mercury;
 using NUnit.Framework;
 
 namespace MercuryExample
 {
-    public class MyTest : SpecificationByMethod
+    public class MyTest : MercurySuite
     {
-        protected override void Cases()
+        protected override void Specifications()
         {
-            Spec(/*see below on writing specs*/);
+            Specs += //see below on writing specs
         }
     }
 }
 </code></pre>
 
-<p>With <code>Specification</code> you return an empty array of <code>ISpecification</code>. In this array is where you will list your specifications.</p>
-
-<pre><code>using Mercury;
-using NUnit.Framework;
-
-namespace MercuryExample
-{
-  public class MyTest : Specification
-  {
-    protected override ISpecification[] TestCases()
-    {
-        return new ISpecification[]
-        {
-            /*see below on writing specs*/
-        };
-    }
-  }
-}
-</code></pre>
-
 <h2>
-<a id="write-specifications" class="anchor" href="#write-specifications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Write specifications</h2>
+<a id="write-specifications" class="anchor" href="#write-specifications" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Write specifications</h2>
 
 <p>You can copy and paste these examples directly into the array then run the tests with your favorite test runner.</p>
 
 <h3>
-<a id="single-assert-no-setup" class="anchor" href="#single-assert-no-setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Single assert, no setup</h3>
+<a id="single-assert-no-setup" class="anchor" href="#single-assert-no-setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Single assert, no setup</h3>
 
 <p>Simplest spec is just a name and an assert:</p>
 
-<pre><code>"Simple assert".Assert(() =&gt; Assert.AreEqual(2, 1 + 1)),
+<pre><code>Specs += "Simple assert".Assert(() =&gt; Assert.AreEqual(2, 1 + 1));
 </code></pre>
 
 <p>This will emit a single unit test with the text "Simple assert" included in the test name.</p>
 
 <h3>
-<a id="arrange" class="anchor" href="#arrange" aria-hidden="true"><span class="octicon octicon-link"></span></a>Arrange</h3>
+<a id="arrange" class="anchor" href="#arrange" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arrange</h3>
 
 <p>Next most complex is an <code>Arrange</code>, this is equivalent to an NUnit <code>[SetUp]</code> and runs for each <code>Assert</code>,<code>With</code> combination (<code>With</code>'s are explained later):</p>
 
-<pre><code>"New List"
+<pre><code>Specs += "New List"
    .Arrange(() =&gt; new List&lt;int&gt;())
-   .Assert("is empty", list =&gt; Assert.AreEqual(0, list.Count)),
+   .Assert("is empty", list =&gt; Assert.AreEqual(0, list.Count));
 </code></pre>
 
 <p>Classes under test whose constructors do not take parameters can take advantage of this shorter syntax:</p>
@@ -120,101 +98,101 @@ namespace MercuryExample
 
 <p>If you do not require a test context, you can use <code>Arrange()</code> with no params or types:</p>
 
-<pre><code>"No context needed because acting on static method"
+<pre><code>Specs += "No context needed because acting on static method"
     .Arrange()
     .Act(() =&gt; string.Join(",", "a", "b"))
-    .Assert(joined =&gt; Assert.AreEqual("a,b", joined)),
+    .Assert(joined =&gt; Assert.AreEqual("a,b", joined));
 </code></pre>
 
 <h3>
-<a id="act" class="anchor" href="#act" aria-hidden="true"><span class="octicon octicon-link"></span></a>Act</h3>
+<a id="act" class="anchor" href="#act" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Act</h3>
 
 <p>You can separate out the <code>Act</code> from the <code>Assert</code>. Here the act invokes <code>Any()</code> and the result is passed to the <code>Assert</code>.</p>
 
-<pre><code>"New List; linq says there is not any"
+<pre><code>Specs += "New List; linq says there is not any"
    .Arrange&lt;List&lt;int&gt;&gt;()
    .Act(list =&gt; list.Any())
-   .Assert(any =&gt; Assert.IsFalse(any)),
+   .Assert(any =&gt; Assert.IsFalse(any));
 </code></pre>
 
 <p>Or more succinctly in this case:</p>
 
-<pre><code>"New List; linq says there is not any"
+<pre><code>Specs += "New List; linq says there is not any"
    .Arrange&lt;List&lt;int&gt;&gt;()
    .Act(list =&gt; list.Any())
-   .Assert(Assert.IsFalse),
+   .Assert(Assert.IsFalse);
 </code></pre>
 
 <h3>
-<a id="acton" class="anchor" href="#acton" aria-hidden="true"><span class="octicon octicon-link"></span></a>ActOn</h3>
+<a id="acton" class="anchor" href="#acton" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ActOn</h3>
 
 <p><code>Act</code> returns the result of it's method. This will not work if the method is <code>void</code>. <code>ActOn</code> is also way to keep the test context. Example:</p>
 
-<pre><code>"Act version"
+<pre><code>Specs += "Act version"
    .Arrange(() =&gt; new List&lt;int&gt;(new []{1, 2, 3}))
    .Act(list =&gt;
    {
      list.Clear();
      return list;
    })
-   .Assert(list =&gt; Assert.AreEqual(0, list.Count)),
+   .Assert(list =&gt; Assert.AreEqual(0, list.Count));
 </code></pre>
 
 <p>Can be just:</p>
 
-<pre><code>"ActOn version"
+<pre><code>Specs += "ActOn version"
    .Arrange(() =&gt; new List&lt;int&gt;(new []{1, 2, 3}))
    .ActOn(list =&gt; list.Clear())
-   .Assert(list =&gt; Assert.AreEqual(0, list.Count)),
+   .Assert(list =&gt; Assert.AreEqual(0, list.Count));
 </code></pre>
 
 <h3>
-<a id="with" class="anchor" href="#with" aria-hidden="true"><span class="octicon octicon-link"></span></a>With</h3>
+<a id="with" class="anchor" href="#with" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>With</h3>
 
 <p><code>With</code> enables you to parameterise your tests. It takes between 1 and 5 generic parameters. As you can set up anoymous, you can usually get away with just one and then you also get useful names.</p>
 
-<pre><code>"When I add an item to list"
+<pre><code>Specs += "When I add an item to list"
    .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=1})
    .ActOn((list, data) =&gt; list.Add(data.a))
    .Assert("it is exactly one long",
-      (list, data) =&gt; Assert.AreEqual(1, list.Count)),
+      (list, data) =&gt; Assert.AreEqual(1, list.Count));
 </code></pre>
 
 <p><code>With</code> can be used in a situation without a test context using <code>Arrange()</code></p>
 
-<pre><code>"Test-Context less using with"
+<pre><code>Specs += "Test-Context less using with"
     .Arrange()
     .With(new {a = "a", b = "b", expect = "a,b"})
     .With(new {a = "c", b = "d", expect = "c,d"})
     .Act(data =&gt; string.Join(",", data.a, data.b))
-    .Assert((actual, data) =&gt; Assert.AreEqual(data.expect, actual)),
+    .Assert((actual, data) =&gt; Assert.AreEqual(data.expect, actual));
 </code></pre>
 
 <p><code>With</code> when used with mutiple data items gives more assert styles:</p>
 
-<pre><code>"Multiple data arguments in with, and three assert styles"
+<pre><code>Specs += "Multiple data arguments in with, and three assert styles"
     .ArrangeNull()
     .With("a", "b", "a,b")
     .With("c", "d", "c,d")
     .Act((_, a, b, expected) =&gt; string.Join(",", a, b))
     .Assert((result, a, b, expected) =&gt; Assert.AreEqual(expected, result))
     .Assert((result, expected) =&gt; Assert.AreEqual(expected, result))
-    .AssertEqualsExpected(),
+    .AssertEqualsExpected();
 </code></pre>
 
 <h3>
-<a id="multiple-withs-and-parameter-injection-to-test-name" class="anchor" href="#multiple-withs-and-parameter-injection-to-test-name" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multiple Withs and parameter injection to test name</h3>
+<a id="multiple-withs-and-parameter-injection-to-test-name" class="anchor" href="#multiple-withs-and-parameter-injection-to-test-name" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Multiple Withs and parameter injection to test name</h3>
 
 <p>Use the <code>#</code> symbol to inject named parameters from your <code>With</code> data type.</p>
 
-<pre><code>"When I add #a item to list"
+<pre><code>Specs += "When I add #a item to list"
    .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=1})
    .With(new {a=2})
    .ActOn((list, data) =&gt; list.Add(data.a))
    .Assert("it is exactly one long",
-      (list, data) =&gt; Assert.AreEqual(1, list.Count)),
+      (list, data) =&gt; Assert.AreEqual(1, list.Count));
 </code></pre>
 
 <p>This emits two tests:</p>
@@ -224,11 +202,11 @@ When I add 2 item to list it is exactly one long
 </code></pre>
 
 <h3>
-<a id="multiple-withs-and-asserts" class="anchor" href="#multiple-withs-and-asserts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multiple Withs and Asserts</h3>
+<a id="multiple-withs-and-asserts" class="anchor" href="#multiple-withs-and-asserts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Multiple Withs and Asserts</h3>
 
 <p>The total number of tests emitted is the number of <code>Assert</code>s multiplied by the number of <code>With</code>s. This test below therefore runs 4 tests.</p>
 
-<pre><code>"When I add #a to list"
+<pre><code>Specs += "When I add #a to list"
    .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=1})
    .With(new {a=2})
@@ -236,15 +214,15 @@ When I add 2 item to list it is exactly one long
    .Assert("it is exactly one long",
       (list, data) =&gt; Assert.AreEqual(1, list.Count))
    .Assert("it contains #a",
-      (list, data) =&gt; Assert.AreEqual(data.a, list[0])),
+      (list, data) =&gt; Assert.AreEqual(data.a, list[0]));
 </code></pre>
 
 <h3>
-<a id="place-expected-values-in-the-data" class="anchor" href="#place-expected-values-in-the-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Place expected values in the data</h3>
+<a id="place-expected-values-in-the-data" class="anchor" href="#place-expected-values-in-the-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Place expected values in the data</h3>
 
 <p>Where each <code>With</code> will generate a different expected value, include those expected values in the <code>With</code> data.</p>
 
-<pre><code>"When I add #expectedLength items to list"
+<pre><code>Specs += "When I add #expectedLength items to list"
    .Arrange&lt;List&lt;int&gt;&gt;()
    .With(new {a=new []{1,2,3},   expectedLength=3, expectedSum=6})
    .With(new {a=new []{4,6,7,9}, expectedLength=4, expectedSum=26})
@@ -252,27 +230,27 @@ When I add 2 item to list it is exactly one long
    .Assert("it is exactly #expectedLength long",
       (list, data) =&gt; Assert.AreEqual(data.expectedLength, list.Count))
    .Assert("the sum is #expectedSum",
-      (list, data) =&gt; Assert.AreEqual(data.expectedSum, list.Sum())),
+      (list, data) =&gt; Assert.AreEqual(data.expectedSum, list.Sum()));
 </code></pre>
 
 <h3>
-<a id="specificationbymethod-advantages" class="anchor" href="#specificationbymethod-advantages" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>SpecificationByMethod</code> advantages</h3>
+<a id="mercurysuite-advantages" class="anchor" href="#mercurysuite-advantages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>MercurySuite</code> advantages</h3>
 
-<pre><code>class SpecByMethodExample : SpecificationByMethod
+<pre><code>class SpecByMethodExample : MercurySuite
 {
-    protected override void Cases()
+    protected override void Specifications()
     {
-        Spec("Example of spec defined in method".Assert(() =&gt; Assert.AreEqual(2, 1 + 1)));
+        Specs += "Example of spec defined in method".Assert(() =&gt; Assert.AreEqual(2, 1 + 1));
 
-        Spec("Lets you space out tests".Assert(() =&gt; Assert.AreEqual(2, 1 + 1)));
+        Specs += "Lets you space out tests".Assert(() =&gt; Assert.AreEqual(2, 1 + 1));
 
         for (int i = 0; i &lt; 10; i++)
         {
-            Spec("And even lets you create specs dynamically #i"
+            Specs += "And even lets you create specs dynamically #i"
                 .Arrange()
                 .With(new {i})
                 .Act(data =&gt; data.i*10)
-                .Assert((result, data) =&gt; Assert.IsTrue(result%10 == 0)));
+                .Assert((result, data) =&gt; Assert.IsTrue(result%10 == 0));
         }
     }
 }
