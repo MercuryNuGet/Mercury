@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 
 namespace Mercury
 {
     public abstract class MercurySuite : Specification
     {
-        private readonly List<ISpecification> _specs = new List<ISpecification>();
+        private SpecSet _specs = new SpecSet();
 
         /// <summary>
         /// Add new spec
@@ -14,7 +13,16 @@ namespace Mercury
         /// <param name="specification"></param>
         protected void Spec(ISpecification specification)
         {
-            _specs.Add(specification);
+            _specs += specification;
+        }
+
+        /// <summary>
+        /// Use += to add ISpecifications
+        /// </summary>
+        public SpecSet Specs
+        {
+            get { return _specs; }
+            set { _specs = value; }
         }
 
         /// <summary>
@@ -24,7 +32,7 @@ namespace Mercury
 
         protected override ISpecification[] TestCases()
         {
-            _specs.Clear();
+            _specs = new SpecSet();
             try
             {
                 Specifications();
