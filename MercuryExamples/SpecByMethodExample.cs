@@ -3,9 +3,9 @@ using NUnit.Framework;
 
 namespace MercuryExamples
 {
-    internal class SpecByMethodExample : SpecificationByMethod
+    internal class SpecByMethodExample : MercurySuite
     {
-        protected override void Cases()
+        protected override void Specifications()
         {
             Spec("Example of spec defined in method".Assert(() => Assert.AreEqual(2, 1 + 1)));
 
