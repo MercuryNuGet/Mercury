@@ -16,9 +16,7 @@ install-package mercury -pre
 
 ##Inherit
 
-Inherit from `MercurySuite` or `Specification` and implement members.
-
-With `MercurySuite` you must call `Specs +=` for each new spec.
+Inherit from `MercurySuite` and call `Specs +=` for each new spec.
 
 ```
 using Mercury;
