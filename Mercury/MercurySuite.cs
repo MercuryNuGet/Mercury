@@ -3,7 +3,7 @@ using System;
 
 namespace Mercury
 {
-    public abstract class MercurySuite : Specification
+    public abstract class MercurySuite : m
     {
         private SpecSet _specs = new SpecSet();
 
