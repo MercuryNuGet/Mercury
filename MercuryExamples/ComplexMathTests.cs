@@ -4,47 +4,51 @@ using NUnit.Framework;
 
 namespace MercuryExamples
 {
-    internal class ComplexMathTests : Specification
+    internal class ComplexMathTests : MercurySuite
     {
-        protected override ISpecification[] TestCases()
+        protected override void Specifications()
         {
-            return new ISpecification[]
-            {
+            Specs +=
                 "Can to string #r,#i and get \"#expect\""
                     .ArrangeNull()
-                    .With(new {r = 0, i = 0, expect = "0 + 0i"})
-                    .With(new {r = 1, i = 2, expect = "1 + 2i"})
+                    .With(new { r = 0, i = 0, expect = "0 + 0i" })
+                    .With(new { r = 1, i = 2, expect = "1 + 2i" })
                     .Act((sut, data) => new Complex(data.r, data.i).ToString())
-                    .Assert((s, o) => Assert.AreEqual(o.expect, s)),
+                    .Assert((s, o) => Assert.AreEqual(o.expect, s));
+
+            Specs +=
                 "Equality of #lhs and #rhs:"
                     .ArrangeNull()
-                    .With(new {lhs = new Complex(0, 0), rhs = new Complex(0, 0)})
-                    .With(new {lhs = new Complex(1, 0), rhs = new Complex(1, 0)})
-                    .With(new {lhs = new Complex(0, 1), rhs = new Complex(0, 1)})
-                    .With(new {lhs = new Complex(1, 2), rhs = new Complex(1, 2)})
+                    .With(new { lhs = new Complex(0, 0), rhs = new Complex(0, 0) })
+                    .With(new { lhs = new Complex(1, 0), rhs = new Complex(1, 0) })
+                    .With(new { lhs = new Complex(0, 1), rhs = new Complex(0, 1) })
+                    .With(new { lhs = new Complex(1, 2), rhs = new Complex(1, 2) })
                     .Assert("equal", (o, d) => Assert.AreEqual(d.lhs, d.rhs))
                     .Assert("reflexive equal", (o, d) => Assert.AreEqual(d.rhs, d.lhs))
-                    .Assert("hashCode equal", (o, d) => Assert.AreEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode())),
+                    .Assert("hashCode equal", (o, d) => Assert.AreEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode()));
+
+            Specs +=
                 "Inequality of #lhs and #rhs:"
                     .ArrangeNull()
-                    .With(new {lhs = new Complex(0, 0), rhs = (object) new Complex(1, 0)})
-                    .With(new {lhs = new Complex(0, 0), rhs = (object) new Complex(0, 1)})
-                    .With(new {lhs = new Complex(1, 0), rhs = (object) new Complex(0, 0)})
-                    .With(new {lhs = new Complex(0, 1), rhs = (object) new Complex(0, 0)})
-                    .With(new {lhs = new Complex(0, 1), rhs = new object()})
+                    .With(new { lhs = new Complex(0, 0), rhs = (object)new Complex(1, 0) })
+                    .With(new { lhs = new Complex(0, 0), rhs = (object)new Complex(0, 1) })
+                    .With(new { lhs = new Complex(1, 0), rhs = (object)new Complex(0, 0) })
+                    .With(new { lhs = new Complex(0, 1), rhs = (object)new Complex(0, 0) })
+                    .With(new { lhs = new Complex(0, 1), rhs = new object() })
                     .Assert("not equal", (o, d) => Assert.AreNotEqual(d.lhs, d.rhs))
-                    .Assert("hashCode not equal", (o, d) => Assert.AreNotEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode())),
+                    .Assert("hashCode not equal", (o, d) => Assert.AreNotEqual(d.lhs.GetHashCode(), d.rhs.GetHashCode()));
+
+            Specs +=
                 "Can add #a to #b and should get #expect"
                     .Arrange()
-                    .With(new {a = new Complex(0, 0), b = new Complex(0, 0), expect = new Complex(0, 0)})
-                    .With(new {a = new Complex(1, 0), b = new Complex(0, 0), expect = new Complex(1, 0)})
-                    .With(new {a = new Complex(0, 0), b = new Complex(1, 0), expect = new Complex(1, 0)})
-                    .With(new {a = new Complex(0, 1), b = new Complex(0, 0), expect = new Complex(0, 1)})
-                    .With(new {a = new Complex(0, 0), b = new Complex(0, 1), expect = new Complex(0, 1)})
-                    .With(new {a = new Complex(1, 2), b = new Complex(4, 8), expect = new Complex(5, 10)})
+                    .With(new { a = new Complex(0, 0), b = new Complex(0, 0), expect = new Complex(0, 0) })
+                    .With(new { a = new Complex(1, 0), b = new Complex(0, 0), expect = new Complex(1, 0) })
+                    .With(new { a = new Complex(0, 0), b = new Complex(1, 0), expect = new Complex(1, 0) })
+                    .With(new { a = new Complex(0, 1), b = new Complex(0, 0), expect = new Complex(0, 1) })
+                    .With(new { a = new Complex(0, 0), b = new Complex(0, 1), expect = new Complex(0, 1) })
+                    .With(new { a = new Complex(1, 2), b = new Complex(4, 8), expect = new Complex(5, 10) })
                     .Act(d => d.a + d.b)
-                    .Assert((actual, o1) => Assert.AreEqual(o1.expect, actual))
-            };
+                    .Assert((actual, o1) => Assert.AreEqual(o1.expect, actual));
         }
     }
 

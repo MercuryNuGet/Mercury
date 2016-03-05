@@ -114,6 +114,7 @@
       <DependentUpon>CodeGen.tt</DependentUpon>
     </Compile>
     <Compile Include="ISpecification.cs" />
+    <Compile Include="MercurySuite.cs" />
     <Compile Include="NameInjection.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PreAssertBuilderX0.generated.cs">
@@ -143,6 +144,7 @@
     <Compile Include="IDataSuite.cs" />
     <Compile Include="ISuite.cs" />
     <Compile Include="SpecificationByMethod.cs" />
+    <Compile Include="SpecSet.cs" />
     <Compile Include="StaticArrange\StaticArrangedDataBuilder.cs" />
     <Compile Include="StaticArrange\StaticArrangedTestBuilder.cs" />
     <Compile Include="StringTestExtension.cs" />
